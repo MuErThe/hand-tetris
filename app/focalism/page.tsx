@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { SiteFooter } from "@/components/SiteFooter";
 import {
   FocusScaleSpecimen,
   AberrationSpecimen,
@@ -218,6 +219,7 @@ export default function FocalismPage() {
           </div>
         </article>
       </div>
+      <SiteFooter />
     </main>
   );
 }

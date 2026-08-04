@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useSyncExternalStore } from "react";
+import { useEffect, useSyncExternalStore, type ReactNode } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { playSfx } from "@/lib/audio/sfx";
 import {
@@ -14,14 +14,43 @@ import {
   type ThemeChoice,
 } from "@/lib/theme";
 
-const LABELS: Record<ThemeChoice, string> = {
-  system: "auto",
-  light: "light",
-  dark: "dark",
+// Icons carry the options; the sr-only descriptions below carry the words.
+// Stroke follows currentColor, so the existing segment states colour them.
+const ICON_PROPS = {
+  width: 14,
+  height: 14,
+  viewBox: "0 0 16 16",
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: 1.5,
+  strokeLinecap: "round",
+  strokeLinejoin: "round",
+  "aria-hidden": true,
+} as const;
+
+const ICONS: Record<ThemeChoice, ReactNode> = {
+  system: (
+    <svg {...ICON_PROPS}>
+      <rect x="2" y="3" width="12" height="8" rx="1.2" />
+      <path d="M5.5 13.5h5" />
+    </svg>
+  ),
+  light: (
+    <svg {...ICON_PROPS}>
+      <circle cx="8" cy="8" r="3" />
+      <path d="M8 1.2v1.8M8 13v1.8M1.2 8H3M13 8h1.8M3.2 3.2l1.3 1.3M11.5 11.5l1.3 1.3M12.8 3.2l-1.3 1.3M4.5 11.5l-1.3 1.3" />
+    </svg>
+  ),
+  dark: (
+    <svg {...ICON_PROPS}>
+      <path d="M13.2 9.2A5.6 5.6 0 1 1 6.8 2.8a4.4 4.4 0 0 0 6.4 6.4Z" />
+    </svg>
+  ),
 };
 
-// Each description opens with the visible label so the accessible name
-// contains it — speech-input users say what they can see (WCAG 2.5.3).
+// The accessible name for each option — speech-input users can still say
+// "auto", "light" or "dark" (WCAG 2.5.3 keeps working without visible text
+// because these are the whole name).
 const DESCRIPTIONS: Record<ThemeChoice, string> = {
   system: "Auto — follow my system setting",
   light: "Light theme",
@@ -96,8 +125,8 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
               transition={{ type: "spring", stiffness: 520, damping: 13, mass: 0.5 }}
             />
           )}
-          <span className="theme-seg__text" aria-hidden="true">
-            {LABELS[c]}
+          <span className="theme-seg__text" title={DESCRIPTIONS[c]}>
+            {ICONS[c]}
           </span>
           <span className="sr-only">{DESCRIPTIONS[c]}</span>
         </motion.label>

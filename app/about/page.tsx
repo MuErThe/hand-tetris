@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { SiteFooter } from "@/components/SiteFooter";
 import { CATALOGUE } from "@/lib/games/registry";
 
 export const metadata: Metadata = {
@@ -143,6 +144,7 @@ export default function AboutPage() {
           </Link>
         </article>
       </div>
+      <SiteFooter />
     </main>
   );
 }

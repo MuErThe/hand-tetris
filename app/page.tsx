@@ -3,6 +3,7 @@ import { WarmUpBanner } from "@/components/arcade/WarmUpBanner";
 import { CardStats } from "@/components/arcade/CardStats";
 import { Vignette } from "@/components/arcade/Vignette";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { SiteFooter } from "@/components/SiteFooter";
 import { GAMES, type GameDef } from "@/lib/games/registry";
 
 export default function Hub() {
@@ -73,6 +74,7 @@ export default function Hub() {
           </Link>
         </div>
       </div>
+      <SiteFooter />
     </main>
   );
 }

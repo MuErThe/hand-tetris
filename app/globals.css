@@ -629,6 +629,8 @@ button {
 .theme-seg__text {
   position: relative;
   z-index: 1;
+  display: inline-flex;
+  align-items: center;
 }
 
 /* The reticle has to land on the label — the input itself is sr-only. */
