@@ -104,12 +104,6 @@ function GameCard({ game }: { game: GameDef }) {
           >
             {game.trains}
           </span>
-          <span
-            className="font-display text-[8px] tracking-[0.1em] px-2 py-0.5 rounded-[6px]"
-            style={{ color: "var(--bg-0)", background: "var(--accent)" }}
-          >
-            Live
-          </span>
         </div>
 
         <h2
@@ -127,13 +121,6 @@ function GameCard({ game }: { game: GameDef }) {
         >
           {game.blurb}
         </p>
-
-        <span
-          className="font-display text-[10px] tracking-[0.06em] transition-transform group-hover:translate-x-0.5"
-          style={{ color: "var(--accent)" }}
-        >
-          ▶ Play
-        </span>
 
         {game.tracksProgress && <CardStats gameId={game.id} unit={game.unit} />}
       </div>
