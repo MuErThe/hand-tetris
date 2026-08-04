@@ -60,7 +60,7 @@ export default function AboutPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(FAQ_JSON_LD) }}
       />
-      <div className="min-h-full flex flex-col items-center px-5 py-10 md:py-14">
+      <div className="min-h-full flex flex-col items-center px-5 md:px-20 py-10 md:py-14">
         <article className="w-full" style={{ maxWidth: 720 }}>
           <div className="flex items-center justify-between gap-4">
             <Link

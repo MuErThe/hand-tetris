@@ -10,6 +10,8 @@ export type VignetteKind =
   | "colour"
   | "circles"
   | "boolean"
+  | "steady"
+  | "doubletake"
   | "warmup";
 
 interface VignetteProps {
@@ -193,6 +195,50 @@ const SCENES: Record<VignetteKind, (tint: string) => React.ReactNode> = {
           style={{ animation: "vg-draw 3.8s ease-in-out infinite" }}
         />
       </g>
+    </>
+  ),
+
+  // steady hand: a curve tracing itself in one stroke from the start marker
+  steady: (tint) => (
+    <>
+      <path
+        d="M 30 52 C 60 16, 100 60, 130 24"
+        fill="none"
+        stroke={DIM}
+        strokeWidth="1.5"
+      />
+      <path
+        d="M 30 52 C 60 16, 100 60, 130 24"
+        fill="none"
+        stroke={tint}
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeDasharray="140"
+        style={{ animation: "vg-trace 3.6s ease-in-out infinite" }}
+      />
+      <circle cx="30" cy="52" r="3" fill="none" stroke={tint} strokeWidth="1.2" />
+    </>
+  ),
+
+  // double take: twin cards, one detail wrong — and it blinks at you
+  doubletake: (tint) => (
+    <>
+      <rect x="28" y="16" width="44" height="40" rx="3" fill="none" stroke={INK} strokeWidth="1.2" />
+      <rect x="88" y="16" width="44" height="40" rx="3" fill="none" stroke={INK} strokeWidth="1.2" />
+      <line x1="34" y1="26" x2="64" y2="26" stroke={DIM} strokeWidth="2" />
+      <line x1="94" y1="26" x2="124" y2="26" stroke={DIM} strokeWidth="2" />
+      <line x1="34" y1="34" x2="58" y2="34" stroke={DIM} strokeWidth="2" />
+      <line
+        x1="98"
+        y1="35.5"
+        x2="122"
+        y2="35.5"
+        stroke={tint}
+        strokeWidth="2"
+        style={{ animation: "vg-blink 3.2s ease-in-out infinite" }}
+      />
+      <line x1="34" y1="46" x2="50" y2="46" stroke={DIM} strokeWidth="2" />
+      <line x1="94" y1="46" x2="110" y2="46" stroke={DIM} strokeWidth="2" />
     </>
   ),
 

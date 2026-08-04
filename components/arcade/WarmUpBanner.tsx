@@ -31,6 +31,9 @@ export function WarmUpBanner() {
           <span className="font-display text-[13px] tracking-[0.1em]" style={{ color: "var(--ink)" }}>
             Daily <span style={{ color: "var(--accent)" }}>warm-up</span>
           </span>
+          <span className="font-mono text-[10px] tracking-[0.06em]" style={{ color: "var(--ink-dim)" }}>
+            five-minute games that sharpen a designer&apos;s eye, hand and imagination.
+          </span>
           <span className="font-mono text-[9px] uppercase tracking-[0.1em]" style={{ color: "var(--ink-dim)" }}>
             four games, drawn daily · five minutes · before the real work
           </span>

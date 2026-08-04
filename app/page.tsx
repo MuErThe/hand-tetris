@@ -2,6 +2,7 @@ import Link from "next/link";
 import { WarmUpBanner } from "@/components/arcade/WarmUpBanner";
 import { CardStats } from "@/components/arcade/CardStats";
 import { Vignette } from "@/components/arcade/Vignette";
+import { AccountMenu } from "@/components/AccountMenu";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { SiteFooter } from "@/components/SiteFooter";
 import { GAMES, type GameDef } from "@/lib/games/registry";
@@ -9,39 +10,42 @@ import { GAMES, type GameDef } from "@/lib/games/registry";
 export default function Hub() {
   return (
     <main className="flex-1 overflow-y-auto overflow-x-hidden">
-      <div className="min-h-full flex flex-col items-center px-5 py-10 md:py-12">
-        {/* Theme lives on the hub, not over a play surface — you set it once
-            on the way in and the games stay uncluttered. */}
-        <div className="w-full flex justify-end mb-4" style={{ maxWidth: 1020 }}>
-          <ThemeToggle />
-        </div>
-
-        {/* Wordmark — the I is the eye */}
-        <div
-          className="font-display text-[10px] tracking-[0.14em] mb-3"
-          style={{ color: "var(--accent)" }}
-        > train the eye you trust </div>
-        <h1
-          className="font-display tracking-[0.08em] leading-[0.95] text-center mb-3"
-          style={{ color: "var(--ink)", fontSize: "clamp(34px, 8vw, 60px)" }}
+      <div className="min-h-full flex flex-col items-center px-5 md:px-20 py-10 md:py-12">
+        {/* Top navbar — the wordmark holds the centre (the I is the eye);
+            theme lives on the right, not over a play surface. */}
+        <header
+          className="w-full grid items-center mb-8"
+          style={{ gridTemplateColumns: "1fr auto 1fr" }}
         >
-          SQU
-          <span
-            className="focal-breathe"
-            style={{
-              color: "var(--accent)",
-            }}
-          >
-            I
-          </span>
-          NT
-        </h1>
-        <p
-          className="font-mono text-[11px] md:text-[12px] tracking-[0.1em] text-center mb-8"
-          style={{ color: "var(--ink-dim)", maxWidth: 440 }}
-        >
-          five-minute games that sharpen a designer's eye, hand and imagination.
-        </p>
+          <div />
+          <h1 className="flex flex-col items-center gap-1.5 text-center">
+            <span
+              className="font-display tracking-[0.1em] leading-none text-[30px]"
+              style={{ color: "var(--ink)" }}
+            >
+              SQU
+              <span className="focal-breathe" style={{ color: "var(--accent)" }}>
+                I
+              </span>
+              NT
+            </span>
+            <span
+              className="font-display text-[9px] tracking-[0.16em] uppercase"
+              style={{ color: "var(--accent)" }}
+            >
+              train the eye you trust
+            </span>
+          </h1>
+          <div className="flex items-center justify-end gap-4">
+            <AccountMenu />
+            <span
+              aria-hidden
+              className="self-center h-5 w-px"
+              style={{ background: "var(--panel-border)" }}
+            />
+            <ThemeToggle />
+          </div>
+        </header>
 
         {/* Bento */}
         <div className="hub-bento">
@@ -57,22 +61,6 @@ export default function Hub() {
         >
           🔒 camera games run entirely on-device · nothing leaves your browser
         </p>
-        <div className="flex items-center gap-5 mt-2">
-          <Link
-            href="/about"
-            className="font-mono text-[9px] uppercase tracking-[0.1em] transition-colors hover:text-[var(--accent)]"
-            style={{ color: "var(--ink-dim)" }}
-          >
-            what is squint? →
-          </Link>
-          <Link
-            href="/focalism"
-            className="font-mono text-[9px] uppercase tracking-[0.1em] transition-colors hover:text-[var(--accent)]"
-            style={{ color: "var(--ink-dim)" }}
-          >
-            our design language →
-          </Link>
-        </div>
       </div>
       <SiteFooter />
     </main>

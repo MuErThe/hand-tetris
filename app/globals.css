@@ -420,6 +420,26 @@ button {
 }
 
 /* warm-up: flame flicker + step dots filling in sequence */
+@keyframes vg-trace {
+  0% {
+    stroke-dashoffset: 140;
+  }
+  55% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes vg-blink {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 1;
+  }
+}
 @keyframes vg-flicker {
   0%, 100% { transform: scale(1) rotate(-1.5deg); }
   30% { transform: scale(1.08) rotate(1.5deg); }
@@ -604,23 +624,29 @@ button {
   color: var(--ink);
 }
 
-/* Selected: raised fill + hairline + full-strength ink. The fill is painted by
-   the sliding marker when motion is on, and by this rule when it isn't. */
+/* Selected: full-strength accent always; the raised fill is painted by the
+   sliding marker when motion is on, and by the fallback rule when it isn't.
+   The :not() guard matters — without it this rule out-ranks the marker
+   reset below and draws a second border on top of the marker. */
 .theme-seg__opt:has(input:checked) {
-  border-color: var(--panel-border-strong);
-  background: var(--raise-strong);
   color: var(--accent);
   font-weight: 700;
 }
 
+.theme-seg__opt:has(input:checked):not(:has(.theme-seg__marker)) {
+  border-color: var(--panel-border-strong);
+  background: var(--raise-strong);
+}
+
 /* The travelling selection. Sits behind the label; the label's own background
    is transparent so the two never double up. */
+/* Flat fill only — an inset ring here stacks with the control's outer
+   border and the icon's own strokes into a nest of rectangles. */
 .theme-seg__marker {
   position: absolute;
   inset: 0;
   border-radius: var(--r-chip);
   background: var(--raise-strong);
-  box-shadow: inset 0 0 0 1px var(--panel-border-strong);
 }
 .theme-seg__opt:has(.theme-seg__marker) {
   background: transparent;
@@ -653,7 +679,6 @@ button {
   display: grid;
   gap: 14px;
   width: 100%;
-  max-width: 1020px;
   grid-template-columns: 1fr;
   grid-template-areas:
     "warmup"

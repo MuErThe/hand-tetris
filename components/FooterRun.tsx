@@ -22,14 +22,16 @@ import {
 } from "@/lib/footerrun/engine";
 
 const BEST_KEY = "arcade/v1/footer-run";
-const HEIGHT = 180;
-const BASELINE = 36; // px above the canvas bottom
+const HEIGHT = 420;
+const BASELINE = 64; // px above the canvas bottom
 
 type Tokens = {
   ink: string;
   dim: string;
   accent: string;
   border: string;
+  field: string;
+  bg: string;
   tee: string;
   ell: string;
   chip: string;
@@ -71,6 +73,8 @@ export function FooterRun() {
         dim: v("--ink-dim", "#777"),
         accent: v("--accent", "#b8860b"),
         border: v("--panel-border", "#999"),
+        field: v("--field-2", "transparent"),
+        bg: v("--bg-0", "#111"),
         tee: v("--c-T", "#888"),
         ell: v("--c-I", "#888"),
         chip: v("--c-O", "#888"),
@@ -89,17 +93,27 @@ export function FooterRun() {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, w, h);
 
-      // clouds — lock-on pings on slow parallax
-      ctx.strokeStyle = t.border;
-      ctx.lineWidth = 1;
-      const drift = state.score * 2.4;
-      for (const [baseX, y, r] of [
-        [w * 0.25, 38, 11],
-        [w * 0.6, 24, 8],
-        [w * 0.85, 46, 13],
+      // a sky of drifting clouds, each on its own parallax speed…
+      const drift = state.score * 5;
+      for (const [bx, y, sc, sp] of [
+        [w * 0.18, 84, 2.0, 0.35],
+        [w * 0.48, 150, 1.4, 0.5],
+        [w * 0.72, 64, 2.5, 0.28],
+        [w * 0.92, 190, 1.7, 0.42],
       ] as const) {
-        const span = w + 60;
-        const x = ((((baseX - drift * 0.4) % span) + span) % span) - 30;
+        const span = w + 160;
+        const x = ((((bx - drift * sp) % span) + span) % span) - 80;
+        drawCloud(ctx, x, y, sc, t);
+      }
+      // …plus a couple of lock-on pings for the house identity
+      ctx.strokeStyle = t.border;
+      ctx.lineWidth = 1.5;
+      for (const [bx, y, r, sp] of [
+        [w * 0.32, 244, 16, 0.6],
+        [w * 0.82, 272, 22, 0.45],
+      ] as const) {
+        const span = w + 120;
+        const x = ((((bx - drift * sp) % span) + span) % span) - 60;
         ctx.beginPath();
         ctx.arc(x, y, r, 0, Math.PI * 2);
         ctx.stroke();
@@ -112,12 +126,19 @@ export function FooterRun() {
       ctx.lineTo(w, ground + 0.5);
       ctx.stroke();
       ctx.strokeStyle = t.border;
-      const dashSpan = 46;
+      ctx.lineWidth = 2;
+      const dashSpan = 86;
       const offset = ((drift % dashSpan) + dashSpan) % dashSpan;
       for (let x = -offset; x < w; x += dashSpan) {
         ctx.beginPath();
-        ctx.moveTo(x, ground + 10.5);
-        ctx.lineTo(x + 16, ground + 10.5);
+        ctx.moveTo(x, ground + 20);
+        ctx.lineTo(x + 32, ground + 20);
+        ctx.stroke();
+      }
+      for (let x = -offset + dashSpan * 0.55; x < w; x += dashSpan) {
+        ctx.beginPath();
+        ctx.moveTo(x, ground + 42);
+        ctx.lineTo(x + 22, ground + 42);
         ctx.stroke();
       }
 
@@ -126,7 +147,7 @@ export function FooterRun() {
       // the reticle runner
       const ry = ground - RUNNER.size - state.y;
       ctx.strokeStyle = state.phase === "dead" ? t.dim : t.accent;
-      ctx.lineWidth = 1.4;
+      ctx.lineWidth = 2.4;
       ctx.strokeRect(RUNNER.x + 0.5, ry + 0.5, RUNNER.size, RUNNER.size);
       const cx = RUNNER.x + RUNNER.size / 2;
       const cy = ry + RUNNER.size / 2;
@@ -137,20 +158,22 @@ export function FooterRun() {
         [-1, 0],
         [1, 0],
       ] as const) {
-        ctx.moveTo(cx + dx * (RUNNER.size / 2 + 2), cy + dy * (RUNNER.size / 2 + 2));
-        ctx.lineTo(cx + dx * (RUNNER.size / 2 + 6), cy + dy * (RUNNER.size / 2 + 6));
+        ctx.moveTo(cx + dx * (RUNNER.size / 2 + 4), cy + dy * (RUNNER.size / 2 + 4));
+        ctx.lineTo(cx + dx * (RUNNER.size / 2 + 12), cy + dy * (RUNNER.size / 2 + 12));
       }
       ctx.stroke();
 
-      // score, in the borrowed grammar
+      // score and best — stacked label-over-value, sharing the page's
+      // 80px desktop gutter with the footer row above
+      const colRight = w - (w >= 768 ? 80 : 24);
       ctx.fillStyle = t.dim;
-      ctx.font = "10px ui-monospace, SFMono-Regular, Menlo, monospace";
+      ctx.font = "700 16px ui-monospace, SFMono-Regular, Menlo, monospace";
+      ctx.textAlign = "left";
+      ctx.fillText("SCORE", colRight - 138, 48);
+      ctx.fillText(pad(state.score), colRight - 138, 76);
       ctx.textAlign = "right";
-      ctx.fillText(
-        `score ${pad(state.score)}   best ${pad(Math.max(best, state.score))}`,
-        w - 14,
-        18,
-      );
+      ctx.fillText("BEST", colRight, 48);
+      ctx.fillText(pad(Math.max(best, state.score)), colRight, 76);
     };
 
     const loop = (now: number) => {
@@ -265,8 +288,8 @@ export function FooterRun() {
       <canvas ref={canvasRef} className="block w-full h-full" />
       {!reduced && phase !== "running" && (
         <div
-          className="absolute inset-x-0 flex justify-center pointer-events-none font-mono text-[10px] uppercase tracking-[0.14em]"
-          style={{ top: 52, color: "var(--ink-dim)" }}
+          className="absolute inset-x-0 flex justify-center pointer-events-none font-mono font-bold text-[14px] uppercase tracking-[0.18em]"
+          style={{ top: HEIGHT * 0.42, color: "var(--ink-dim)" }}
         >
           {phase === "dead" ? "caught · space to run again" : "press space to run _"}
         </div>
@@ -275,43 +298,82 @@ export function FooterRun() {
   );
 }
 
+/** A three-bump cloud outline, filled with the panel surface. */
+function drawCloud(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  s: number,
+  t: Tokens,
+): void {
+  ctx.fillStyle = t.field;
+  ctx.strokeStyle = t.border;
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.arc(x, y, 8 * s, Math.PI * 0.5, Math.PI * 1.5);
+  ctx.arc(x + 10 * s, y - 7 * s, 9 * s, Math.PI * 1.02, Math.PI * 1.98);
+  ctx.arc(x + 22 * s, y, 8 * s, Math.PI * 1.5, Math.PI * 0.5);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+}
+
 function drawObstacle(
   ctx: CanvasRenderingContext2D,
   o: Obstacle,
   ground: number,
   t: Tokens,
 ): void {
-  const top = ground - o.h;
-  switch (o.kind) {
+  const baseH = o.h - (o.top?.h ?? 0);
+  drawPiece(ctx, o.kind, o.x, o.w, baseH, ground, t);
+  if (o.top) drawPiece(ctx, o.top.kind, o.x, o.w, o.top.h, ground - baseH, t);
+}
+
+/** Paint one piece whose base sits on `bottom` and which rises `h` above it. */
+function drawPiece(
+  ctx: CanvasRenderingContext2D,
+  kind: Obstacle["kind"],
+  x: number,
+  w: number,
+  h: number,
+  bottom: number,
+  t: Tokens,
+): void {
+  const top = bottom - h;
+  switch (kind) {
     case "tee": {
-      // Tetris T: three cells across, one below centre
-      const c = o.w / 3;
+      // Tetris T, stretched to fill its whole box so stacks stay flush:
+      // bar across the top half, stem down the centre to the base.
+      const bar = h * 0.5;
       ctx.fillStyle = t.tee;
-      ctx.fillRect(o.x, top, o.w, c);
-      ctx.fillRect(o.x + c, top + c, c, c);
+      ctx.fillRect(x, top, w, bar);
+      ctx.fillRect(x + w / 3, top + bar, w / 3, h - bar);
       break;
     }
     case "ell": {
-      // Tetris L: two cells up, one foot right
-      const c = o.w / 2;
+      // Tetris L: full-height upright, foot flush with the base.
+      const c = w / 2;
       ctx.fillStyle = t.ell;
-      ctx.fillRect(o.x, top, c, o.h);
-      ctx.fillRect(o.x + c, ground - c, c, c);
+      ctx.fillRect(x, top, c, h);
+      ctx.fillRect(x + c, bottom - c, c, c);
       break;
     }
     case "chip":
       ctx.fillStyle = t.chip;
-      ctx.fillRect(o.x, top, o.w, o.h);
-      ctx.strokeStyle = t.dim;
-      ctx.lineWidth = 1;
-      ctx.strokeRect(o.x + 0.5, top + 0.5, o.w - 1, o.h - 1);
+      ctx.fillRect(x, top, w, h);
       break;
     case "aye":
-    case "vee":
+    case "vee": {
+      // letterform punched into a SOLID specimen block
       ctx.fillStyle = t.ink;
-      ctx.font = `600 ${o.h}px serif`;
-      ctx.textAlign = "left";
-      ctx.fillText(o.kind === "aye" ? "A" : "V", o.x, ground);
+      ctx.fillRect(x, top, w, h);
+      ctx.fillStyle = t.bg;
+      ctx.font = `600 ${Math.round(h * 0.62)}px serif`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(kind === "aye" ? "A" : "V", x + w / 2, top + h / 2 + 1);
+      ctx.textBaseline = "alphabetic";
       break;
+    }
   }
 }

@@ -7,10 +7,23 @@ import { getSupabase } from "@/lib/leaderboard/supabase";
 /** A Google-backed account. Guests and anonymous sessions read as null. */
 export interface Account {
   email: string | null;
+  name: string | null;
+  avatarUrl: string | null;
 }
 
 function toAccount(user: User | null | undefined): Account | null {
-  return user && !user.is_anonymous ? { email: user.email ?? null } : null;
+  if (!user || user.is_anonymous) return null;
+  const m = (user.user_metadata ?? {}) as Record<string, unknown>;
+  return {
+    email: user.email ?? null,
+    name:
+      typeof m.full_name === "string"
+        ? m.full_name
+        : typeof m.name === "string"
+          ? m.name
+          : null,
+    avatarUrl: typeof m.avatar_url === "string" ? m.avatar_url : null,
+  };
 }
 
 /**
