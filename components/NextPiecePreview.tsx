@@ -24,7 +24,7 @@ export function NextPiecePreview({
         width: size,
         height: size,
         background:
-          "linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.15))",
+          "linear-gradient(180deg, var(--raise), rgba(0,0,0,0.15))",
       }}
       className="rounded-sm border"
     >

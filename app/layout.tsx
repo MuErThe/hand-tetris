@@ -1,14 +1,19 @@
-import type { Metadata } from "next";
-import { Silkscreen, JetBrains_Mono, Fraunces } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Space_Grotesk, JetBrains_Mono, Fraunces } from "next/font/google";
+import { THEME_BOOT_SCRIPT } from "@/lib/theme";
+import { CATALOGUE } from "@/lib/games/registry";
 import "./globals.css";
 
 // preload disabled — the boot placeholder doesn't render any text, so the
 // link-preload tags fire a "preloaded but not used within a few seconds"
 // warning. Fonts still load lazily on first use.
-const silkscreen = Silkscreen({
-  variable: "--font-silkscreen",
+// Display face. Technical but rounded — calm without going generic, and a
+// clear relative of the mono used for data. Replaced the pixel face when the
+// arcade skin came off; Focalism itself is unchanged.
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-display-face",
   subsets: ["latin"],
-  weight: ["400", "700"],
+  weight: ["400", "500", "600", "700"],
   preload: false,
 });
 
@@ -85,6 +90,16 @@ export const metadata: Metadata = {
   },
 };
 
+// Browser chrome follows the OS preference. It intentionally doesn't track an
+// explicit in-app override — these are static <meta> tags and the mismatch is
+// confined to the address bar.
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: dark)", color: "#0e0a14" },
+    { media: "(prefers-color-scheme: light)", color: "#ececeb" },
+  ],
+};
+
 // Content-Security-Policy ships as a real response header via vercel.json
 // (which also lets us enforce frame-ancestors — impossible from a meta tag).
 // Keeping it out of the markup also means `next dev` isn't subject to it,
@@ -114,12 +129,8 @@ const JSON_LD = {
       description:
         "A free arcade of five-minute games that train a designer's instincts — visual accuracy, kerning, colour perception and divergent thinking — with teach-back feedback, local progress tracking and daily warm-up streaks.",
       featureList: [
-        "Eyeball It — bisect, centre and align by eye, scored on pixel error",
-        "Kern Combat — space letters against the font's own kerning metrics",
-        "Colour Forge — mix and match colours, scored by CIEDE2000",
-        "Thirty Circles — the classic divergent-thinking sprint",
-        "Hand Tetris — gesture-controlled Tetris via webcam hand tracking",
-        "Daily Warm-Up — one round of each game with streak tracking",
+        ...CATALOGUE.map((g) => `${g.name} — ${g.blurb}`),
+        "Daily Warm-Up — four games sampled daily with streak tracking",
       ],
     },
   ],
@@ -131,14 +142,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+    // suppressHydrationWarning: the boot script stamps data-theme on <html>
+    // before React hydrates, so the server markup never matches.
     <html
       lang="en"
-      className={`${silkscreen.variable} ${jetbrainsMono.variable} ${fraunces.variable} h-full antialiased`}
+      className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} ${fraunces.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
       <body
         className="h-full flex flex-col overflow-hidden"
         suppressHydrationWarning
       >
+        {/* First thing in the document: resolve the theme before anything
+            paints. Nothing renders above it, so there is no flash. */}
+        <script dangerouslySetInnerHTML={{ __html: THEME_BOOT_SCRIPT }} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }}

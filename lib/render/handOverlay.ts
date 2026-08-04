@@ -19,7 +19,7 @@ const THEME = {
   accent: "#f5b651",
   accentHot: "#ff7849",
   inkDim: "#8a8398",
-  inkFaint: "rgba(245, 182, 81, 0.45)",
+  inkFaint: "color-mix(in srgb, var(--accent) 45%, transparent)",
 };
 
 export interface OverlayDotState {
@@ -189,7 +189,7 @@ export function drawHandOverlay({
     ctx.arc(pt.x, pt.y, r, 0, Math.PI * 2);
     ctx.fill();
     // Inner highlight
-    ctx.fillStyle = "rgba(255, 255, 255, 0.35)";
+    ctx.fillStyle = "var(--raise-strong)";
     ctx.beginPath();
     ctx.arc(pt.x - r * 0.25, pt.y - r * 0.3, Math.max(1, r * 0.35), 0, Math.PI * 2);
     ctx.fill();
@@ -215,13 +215,13 @@ function drawDebugPanel(
   ctx.setLineDash([6, 4]);
   ctx.strokeStyle = live.dropZoneActive
     ? THEME.accentHot
-    : "rgba(255,120,73,0.5)";
+    : "color-mix(in srgb, var(--accent-hot) 50%, transparent)";
   const yEnter = videoRect.y + d.dropEnter * videoRect.h;
   ctx.beginPath();
   ctx.moveTo(0, yEnter);
   ctx.lineTo(width, yEnter);
   ctx.stroke();
-  ctx.strokeStyle = "rgba(245,182,81,0.35)";
+  ctx.strokeStyle = "color-mix(in srgb, var(--accent) 35%, transparent)";
   const yExit = videoRect.y + d.dropExit * videoRect.h;
   ctx.beginPath();
   ctx.moveTo(0, yExit);
@@ -249,7 +249,7 @@ function drawDebugPanel(
   const boxH = pad * 2 + lineH * lines.length;
   ctx.fillStyle = "rgba(10, 7, 16, 0.78)";
   ctx.fillRect(8, 8, boxW, boxH);
-  ctx.strokeStyle = "rgba(245,182,81,0.4)";
+  ctx.strokeStyle = "color-mix(in srgb, var(--accent) 40%, transparent)";
   ctx.lineWidth = 1;
   ctx.strokeRect(8.5, 8.5, boxW - 1, boxH - 1);
 

@@ -22,7 +22,7 @@ export function Leaderboard({
   highlightName,
   emptyMessage = "no scores yet · you could be first",
   columns = [],
-  title = "LEADERBOARD ─ ALL TIME · TOP 10",
+  title = "Leaderboard · all time · top 10",
 }: LeaderboardProps) {
   const highlight = highlightName?.toLowerCase();
   // Grid: rank · name (flex) · score · [each meta column].
@@ -34,25 +34,25 @@ export function Leaderboard({
   ].join(" ");
   return (
     <div
-      className="rounded-[2px] border overflow-hidden"
+      className="rounded-[6px] border overflow-hidden"
       style={{ borderColor: "var(--panel-border)" }}
     >
       <div
         className="px-3 py-2 flex items-center justify-between border-b"
         style={{
           borderColor: "var(--panel-border)",
-          background: "rgba(0,0,0,0.2)",
+          background: "var(--recess)",
         }}
       >
         <span
-          className="font-display text-[10px] tracking-[0.22em]"
+          className="font-display text-[10px] tracking-[0.1em]"
           style={{ color: "var(--accent)" }}
         >
           {title}
         </span>
         {loading && (
           <span
-            className="font-mono text-[9px] uppercase tracking-[0.18em]"
+            className="font-mono text-[9px] uppercase tracking-[0.09em]"
             style={{ color: "var(--ink-dim)" }}
           >
             syncing…
@@ -62,7 +62,7 @@ export function Leaderboard({
 
       {rows.length === 0 && !loading ? (
         <div
-          className="px-3 py-6 text-center font-mono text-[11px] uppercase tracking-[0.18em]"
+          className="px-3 py-6 text-center font-mono text-[11px] tracking-[0.09em]"
           style={{ color: "var(--ink-dim)" }}
         >
           {emptyMessage}
@@ -70,7 +70,7 @@ export function Leaderboard({
       ) : (
         <div className="font-mono text-[12px]">
           <div
-            className="grid px-3 py-1.5 border-b text-[9px] uppercase tracking-[0.22em]"
+            className="grid px-3 py-1.5 border-b text-[9px] uppercase tracking-[0.1em]"
             style={{
               borderColor: "var(--panel-border)",
               color: "var(--ink-dim)",
@@ -98,7 +98,7 @@ export function Leaderboard({
                 className="grid px-3 py-1.5"
                 style={{
                   background: isMe
-                    ? "linear-gradient(90deg, rgba(245,182,81,0.18), rgba(245,182,81,0.04))"
+                    ? "linear-gradient(90deg, color-mix(in srgb, var(--accent) 18%, transparent), color-mix(in srgb, var(--accent) 4%, transparent))"
                     : "transparent",
                   color: isMe ? "var(--accent)" : "var(--ink)",
                   gridTemplateColumns,
@@ -113,7 +113,7 @@ export function Leaderboard({
                 >
                   {String(r.rank).padStart(2, "0")}
                 </span>
-                <span className="truncate font-display tracking-[0.05em]">
+                <span className="truncate font-display tracking-[0.02em]">
                   {r.name}
                   {isMe && (
                     <span

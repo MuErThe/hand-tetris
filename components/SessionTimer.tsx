@@ -48,7 +48,7 @@ export function SessionTimer({ running, resetKey }: SessionTimerProps) {
   return (
     <div className="flex items-center gap-2">
       <span
-        className="font-mono text-[9px] uppercase tracking-[0.22em]"
+        className="font-mono text-[9px] uppercase tracking-[0.1em]"
         style={{ color: "var(--ink-dim)" }}
       >
         session
@@ -58,7 +58,7 @@ export function SessionTimer({ running, resetKey }: SessionTimerProps) {
         style={{
           color: running ? "var(--ink)" : "var(--ink-dim)",
           letterSpacing: "0.16em",
-          textShadow: running ? "0 0 6px rgba(245,182,81,0.18)" : "none",
+          textShadow: running ? "0 0 6px color-mix(in srgb, var(--accent) 18%, transparent)" : "none",
         }}
       >
         {m}:{s}

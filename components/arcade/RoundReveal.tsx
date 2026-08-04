@@ -46,7 +46,7 @@ export function RoundReveal({
           className={
             compact
               ? "flex flex-col gap-3"
-              : "panel-bg rounded-[2px] border px-5 py-4 flex flex-col gap-3"
+              : "panel-bg rounded-[6px] border px-5 py-4 flex flex-col gap-3"
           }
           style={compact ? undefined : { borderColor: "var(--panel-border-strong)" }}
         >
@@ -69,14 +69,14 @@ export function RoundReveal({
                 +{points}
               </motion.span>
               <span
-                className="font-mono text-[9px] uppercase tracking-[0.22em]"
+                className="font-mono text-[9px] uppercase tracking-[0.1em]"
                 style={{ color: "var(--ink-dim)" }}
               >
                 / {maxPoints}
               </span>
             </div>
             <span
-              className="font-mono text-[10px] tracking-[0.1em] leading-relaxed"
+              className="font-mono text-[10px] tracking-[0.05em] leading-relaxed"
               style={{ color: "var(--ink-dim)" }}
             >
               {detail}
@@ -85,9 +85,9 @@ export function RoundReveal({
 
           {principle && (
             <div
-              className="flex items-start gap-2 rounded-[2px] px-3 py-2"
+              className="flex items-start gap-2 rounded-[6px] px-3 py-2"
               style={{
-                background: "rgba(245,182,81,0.06)",
+                background: "color-mix(in srgb, var(--accent) 6%, transparent)",
                 border: "1px solid var(--panel-border)",
               }}
             >
@@ -110,11 +110,11 @@ export function RoundReveal({
             type="button"
             onClick={onContinue}
             autoFocus
-            className="font-display tracking-[0.24em] text-[12px] px-6 py-2.5 border w-full transition-all duration-150 hover:bg-[rgba(245,182,81,0.18)]"
+            className="font-display tracking-[0.06em] text-[12px] px-6 py-2.5 border w-full transition-all duration-150 hover-wash"
             style={{
               borderColor: "var(--accent)",
               color: "var(--accent)",
-              background: "rgba(245,182,81,0.08)",
+              background: "color-mix(in srgb, var(--accent) 8%, transparent)",
             }}
           >
             {isLast ? "SEE RESULTS ▸" : "NEXT ▸"}

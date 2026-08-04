@@ -20,7 +20,7 @@ export function CardStats({ gameId, unit = "" }: { gameId: string; unit?: string
 
   return (
     <div className="flex items-center justify-between pt-2 mt-1 border-t" style={{ borderColor: "var(--panel-border)" }}>
-      <span className="font-mono text-[9px] uppercase tracking-[0.18em]" style={{ color: "var(--ink-dim)" }}>
+      <span className="font-mono text-[9px] uppercase tracking-[0.09em]" style={{ color: "var(--ink-dim)" }}>
         best <span className="font-display" style={{ color: "var(--accent)" }}>{best.toLocaleString("en-US")}{unit}</span>
       </span>
       {trend.length >= 2 && <Sparkline values={trend} width={72} height={20} />}

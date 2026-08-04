@@ -161,7 +161,7 @@ export function StartScreen({ show, onStart, onDismiss }: StartScreenProps) {
           transition={{ duration: 0.3 }}
           className="fixed inset-0 z-40 flex items-start md:items-center justify-center px-6 py-6 overflow-y-auto overflow-x-hidden"
           style={{
-            background: "rgba(14,10,20,0.68)",
+            background: "var(--scrim)",
           }}
         >
           <motion.div
@@ -169,40 +169,33 @@ export function StartScreen({ show, onStart, onDismiss }: StartScreenProps) {
             animate={sharpenIn.animate}
             exit={sharpenIn.exit}
             transition={RACK}
-            className="panel-bg relative rounded-[2px] border max-w-[560px] w-full overflow-hidden my-auto"
+            className="panel-bg relative rounded-[6px] border max-w-[560px] w-full overflow-hidden my-auto"
             style={{
               borderColor: "var(--panel-border-strong)",
               boxShadow: "0 24px 60px rgba(0,0,0,0.55)",
             }}
           >
-            <CornerOrnament pos="tl" />
-            <CornerOrnament pos="tr" />
-            <CornerOrnament pos="bl" />
-            <CornerOrnament pos="br" />
 
             <div className="px-8 md:px-10 py-7">
               <div
-                className="font-display text-[10px] tracking-[0.32em] mb-3 text-center"
+                className="font-display text-[10px] tracking-[0.12em] mb-3 text-center"
                 style={{ color: "var(--accent)" }}
-              >
-                ─── byo hand ───
-              </div>
+              > byo hand </div>
               <h1
-                className="font-display tracking-[0.18em] leading-[0.95] mb-5 text-center"
+                className="font-display tracking-[0.09em] leading-[0.95] mb-5 text-center"
                 style={{
                   color: "var(--ink)",
                   fontSize: "clamp(38px, 8vw, 56px)",
                 }}
               >
-                HAND
+                Hand
                 <br />
                 <span
                   style={{
                     color: "var(--accent)",
-                    textShadow: "0 0 20px rgba(245,182,81,0.35)",
                   }}
                 >
-                  TETRIS
+                  Tetris
                 </span>
               </h1>
 
@@ -210,13 +203,13 @@ export function StartScreen({ show, onStart, onDismiss }: StartScreenProps) {
               <div className="mb-5">
                 <div className="flex items-center justify-between mb-1.5">
                   <label
-                    className="font-display text-[10px] tracking-[0.22em]"
+                    className="font-display text-[10px] tracking-[0.1em]"
                     style={{ color: "var(--accent)" }}
                   >
-                    PILOT TAG
+                    Pilot tag
                   </label>
                   <span
-                    className="font-mono text-[9px] uppercase tracking-[0.18em]"
+                    className="font-mono text-[9px] uppercase tracking-[0.09em]"
                     style={{
                       color: inlineMsg ? "var(--accent-hot)" : "var(--ink-dim)",
                     }}
@@ -225,7 +218,7 @@ export function StartScreen({ show, onStart, onDismiss }: StartScreenProps) {
                   </span>
                 </div>
                 <div
-                  className="flex gap-2 rounded-[2px] border p-1.5"
+                  className="flex gap-2 rounded-[6px] border p-1.5"
                   style={{
                     borderColor: "var(--panel-border-strong)",
                     background:
@@ -247,7 +240,7 @@ export function StartScreen({ show, onStart, onDismiss }: StartScreenProps) {
                     spellCheck={false}
                     autoComplete="off"
                     maxLength={NAME_RULES.max}
-                    className="flex-1 bg-transparent outline-none font-display tracking-[0.18em] px-2"
+                    className="flex-1 bg-transparent outline-none font-display tracking-[0.09em] px-2"
                     style={{
                       color: "var(--ink)",
                       fontSize: 18,
@@ -262,18 +255,18 @@ export function StartScreen({ show, onStart, onDismiss }: StartScreenProps) {
                       setError(null);
                       inputRef.current?.focus();
                     }}
-                    className="px-3 font-display text-[10px] tracking-[0.22em] rounded-[2px] border transition-colors hover:bg-[rgba(245,182,81,0.18)]"
+                    className="px-3 font-display text-[10px] tracking-[0.1em] rounded-[6px] border transition-colors hover-wash"
                     style={{
                       borderColor: "var(--panel-border-strong)",
                       color: "var(--accent)",
                     }}
                   >
-                    GENERATE
+                    Generate
                   </button>
                 </div>
                 {stored && stored.name.toLowerCase() === name.toLowerCase() && (
                   <div
-                    className="font-mono text-[9px] uppercase tracking-[0.18em] mt-1.5"
+                    className="font-mono text-[9px] uppercase tracking-[0.09em] mt-1.5"
                     style={{ color: "var(--c-S)" }}
                   >
                     ✓ welcome back, {stored.name}
@@ -281,7 +274,7 @@ export function StartScreen({ show, onStart, onDismiss }: StartScreenProps) {
                 )}
                 {!lbOnline && (
                   <div
-                    className="font-mono text-[9px] uppercase tracking-[0.18em] mt-1.5"
+                    className="font-mono text-[9px] uppercase tracking-[0.09em] mt-1.5"
                     style={{ color: "var(--ink-dim)" }}
                   >
                     ⓘ leaderboard not configured · scores stay local
@@ -292,10 +285,10 @@ export function StartScreen({ show, onStart, onDismiss }: StartScreenProps) {
 
               {error && (
                 <div
-                  className="font-mono text-[11px] mb-4 px-3 py-2 rounded-[2px] border"
+                  className="font-mono text-[11px] mb-4 px-3 py-2 rounded-[6px] border"
                   style={{
-                    borderColor: "rgba(255, 120, 73, 0.4)",
-                    background: "rgba(255, 120, 73, 0.08)",
+                    borderColor: "color-mix(in srgb, var(--accent-hot) 40%, transparent)",
+                    background: "color-mix(in srgb, var(--accent-hot) 8%, transparent)",
                     color: "var(--accent-hot)",
                   }}
                 >
@@ -307,28 +300,28 @@ export function StartScreen({ show, onStart, onDismiss }: StartScreenProps) {
                 <Detent
                   disabled={busy}
                   onClick={() => handleStart("camera")}
-                  className="font-display tracking-[0.24em] text-sm px-6 py-3.5 border w-full transition-all duration-150 disabled:opacity-50 hover:bg-[rgba(245,182,81,0.22)]"
+                  className="font-display tracking-[0.06em] text-sm px-6 py-3.5 border w-full transition-all duration-150 disabled:opacity-50 hover-wash"
                   style={{
                     borderColor: "var(--accent)",
                     color: "var(--accent)",
-                    background: "rgba(245, 182, 81, 0.1)",
-                    boxShadow: "0 0 24px rgba(245, 182, 81, 0.18)",
+                    background: "color-mix(in srgb, var(--accent) 10%, transparent)",
+                    boxShadow: "0 0 24px color-mix(in srgb, var(--accent) 18%, transparent)",
                   }}
                 >
                   {busy
-                    ? busyReason.toUpperCase() || "WORKING…"
+                    ? busyReason || "Working…"
                     : "▶ PLAY WITH HANDS"}
                 </Detent>
                 <button
                   disabled={busy}
                   onClick={() => handleStart("keyboard")}
-                  className="font-mono uppercase tracking-[0.22em] text-[11px] px-6 py-2.5 w-full transition-colors disabled:opacity-50 hover:text-[var(--ink)]"
+                  className="font-mono tracking-[0.1em] text-[11px] px-6 py-2.5 w-full transition-colors disabled:opacity-50 hover:text-[var(--ink)]"
                   style={{ color: "var(--ink-dim)" }}
                 >
                   play with keyboard only →
                 </button>
                 <p
-                  className="font-mono text-[9px] uppercase tracking-[0.18em] text-center mt-1"
+                  className="font-mono text-[9px] uppercase tracking-[0.09em] text-center mt-1"
                   style={{ color: "var(--ink-dim)", opacity: 0.8 }}
                 >
                   🔒 video is processed on-device · never leaves your browser
@@ -340,7 +333,7 @@ export function StartScreen({ show, onStart, onDismiss }: StartScreenProps) {
               <button
                 type="button"
                 onClick={() => setBoardOpen(true)}
-                className="w-full px-8 md:px-10 py-3 font-mono text-[10px] uppercase tracking-[0.22em] border-t transition-colors flex items-center justify-center gap-2 hover:bg-[rgba(245,182,81,0.08)]"
+                className="w-full px-8 md:px-10 py-3 font-mono text-[10px] uppercase tracking-[0.1em] border-t transition-colors flex items-center justify-center gap-2 hover-wash-soft"
                 style={{
                   borderColor: "var(--panel-border)",
                   color: "var(--ink-dim)",
@@ -360,7 +353,7 @@ export function StartScreen({ show, onStart, onDismiss }: StartScreenProps) {
           </motion.div>
           <Link
             href="/"
-            className="fixed top-4 left-4 z-[55] font-mono text-[10px] uppercase tracking-[0.24em] px-3 py-2 rounded-[2px] border transition-all duration-150 hover:-translate-y-px"
+            className="fixed top-4 left-4 z-[55] font-mono text-[10px] uppercase tracking-[0.06em] px-3 py-2 rounded-[6px] border transition-all duration-150 hover:-translate-y-px"
             style={{
               borderColor: "var(--panel-border-strong)",
               color: "var(--ink-dim)",
@@ -381,18 +374,18 @@ export function StartScreen({ show, onStart, onDismiss }: StartScreenProps) {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -8 }}
                 transition={{ duration: 0.18 }}
-                className="fixed top-4 right-4 z-[55] font-display text-[11px] tracking-[0.24em] px-3.5 py-2 rounded-[2px] border transition-all duration-150 hover:brightness-110 hover:-translate-y-px flex items-center gap-1.5"
+                className="fixed top-4 right-4 z-[55] font-display text-[11px] tracking-[0.06em] px-3.5 py-2 rounded-[6px] border transition-all duration-150 hover:brightness-110 hover:-translate-y-px flex items-center gap-1.5"
                 style={{
                   borderColor: "var(--accent)",
                   color: "#1a1108",
                   background: "var(--accent)",
                   boxShadow:
-                    "0 0 0 1px rgba(245,182,81,0.35), 0 0 24px rgba(245,182,81,0.55), 0 6px 18px rgba(0,0,0,0.45)",
+                    "0 0 0 1px color-mix(in srgb, var(--accent) 35%, transparent), 0 0 24px color-mix(in srgb, var(--accent) 55%, transparent), 0 6px 18px rgba(0,0,0,0.45)",
                   fontWeight: 600,
                 }}
               >
                 <span style={{ fontSize: 12, lineHeight: 1 }}>?</span>
-                RULES
+                Rules
               </motion.button>
             )}
           </AnimatePresence>
@@ -467,23 +460,21 @@ function RulesPanel({
             >
               <div>
                 <div
-                  className="font-display text-[9px] tracking-[0.32em] mb-0.5"
+                  className="font-display text-[9px] tracking-[0.12em] mb-0.5"
                   style={{ color: "var(--accent)" }}
-                >
-                  ─── manual ───
-                </div>
+                > manual </div>
                 <h2
-                  className="font-display tracking-[0.22em] text-lg"
+                  className="font-display tracking-[0.1em] text-lg"
                   style={{ color: "var(--ink)" }}
                 >
-                  RULES
+                  Rules
                 </h2>
               </div>
               <button
                 type="button"
                 onClick={onClose}
                 aria-label="close rules"
-                className="w-8 h-8 flex items-center justify-center rounded-[2px] border transition-colors hover:bg-[rgba(245,182,81,0.18)]"
+                className="w-8 h-8 flex items-center justify-center rounded-[6px] border transition-colors hover-wash"
                 style={{
                   borderColor: "var(--panel-border-strong)",
                   color: "var(--accent)",
@@ -495,7 +486,7 @@ function RulesPanel({
 
             <div className="px-6 py-5 flex flex-col gap-4">
               <div
-                className="flex items-center gap-3 font-display text-[10px] tracking-[0.32em]"
+                className="flex items-center gap-3 font-display text-[10px] tracking-[0.12em]"
                 style={{ color: "var(--accent)" }}
               >
                 <span
@@ -529,7 +520,7 @@ function RulesPanel({
               />
 
               <div
-                className="flex items-center gap-3 mt-2 font-display text-[10px] tracking-[0.32em]"
+                className="flex items-center gap-3 mt-2 font-display text-[10px] tracking-[0.12em]"
                 style={{ color: "var(--accent)" }}
               >
                 <span
@@ -588,15 +579,15 @@ function RuleRow({
 }) {
   return (
     <div
-      className="rounded-[2px] border px-3 py-3 flex gap-3 items-start"
+      className="rounded-[6px] border px-3 py-3 flex gap-3 items-start"
       style={{
         borderColor: "var(--panel-border)",
         background:
-          "linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.22))",
+          "linear-gradient(180deg, var(--raise), rgba(0,0,0,0.22))",
       }}
     >
       <div
-        className="shrink-0 w-[88px] h-[88px] rounded-[2px] border flex items-center justify-center"
+        className="shrink-0 w-[88px] h-[88px] rounded-[6px] border flex items-center justify-center"
         style={{
           borderColor: "var(--panel-border)",
           background: "rgba(0,0,0,0.35)",
@@ -608,7 +599,7 @@ function RuleRow({
       <div className="flex-1 flex flex-col gap-1">
         <div className="flex items-baseline justify-between">
           <span
-            className="font-display text-[11px] tracking-[0.22em]"
+            className="font-display text-[11px] tracking-[0.1em]"
             style={{ color: "var(--accent)" }}
           >
             {title}
@@ -621,7 +612,7 @@ function RuleRow({
           </span>
         </div>
         <p
-          className="font-mono text-[10px] uppercase tracking-[0.06em] leading-snug"
+          className="font-mono text-[10px] uppercase tracking-[0.03em] leading-snug"
           style={{ color: "var(--ink-dim)" }}
         >
           {body}
@@ -730,7 +721,7 @@ function KeyIllustration({
         fill={stroke}
         stroke="none"
       >
-        SPACE
+        Space
       </text>
       {/* slam trail */}
       <path d="M18 40 L72 40" strokeDasharray="2 3" opacity="0.55" />
@@ -836,40 +827,5 @@ function HandIllustration({ type }: { type: "steer" | "pinch" | "drop" }) {
       {/* target strip */}
       <path d="M8 92 L72 92" strokeDasharray="2 3" opacity="0.6" />
     </svg>
-  );
-}
-
-function CornerOrnament({ pos }: { pos: "tl" | "tr" | "bl" | "br" }) {
-  const map: Record<typeof pos, string> = {
-    tl: "top-2 left-2",
-    tr: "top-2 right-2",
-    bl: "bottom-2 left-2",
-    br: "bottom-2 right-2",
-  } as const;
-  const isLeft = pos.endsWith("l");
-  const isTop = pos.startsWith("t");
-  return (
-    <div className={`pointer-events-none absolute w-4 h-4 ${map[pos]}`}>
-      <div
-        className="absolute w-4 h-px"
-        style={{
-          background: "var(--accent)",
-          top: isTop ? 0 : "auto",
-          bottom: isTop ? "auto" : 0,
-          left: isLeft ? 0 : "auto",
-          right: isLeft ? "auto" : 0,
-        }}
-      />
-      <div
-        className="absolute w-px h-4"
-        style={{
-          background: "var(--accent)",
-          top: isTop ? 0 : "auto",
-          bottom: isTop ? "auto" : 0,
-          left: isLeft ? 0 : "auto",
-          right: isLeft ? "auto" : 0,
-        }}
-      />
-    </div>
   );
 }

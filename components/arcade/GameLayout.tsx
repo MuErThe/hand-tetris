@@ -4,7 +4,6 @@ import { useEffect, useRef, type ReactNode } from "react";
 import { animate, useReducedMotion } from "framer-motion";
 import { PanelFrame } from "@/components/PanelFrame";
 import { RoundDots } from "./RoundDots";
-import { FocalPlane } from "@/components/focal/FocalPlane";
 
 interface GameLayoutProps {
   /** Current challenge-type label, e.g. "BISECT" — the playfield panel label. */
@@ -51,7 +50,7 @@ export function GameLayout({
         hint={`round ${roundIdx + 1} / ${roundCount}`}
         rightSlot={
           <span
-            className="font-mono text-[9px] uppercase tracking-[0.2em]"
+            className="font-mono text-[9px] uppercase tracking-[0.1em]"
             style={{ color: "var(--ink-dim)" }}
           >
             score{" "}
@@ -66,7 +65,7 @@ export function GameLayout({
         contentClassName="flex-1 flex flex-col gap-3 min-h-0"
       >
         <p
-          className="shrink-0 font-mono text-[12px] text-center tracking-[0.04em]"
+          className="shrink-0 font-mono text-[12px] text-center tracking-[0.02em]"
           style={{ color: "var(--ink)" }}
         >
           {prompt}
@@ -75,10 +74,13 @@ export function GameLayout({
         {action && <div className="shrink-0">{action}</div>}
       </PanelFrame>
 
-      {/* Rail — peripheral (fz-1) while aiming; racks sharp when the reveal
-          lands. The playfield itself never defocuses: the teach-back marks
-          are drawn on it, and you don't blur the evidence. */}
-      <FocalPlane level={reveal ? 0 : 1} className="flex flex-col gap-3 min-h-0">
+      {/* The rail stays sharp. It used to sit at fz-1 while aiming and rack in
+          on the reveal, but the score and round dots are things you glance at
+          mid-round — blurring them makes the player fight the interface for
+          information it is already showing. Focus-pull still does real work on
+          the hub and behind the start overlay, where there genuinely is one
+          subject. */}
+      <div className="flex flex-col gap-3 min-h-0">
         <PanelFrame label="SESSION" hint="this run">
           <div className="flex flex-col gap-3">
             <RoundDots
@@ -89,7 +91,7 @@ export function GameLayout({
             />
             <div className="flex items-baseline justify-between">
               <span
-                className="font-mono text-[9px] uppercase tracking-[0.22em]"
+                className="font-mono text-[9px] uppercase tracking-[0.1em]"
                 style={{ color: "var(--ink-dim)" }}
               >
                 score
@@ -111,7 +113,7 @@ export function GameLayout({
         >
           {reveal ?? (
             <div
-              className="py-6 text-center font-mono text-[10px] uppercase tracking-[0.22em] leading-relaxed"
+              className="py-6 text-center font-mono text-[10px] uppercase tracking-[0.1em] leading-relaxed"
               style={{ color: "var(--ink-dim)", opacity: 0.7 }}
             >
               make your call —<br />
@@ -119,7 +121,7 @@ export function GameLayout({
             </div>
           )}
         </PanelFrame>
-      </FocalPlane>
+      </div>
     </div>
   );
 }
@@ -154,11 +156,33 @@ function ScoreTicker({
         el.textContent = Math.round(v).toLocaleString("en-US");
       },
     });
-    return () => controls.stop();
+    // A springy nudge on the number itself, so the count-up is felt and not
+    // just read. Runs alongside the count rather than gating it.
+    const pop = animate(1.14, 1, {
+      type: "spring",
+      stiffness: 480,
+      damping: 12,
+      mass: 0.5,
+      onUpdate: (v) => {
+        el.style.transform = `scale(${v})`;
+      },
+      onComplete: () => {
+        el.style.transform = "";
+      },
+    });
+    return () => {
+      controls.stop();
+      pop.stop();
+    };
   }, [value, reduced]);
 
   return (
-    <span ref={ref} className={className} style={style}>
+    // inline-block so the pop's transform actually applies.
+    <span
+      ref={ref}
+      className={className}
+      style={{ display: "inline-block", ...style }}
+    >
       {value.toLocaleString("en-US")}
     </span>
   );

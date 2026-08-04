@@ -9,6 +9,7 @@ export type VignetteKind =
   | "kern"
   | "colour"
   | "circles"
+  | "boolean"
   | "warmup";
 
 interface VignetteProps {
@@ -24,7 +25,7 @@ export function Vignette({ kind, tint, className = "" }: VignetteProps) {
       aria-hidden
       className={`vg-anim relative w-full overflow-hidden ${className}`}
       style={{
-        background: `linear-gradient(180deg, color-mix(in srgb, ${tint} 8%, transparent), rgba(0,0,0,0.22))`,
+        background: `linear-gradient(180deg, color-mix(in srgb, ${tint} 8%, transparent), var(--recess))`,
       }}
     >
       <svg
@@ -38,8 +39,8 @@ export function Vignette({ kind, tint, className = "" }: VignetteProps) {
   );
 }
 
-const INK = "rgba(236,230,216,0.85)";
-const DIM = "rgba(236,230,216,0.28)";
+const INK = "color-mix(in srgb, var(--ink) 85%, transparent)";
+const DIM = "color-mix(in srgb, var(--ink) 28%, transparent)";
 
 const SCENES: Record<VignetteKind, (tint: string) => React.ReactNode> = {
   tetris: (tint) => (
@@ -97,6 +98,38 @@ const SCENES: Record<VignetteKind, (tint: string) => React.ReactNode> = {
     </>
   ),
 
+  // cutout: two shapes overlap and the shared region keeps being selected
+  boolean: (tint) => (
+    <>
+      <defs>
+        <clipPath id="vg-boolean-overlap">
+          <circle cx="72" cy="36" r="19" />
+        </clipPath>
+      </defs>
+      <circle cx="72" cy="36" r="19" fill="none" stroke={INK} strokeWidth="1.5" />
+      <rect
+        x="78"
+        y="20"
+        width="32"
+        height="32"
+        rx="7"
+        fill="none"
+        stroke={INK}
+        strokeWidth="1.5"
+      />
+      <g clipPath="url(#vg-boolean-overlap)">
+        <rect
+          x="78"
+          y="20"
+          width="32"
+          height="32"
+          rx="7"
+          fill={tint}
+          style={{ animation: "vg-boolean 4s ease-in-out infinite" }}
+        />
+      </g>
+    </>
+  ),
   kern: (tint) => (
     <>
       {/* baseline */}

@@ -33,7 +33,7 @@ export default function EyeballItPage() {
       gameId={EYEBALL_GAME}
       title={
         <>
-          EYEBALL <span style={{ color: "var(--accent)" }}>IT</span>
+          Eyeball <span style={{ color: "var(--accent)" }}>It</span>
         </>
       }
       trains="the trained eye"
@@ -124,7 +124,7 @@ export function EyeballGame({
       const acc = Math.round(100 * (1 - meanError));
       const bestRound = rounds.reduce((m, r) => Math.max(m, r.points), 0);
       if (record) recordSession(EYEBALL_GAME, score, rounds);
-      const headline = acc >= 85 ? "SHARP EYE" : acc >= 65 ? "GOOD EYE" : "KEEP LOOKING";
+      const headline = acc >= 85 ? "Sharp eye" : acc >= 65 ? "Good eye" : "Keep looking";
       onFinish({
         score,
         meta: { acc, best: bestRound },
@@ -239,7 +239,7 @@ function PlaySurface({
     <svg
       viewBox="0 0 100 100"
       preserveAspectRatio="none"
-      className="absolute inset-0 w-full h-full rounded-[2px] border"
+      className="absolute inset-0 w-full h-full rounded-[6px] border"
       style={{
         borderColor: "var(--panel-border-strong)",
         background: "var(--paper-bg)",

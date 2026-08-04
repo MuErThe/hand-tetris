@@ -1,11 +1,7 @@
 import type { Metadata } from "next";
+import { metadataFor } from "@/lib/games/registry";
 
-export const metadata: Metadata = {
-  title: "Hand Tetris — play Tetris with your hands",
-  description:
-    "Gesture-controlled Tetris in the browser: steer with your hand, pinch to rotate, dip to drop. Webcam hand tracking runs entirely on-device — video never leaves your browser.",
-  alternates: { canonical: "./" },
-};
+export const metadata: Metadata = metadataFor("tetris");
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return children;

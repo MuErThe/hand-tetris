@@ -328,8 +328,11 @@ export default function Home() {
   }
 
   return (
+    // force-dark: the WebGL stage is a lit 3D scene and the webcam feed is
+    // graded for it. Both fall apart on paper, so Tetris keeps its dark room
+    // whatever the rest of the site is set to.
     <div
-      className="relative flex-1 flex flex-col w-full h-screen overflow-hidden gap-3"
+      className="force-dark relative flex-1 flex flex-col w-full h-screen overflow-hidden gap-3"
       style={{ padding: "16px 18px" }}
     >
       {/* Header */}
@@ -338,19 +341,19 @@ export default function Home() {
           <Link
             href="/"
             title="Back to the arcade"
-            className="font-mono text-[9px] uppercase tracking-[0.22em] self-center transition-colors hover:text-[var(--accent)]"
+            className="font-mono text-[9px] uppercase tracking-[0.1em] self-center transition-colors hover:text-[var(--accent)]"
             style={{ color: "var(--ink-dim)" }}
           >
             ◂ arcade
           </Link>
           <h1
-            className="font-display text-xl md:text-2xl tracking-[0.22em] leading-none"
+            className="font-display text-xl md:text-2xl tracking-[0.1em] leading-none"
             style={{ color: "var(--ink)" }}
           >
-            HAND <span style={{ color: "var(--accent)" }}>TETRIS</span>
+            Hand <span style={{ color: "var(--accent)" }}>Tetris</span>
           </h1>
           <span
-            className="font-mono text-[9px] uppercase tracking-[0.22em]"
+            className="font-mono text-[9px] uppercase tracking-[0.1em]"
             style={{ color: "var(--ink-dim)" }}
           >
             gesture mode
@@ -359,11 +362,11 @@ export default function Home() {
         <div className="flex items-center gap-5 flex-wrap">
           {player && (
             <div
-              className="flex items-center gap-2 px-2.5 py-1 rounded-[2px]"
+              className="flex items-center gap-2 px-2.5 py-1 rounded-[6px]"
               style={{ border: "1px solid var(--panel-border)" }}
             >
               <span
-                className="font-mono text-[9px] uppercase tracking-[0.22em]"
+                className="font-mono text-[9px] uppercase tracking-[0.1em]"
                 style={{ color: "var(--ink-dim)" }}
               >
                 pilot
@@ -384,7 +387,7 @@ export default function Home() {
                 type="button"
                 onClick={handlePauseToggle}
                 title={isPaused ? "Resume the run (R)" : "Pause the run (P)"}
-                className="flex items-center gap-2 px-3.5 py-1.5 rounded-[2px] border-2 font-display text-[11px] tracking-[0.24em] transition-all duration-150"
+                className="flex items-center gap-2 px-3.5 py-1.5 rounded-[6px] border-2 font-display text-[11px] tracking-[0.06em] transition-all duration-150"
                 style={{
                   borderColor: "var(--accent)",
                   color: "#1a1108",
@@ -392,49 +395,49 @@ export default function Home() {
                     ? "linear-gradient(180deg, #ffd28a, var(--accent))"
                     : "linear-gradient(180deg, var(--accent), #d99339)",
                   boxShadow:
-                    "0 0 18px rgba(245, 182, 81, 0.5), inset 0 -2px 0 rgba(0,0,0,0.25)",
+                    "0 0 18px color-mix(in srgb, var(--accent) 50%, transparent), inset 0 -2px 0 rgba(0,0,0,0.25)",
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.boxShadow =
-                    "0 0 28px rgba(245, 182, 81, 0.8), inset 0 -2px 0 rgba(0,0,0,0.25)";
+                    "0 0 28px color-mix(in srgb, var(--accent) 80%, transparent), inset 0 -2px 0 rgba(0,0,0,0.25)";
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.boxShadow =
-                    "0 0 18px rgba(245, 182, 81, 0.5), inset 0 -2px 0 rgba(0,0,0,0.25)";
+                    "0 0 18px color-mix(in srgb, var(--accent) 50%, transparent), inset 0 -2px 0 rgba(0,0,0,0.25)";
                 }}
               >
                 <KeyBadge letter={isPaused ? "R" : "P"} tone="dark" />
-                {isPaused ? "RESUME" : "PAUSE"}
+                {isPaused ? "Resume" : "Pause"}
               </button>
               <button
                 type="button"
                 onClick={handleQuit}
                 title="End the current run (Q)"
-                className="flex items-center gap-2 px-3.5 py-1.5 rounded-[2px] border-2 font-display text-[11px] tracking-[0.24em] transition-all duration-150"
+                className="flex items-center gap-2 px-3.5 py-1.5 rounded-[6px] border-2 font-display text-[11px] tracking-[0.06em] transition-all duration-150"
                 style={{
                   borderColor: "var(--accent-hot)",
                   color: "#fff",
                   background:
                     "linear-gradient(180deg, var(--accent-hot), #d8451c)",
                   boxShadow:
-                    "0 0 18px rgba(255, 120, 73, 0.55), inset 0 -2px 0 rgba(0,0,0,0.25)",
+                    "0 0 18px color-mix(in srgb, var(--accent-hot) 55%, transparent), inset 0 -2px 0 rgba(0,0,0,0.25)",
                   textShadow: "0 1px 0 rgba(0,0,0,0.35)",
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.background =
                     "linear-gradient(180deg, #ff8a5a, var(--accent-hot))";
                   e.currentTarget.style.boxShadow =
-                    "0 0 28px rgba(255, 120, 73, 0.85), inset 0 -2px 0 rgba(0,0,0,0.25)";
+                    "0 0 28px color-mix(in srgb, var(--accent-hot) 85%, transparent), inset 0 -2px 0 rgba(0,0,0,0.25)";
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.background =
                     "linear-gradient(180deg, var(--accent-hot), #d8451c)";
                   e.currentTarget.style.boxShadow =
-                    "0 0 18px rgba(255, 120, 73, 0.55), inset 0 -2px 0 rgba(0,0,0,0.25)";
+                    "0 0 18px color-mix(in srgb, var(--accent-hot) 55%, transparent), inset 0 -2px 0 rgba(0,0,0,0.25)";
                 }}
               >
                 <KeyBadge letter="Q" tone="light" />
-                QUIT
+                Quit
               </button>
             </div>
           )}
@@ -461,14 +464,14 @@ export default function Home() {
               />
             )}
             <div
-              className="pointer-events-none absolute top-2 left-2 px-2 py-1 rounded-[2px]"
+              className="pointer-events-none absolute top-2 left-2 px-2 py-1 rounded-[6px]"
               style={{
-                background: "rgba(14,10,20,0.55)",
+                background: "var(--scrim-soft)",
                 border: "1px solid var(--panel-border)",
               }}
             >
               <span
-                className="font-mono text-[9px] uppercase tracking-[0.22em]"
+                className="font-mono text-[9px] uppercase tracking-[0.1em]"
                 style={{ color: "var(--ink-dim)" }}
               >
                 level
@@ -483,20 +486,19 @@ export default function Home() {
             {isPaused && started && !isOver && (
               <div
                 className="pointer-events-none absolute inset-0 flex items-center justify-center"
-                style={{ background: "rgba(14,10,20,0.6)", backdropFilter: "blur(2px)" }}
+                style={{ background: "var(--scrim-soft)", backdropFilter: "blur(2px)" }}
               >
                 <div className="text-center">
                   <div
-                    className="font-display tracking-[0.34em] text-3xl mb-2"
+                    className="font-display tracking-[0.12em] text-3xl mb-2"
                     style={{
                       color: "var(--accent)",
-                      textShadow: "0 0 24px rgba(245,182,81,0.6)",
                     }}
                   >
-                    PAUSED
+                    Paused
                   </div>
                   <div
-                    className="font-mono text-[10px] uppercase tracking-[0.22em]"
+                    className="font-mono text-[10px] uppercase tracking-[0.1em]"
                     style={{ color: "var(--ink-dim)" }}
                   >
                     press <KeyBadge letter="R" tone="light" /> to resume
@@ -505,14 +507,14 @@ export default function Home() {
               </div>
             )}
             <div
-              className="pointer-events-none absolute top-2 right-2 px-2 py-1 rounded-[2px]"
+              className="pointer-events-none absolute top-2 right-2 px-2 py-1 rounded-[6px]"
               style={{
-                background: "rgba(14,10,20,0.55)",
+                background: "var(--scrim-soft)",
                 border: "1px solid var(--panel-border)",
               }}
             >
               <span
-                className="font-mono text-[9px] uppercase tracking-[0.22em]"
+                className="font-mono text-[9px] uppercase tracking-[0.1em]"
                 style={{ color: "var(--ink-dim)" }}
               >
                 score
@@ -559,11 +561,9 @@ export default function Home() {
       <footer className="shrink-0 flex items-center justify-between gap-3 flex-wrap">
         <KeyboardHints />
         <span
-          className="font-mono text-[9px] uppercase tracking-[0.22em]"
+          className="font-mono text-[9px] uppercase tracking-[0.1em]"
           style={{ color: "var(--ink-dim)" }}
-        >
-          ─── pinch · steer · drop ───
-        </span>
+        > pinch · steer · drop </span>
       </footer>
 
       <StartScreen
@@ -599,40 +599,37 @@ function MobileGate() {
       style={{ background: "#000" }}
     >
       <div
-        className="font-display text-[10px] tracking-[0.32em] mb-3"
+        className="font-display text-[10px] tracking-[0.12em] mb-3"
         style={{ color: "var(--accent)" }}
-      >
-        ─── wrong stage ───
-      </div>
+      > wrong stage </div>
       <h1
-        className="font-display tracking-[0.18em] leading-[0.95] mb-3"
+        className="font-display tracking-[0.09em] leading-[0.95] mb-3"
         style={{
           color: "var(--ink)",
           fontSize: "clamp(34px, 9vw, 56px)",
         }}
       >
-        HAND
+        Hand
         <br />
         <span
           style={{
             color: "var(--accent)",
-            textShadow: "0 0 20px rgba(245,182,81,0.35)",
           }}
         >
-          TETRIS
+          Tetris
         </span>
       </h1>
 
       <RotateDeviceAnimation />
 
       <h2
-        className="font-display tracking-[0.22em] text-base md:text-lg mt-5 mb-2"
+        className="font-display tracking-[0.1em] text-base md:text-lg mt-5 mb-2"
         style={{ color: "var(--accent)" }}
       >
-        GO WIDE, PILOT
+        Go wide, pilot
       </h2>
       <p
-        className="font-mono text-[10px] uppercase tracking-[0.22em] leading-relaxed max-w-[300px]"
+        className="font-mono text-[11px] tracking-[0.02em] leading-relaxed max-w-[320px]"
         style={{ color: "var(--ink-dim)" }}
       >
         hand tetris needs elbow room.
@@ -643,7 +640,7 @@ function MobileGate() {
       </p>
 
       <div
-        className="font-mono text-[9px] uppercase tracking-[0.22em] mt-6"
+        className="font-mono text-[9px] uppercase tracking-[0.1em] mt-6"
         style={{ color: "var(--panel-border-strong)" }}
       >
         min ░ 900 px wide · landscape only
@@ -710,8 +707,8 @@ function KeyBadge({ letter, tone }: { letter: string; tone: "light" | "dark" }) 
         height: 16,
         fontSize: 9,
         borderRadius: 2,
-        border: `1px solid ${isDark ? "rgba(0,0,0,0.55)" : "rgba(255,255,255,0.7)"}`,
-        background: isDark ? "rgba(0,0,0,0.18)" : "rgba(255,255,255,0.18)",
+        border: `1px solid ${isDark ? "rgba(0,0,0,0.55)" : "var(--raise-strong)"}`,
+        background: isDark ? "rgba(0,0,0,0.18)" : "var(--raise-strong)",
         color: isDark ? "#1a1108" : "#fff",
       }}
     >
@@ -732,7 +729,7 @@ function CamBadge({ status }: { status: CameraStatus }) {
   const cur = map[status];
   return (
     <div
-      className="flex items-center gap-2 px-2.5 py-1 rounded-[2px]"
+      className="flex items-center gap-2 px-2.5 py-1 rounded-[6px]"
       style={{ border: "1px solid var(--panel-border)" }}
     >
       <span
@@ -740,7 +737,7 @@ function CamBadge({ status }: { status: CameraStatus }) {
         style={{ background: cur.dot, boxShadow: `0 0 6px ${cur.dot}` }}
       />
       <span
-        className="font-mono text-[9px] uppercase tracking-[0.22em]"
+        className="font-mono text-[9px] uppercase tracking-[0.1em]"
         style={{ color: "var(--ink-dim)" }}
       >
         cam · {cur.label}

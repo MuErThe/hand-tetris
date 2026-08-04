@@ -54,6 +54,32 @@ function srgbToLinear(c: number): number {
   return cs <= 0.04045 ? cs / 12.92 : Math.pow((cs + 0.055) / 1.055, 2.4);
 }
 
+/** WCAG relative luminance, 0 (black) … 1 (white). */
+export function relativeLuminance({ r, g, b }: Rgb): number {
+  return (
+    0.2126 * srgbToLinear(r) +
+    0.7152 * srgbToLinear(g) +
+    0.0722 * srgbToLinear(b)
+  );
+}
+
+/** WCAG contrast ratio between two opaque colours, 1 … 21. Order-independent. */
+export function contrastRatio(a: Rgb, b: Rgb): number {
+  const la = relativeLuminance(a);
+  const lb = relativeLuminance(b);
+  const [hi, lo] = la > lb ? [la, lb] : [lb, la];
+  return (hi + 0.05) / (lo + 0.05);
+}
+
+/** Composite an opaque colour over a ground at the given alpha. */
+export function blend(fg: Rgb, ground: Rgb, alpha: number): Rgb {
+  return {
+    r: ground.r + (fg.r - ground.r) * alpha,
+    g: ground.g + (fg.g - ground.g) * alpha,
+    b: ground.b + (fg.b - ground.b) * alpha,
+  };
+}
+
 export function rgbToLab({ r, g, b }: Rgb): Lab {
   const R = srgbToLinear(r);
   const G = srgbToLinear(g);

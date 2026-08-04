@@ -39,7 +39,7 @@ export function PinchMeter({ gestureRef }: PinchMeterProps) {
       {/* Pinch vertical bar */}
       <div className="flex flex-col items-center gap-1">
         <span
-          className="font-mono text-[8px] uppercase tracking-[0.18em]"
+          className="font-mono text-[8px] uppercase tracking-[0.09em]"
           style={{ color: "var(--ink-dim)" }}
         >
           pinch
@@ -47,7 +47,7 @@ export function PinchMeter({ gestureRef }: PinchMeterProps) {
         <div
           className="relative w-2 rounded-[1px] overflow-hidden"
           style={{
-            background: "rgba(255,255,255,0.05)",
+            background: "var(--raise-strong)",
             height: 56,
           }}
         >
@@ -61,8 +61,8 @@ export function PinchMeter({ gestureRef }: PinchMeterProps) {
                   : "linear-gradient(180deg, var(--accent), #c9882f)",
               boxShadow:
                 pinch01 > 0.78
-                  ? "0 0 8px rgba(255,120,73,0.55)"
-                  : "0 0 4px rgba(245,182,81,0.4)",
+                  ? "0 0 8px color-mix(in srgb, var(--accent-hot) 55%, transparent)"
+                  : "0 0 4px color-mix(in srgb, var(--accent) 40%, transparent)",
             }}
           />
           {/* Threshold tick */}
@@ -70,7 +70,7 @@ export function PinchMeter({ gestureRef }: PinchMeterProps) {
             className="absolute left-0 right-0 h-px"
             style={{
               bottom: "78%",
-              background: "rgba(255,120,73,0.45)",
+              background: "color-mix(in srgb, var(--accent-hot) 45%, transparent)",
             }}
           />
         </div>
@@ -80,7 +80,7 @@ export function PinchMeter({ gestureRef }: PinchMeterProps) {
       <div className="flex flex-col flex-1 gap-1">
         <div className="flex items-center justify-between">
           <span
-            className="font-mono text-[8px] uppercase tracking-[0.18em]"
+            className="font-mono text-[8px] uppercase tracking-[0.09em]"
             style={{ color: "var(--ink-dim)" }}
           >
             target column
@@ -103,10 +103,10 @@ export function PinchMeter({ gestureRef }: PinchMeterProps) {
                   i === col
                     ? "var(--accent)"
                     : Math.abs(i - col) === 1
-                      ? "rgba(245,182,81,0.35)"
-                      : "rgba(255,255,255,0.05)",
+                      ? "color-mix(in srgb, var(--accent) 35%, transparent)"
+                      : "var(--raise-strong)",
                 boxShadow:
-                  i === col ? "0 0 6px rgba(245,182,81,0.55)" : "none",
+                  i === col ? "0 0 6px color-mix(in srgb, var(--accent) 55%, transparent)" : "none",
               }}
             />
           ))}

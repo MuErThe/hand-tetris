@@ -22,17 +22,17 @@ export function FocusScaleSpecimen() {
             key={label}
             type="button"
             onClick={() => setFocused(i)}
-            className={`fz-${level} rounded-[2px] border px-3 py-6 text-center cursor-pointer`}
+            className={`fz-${level} rounded-[6px] border px-3 py-6 text-center cursor-pointer`}
             style={{
               borderColor: i === focused ? "var(--accent)" : "var(--panel-border)",
               background: "var(--field-2)",
               pointerEvents: "auto", // stay clickable even when defocused
             }}
           >
-            <span className="font-display text-[12px] tracking-[0.18em] block mb-1" style={{ color: i === focused ? "var(--accent)" : "var(--ink)" }}>
+            <span className="font-display text-[12px] tracking-[0.09em] block mb-1" style={{ color: i === focused ? "var(--accent)" : "var(--ink)" }}>
               PLANE {i}
             </span>
-            <span className="font-mono text-[9px] uppercase tracking-[0.18em]" style={{ color: "var(--ink-dim)" }}>
+            <span className="font-mono text-[9px] uppercase tracking-[0.09em]" style={{ color: "var(--ink-dim)" }}>
               {label}
             </span>
           </button>
@@ -48,23 +48,23 @@ export function AberrationSpecimen() {
   return (
     <div className="flex flex-wrap items-center gap-4">
       <div
-        className={`rounded-[2px] border px-6 py-5 ${erring ? "aberrate-edge" : ""}`}
+        className={`rounded-[6px] border px-6 py-5 ${erring ? "aberrate-edge" : ""}`}
         style={{ borderColor: erring ? "var(--accent-hot)" : "var(--panel-border)", background: "var(--field-2)" }}
       >
         <span
-          className={`font-display text-[16px] tracking-[0.16em] ${erring ? "aberrate-text" : ""}`}
+          className={`font-display text-[16px] tracking-[0.08em] ${erring ? "aberrate-text" : ""}`}
           style={{ color: erring ? "var(--accent-hot)" : "var(--ink)" }}
         >
-          {erring ? "OFF BY 12%" : "DEAD CENTRE"}
+          {erring ? "OFF BY 12%" : "Dead centre"}
         </span>
       </div>
       <Detent
         type="button"
         onClick={() => setErring((e) => !e)}
-        className="font-display text-[11px] tracking-[0.22em] px-4 py-2.5 border rounded-[2px] cursor-pointer"
-        style={{ borderColor: "var(--accent)", color: "var(--accent)", background: "rgba(245,182,81,0.08)" }}
+        className="font-display text-[11px] tracking-[0.1em] px-4 py-2.5 border rounded-[6px] cursor-pointer"
+        style={{ borderColor: "var(--accent)", color: "var(--accent)", background: "color-mix(in srgb, var(--accent) 8%, transparent)" }}
       >
-        {erring ? "CORRECT IT" : "MISS THE MARK"}
+        {erring ? "Correct it" : "Miss the mark"}
       </Detent>
     </div>
   );
@@ -78,12 +78,12 @@ export function DetentSpecimen() {
       <Detent
         type="button"
         onClick={() => setCount((c) => c + 1)}
-        className="font-display text-[12px] tracking-[0.24em] px-6 py-3 border rounded-[2px] cursor-pointer"
-        style={{ borderColor: "var(--accent)", color: "var(--accent)", background: "rgba(245,182,81,0.1)" }}
+        className="font-display text-[12px] tracking-[0.06em] px-6 py-3 border rounded-[6px] cursor-pointer"
+        style={{ borderColor: "var(--accent)", color: "var(--accent)", background: "color-mix(in srgb, var(--accent) 10%, transparent)" }}
       >
-        TURN THE DIAL
+        Turn the dial
       </Detent>
-      <span className="font-mono text-[11px] tracking-[0.1em]" style={{ color: "var(--ink-dim)" }}>
+      <span className="font-mono text-[11px] tracking-[0.05em]" style={{ color: "var(--ink-dim)" }}>
         {count} detent{count === 1 ? "" : "s"} clicked
       </span>
     </div>
@@ -99,10 +99,10 @@ export function RackSpecimen() {
         {["THE PLAYFIELD", "THE REVEAL"].map((label, i) => (
           <div
             key={label}
-            className={`fz-${side === i ? 0 : 1} rounded-[2px] border px-4 py-8 text-center`}
+            className={`fz-${side === i ? 0 : 1} rounded-[6px] border px-4 py-8 text-center`}
             style={{ borderColor: side === i ? "var(--accent)" : "var(--panel-border)", background: "var(--field-2)" }}
           >
-            <span className="font-display text-[13px] tracking-[0.18em]" style={{ color: side === i ? "var(--ink)" : "var(--ink-dim)" }}>
+            <span className="font-display text-[13px] tracking-[0.09em]" style={{ color: side === i ? "var(--ink)" : "var(--ink-dim)" }}>
               {label}
             </span>
           </div>
@@ -111,10 +111,10 @@ export function RackSpecimen() {
       <Detent
         type="button"
         onClick={() => setSide((s) => (s === 0 ? 1 : 0))}
-        className="self-start font-display text-[11px] tracking-[0.22em] px-4 py-2.5 border rounded-[2px] cursor-pointer"
-        style={{ borderColor: "var(--accent)", color: "var(--accent)", background: "rgba(245,182,81,0.08)" }}
+        className="self-start font-display text-[11px] tracking-[0.1em] px-4 py-2.5 border rounded-[6px] cursor-pointer"
+        style={{ borderColor: "var(--accent)", color: "var(--accent)", background: "color-mix(in srgb, var(--accent) 8%, transparent)" }}
       >
-        RACK FOCUS ⟷
+        Rack focus ⟷
       </Detent>
     </div>
   );
@@ -125,12 +125,12 @@ export function ReticleSpecimen() {
   return (
     <div className="flex flex-wrap gap-3">
       {["EYE", "TYPE", "COLOUR"].map((label) => (
-        <Reticle key={label} className="rounded-[2px]">
+        <Reticle key={label} className="rounded-[6px]">
           <div
-            className="rounded-[2px] border px-8 py-6 text-center"
+            className="rounded-[6px] border px-8 py-6 text-center"
             style={{ borderColor: "var(--panel-border)", background: "var(--field-2)" }}
           >
-            <span className="font-display text-[12px] tracking-[0.2em]" style={{ color: "var(--ink)" }}>
+            <span className="font-display text-[12px] tracking-[0.1em]" style={{ color: "var(--ink)" }}>
               {label}
             </span>
           </div>

@@ -56,7 +56,7 @@ export default function KernCombatPage() {
       gameId={KERN_GAME}
       title={
         <>
-          KERN <span style={{ color: "var(--accent)" }}>COMBAT</span>
+          Kern <span style={{ color: "var(--accent)" }}>Combat</span>
         </>
       }
       trains="typographic craft"
@@ -221,7 +221,7 @@ export function KernGame({
         rounds.reduce((a, r) => a + r.errorPct, 0) / (rounds.length || 1);
       const acc = Math.round(100 * (1 - meanError));
       if (record) recordSession(KERN_GAME, score, rounds);
-      const headline = acc >= 85 ? "TIGHT KERNING" : acc >= 65 ? "GOOD SPACING" : "MIND THE GAPS";
+      const headline = acc >= 85 ? "Tight kerning" : acc >= 65 ? "Good spacing" : "Mind the gaps";
       onFinish({
         score,
         meta: { acc, words: roundCount },
@@ -267,10 +267,10 @@ export function KernGame({
           <Detent
             type="button"
             onClick={lockIn}
-            className="font-display tracking-[0.24em] text-[13px] px-6 py-3 border w-full transition-all duration-150 hover:bg-[rgba(245,182,81,0.2)]"
-            style={{ borderColor: "var(--accent)", color: "var(--accent)", background: "rgba(245,182,81,0.1)" }}
+            className="font-display tracking-[0.06em] text-[13px] px-6 py-3 border w-full transition-all duration-150 hover-wash"
+            style={{ borderColor: "var(--accent)", color: "var(--accent)", background: "color-mix(in srgb, var(--accent) 10%, transparent)" }}
           >
-            ▣ LOCK IT IN
+            ▣ Lock it in
           </Detent>
         ) : undefined
       }
@@ -279,7 +279,7 @@ export function KernGame({
       <div className="flex-1 min-h-0 flex items-center justify-center">
         <div
           ref={containerRef}
-          className="relative w-full rounded-[2px] border overflow-hidden"
+          className="relative w-full rounded-[6px] border overflow-hidden"
           style={{
             maxWidth: 820,
             height: 240,

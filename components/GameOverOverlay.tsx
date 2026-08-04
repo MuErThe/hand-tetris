@@ -34,7 +34,7 @@ interface GameOverOverlayProps {
   onRestart: () => void;
   /** Optional — when given, renders a secondary "BACK TO MENU" action. */
   onBackToMenu?: () => void;
-  /** When true, the modal header reads "RUN ENDED" instead of "GAME OVER". */
+  /** When true, the modal header reads "Run ended" instead of "Game over". */
   endedManually?: boolean;
 }
 
@@ -64,7 +64,7 @@ export function GameOverOverlay({
           transition={{ duration: 0.25 }}
           className="fixed inset-0 z-40 flex items-center justify-center px-6 py-6 overflow-y-auto"
           style={{
-            background: "rgba(14,10,20,0.72)",
+            background: "var(--scrim)",
           }}
         >
           <motion.div
@@ -72,24 +72,24 @@ export function GameOverOverlay({
             animate={sharpenIn.animate}
             exit={sharpenIn.exit}
             transition={RACK}
-            className="panel-bg relative rounded-[2px] border max-w-[560px] w-full overflow-hidden"
+            className="panel-bg relative rounded-[6px] border max-w-[560px] w-full overflow-hidden"
             style={{
-              borderColor: "rgba(255,120,73,0.45)",
+              borderColor: "color-mix(in srgb, var(--accent-hot) 45%, transparent)",
               boxShadow: "0 24px 60px rgba(0,0,0,0.55)",
             }}
           >
             <div
-              className="px-6 py-3 border-b font-display text-[10px] tracking-[0.32em] flex items-center justify-between"
+              className="px-6 py-3 border-b font-display text-[10px] tracking-[0.12em] flex items-center justify-between"
               style={{
-                borderColor: "rgba(255,120,73,0.25)",
+                borderColor: "color-mix(in srgb, var(--accent-hot) 25%, transparent)",
                 color: "var(--accent-hot)",
-                background: "rgba(255,120,73,0.08)",
+                background: "color-mix(in srgb, var(--accent-hot) 8%, transparent)",
               }}
             >
               <span>
                 {endedManually
-                  ? "─── ejected · run ended ───"
-                  : "─── stack overflow ───"}
+                  ? " ejected · run ended "
+                  : " stack overflow "}
               </span>
               <span style={{ color: "var(--ink-dim)" }}>
                 {endedManually ? "stopped" : "terminated"}
@@ -101,17 +101,16 @@ export function GameOverOverlay({
                 initial={{ scale: 0.85 }}
                 animate={{ scale: 1 }}
                 transition={{ duration: 0.45, ease: "easeOut" }}
-                className="font-display tracking-[0.18em] leading-none mb-1"
+                className="font-display tracking-[0.09em] leading-none mb-1"
                 style={{
                   color: "var(--accent-hot)",
                   fontSize: 36,
-                  textShadow: "0 0 16px rgba(255,120,73,0.55)",
                 }}
               >
-                {endedManually ? "RUN ENDED" : "GAME OVER"}
+                {endedManually ? "Run ended" : "Game over"}
               </motion.h2>
               <div
-                className="font-mono text-[10px] uppercase tracking-[0.22em] mb-1"
+                className="font-mono text-[10px] uppercase tracking-[0.1em] mb-1"
                 style={{ color: "var(--ink-dim)" }}
               >
                 {playerName ? `pilot · ${playerName}` : "the well is full"}
@@ -120,10 +119,9 @@ export function GameOverOverlay({
                 <motion.div
                   initial={{ opacity: 0, y: -6 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="font-display text-[12px] tracking-[0.22em] mb-3"
+                  className="font-display text-[12px] tracking-[0.1em] mb-3"
                   style={{
                     color: "var(--accent)",
-                    textShadow: "0 0 10px rgba(245,182,81,0.5)",
                   }}
                 >
                   ★ new personal best ★
@@ -131,7 +129,7 @@ export function GameOverOverlay({
               )}
               {!newBest && personalBest && (
                 <div
-                  className="font-mono text-[10px] uppercase tracking-[0.22em] mb-3"
+                  className="font-mono text-[10px] uppercase tracking-[0.1em] mb-3"
                   style={{ color: "var(--ink-dim)" }}
                 >
                   personal best · {personalBest.score.toLocaleString("en-US")}
@@ -163,20 +161,20 @@ export function GameOverOverlay({
               <div className="flex flex-col gap-2">
                 <Detent
                   onClick={onRestart}
-                  className="font-display tracking-[0.24em] text-sm px-6 py-3.5 border w-full transition-all duration-150 hover:bg-[rgba(245,182,81,0.22)]"
+                  className="font-display tracking-[0.06em] text-sm px-6 py-3.5 border w-full transition-all duration-150 hover-wash"
                   style={{
                     borderColor: "var(--accent)",
                     color: "var(--accent)",
-                    background: "rgba(245, 182, 81, 0.1)",
-                    boxShadow: "0 0 20px rgba(245, 182, 81, 0.15)",
+                    background: "color-mix(in srgb, var(--accent) 10%, transparent)",
+                    boxShadow: "0 0 20px color-mix(in srgb, var(--accent) 15%, transparent)",
                   }}
                 >
-                  ↻ INSERT COIN
+                  ↻ Insert coin
                 </Detent>
                 {onBackToMenu && (
                   <button
                     onClick={onBackToMenu}
-                    className="font-mono uppercase tracking-[0.22em] text-[11px] px-6 py-2 w-full transition-colors hover:text-[var(--ink)]"
+                    className="font-mono tracking-[0.1em] text-[11px] px-6 py-2 w-full transition-colors hover:text-[var(--ink)]"
                     style={{ color: "var(--ink-dim)" }}
                   >
                     ← back to menu
@@ -202,18 +200,18 @@ function StatBlock({
 }) {
   return (
     <div
-      className="flex flex-col items-center justify-center rounded-[2px] border py-3"
+      className="flex flex-col items-center justify-center rounded-[6px] border py-3"
       style={{
         borderColor: hero
           ? "var(--panel-border-strong)"
           : "var(--panel-border)",
         background: hero
-          ? "linear-gradient(180deg, rgba(245,182,81,0.08), rgba(245,182,81,0.02))"
-          : "rgba(255,255,255,0.02)",
+          ? "linear-gradient(180deg, color-mix(in srgb, var(--accent) 8%, transparent), color-mix(in srgb, var(--accent) 2%, transparent))"
+          : "var(--raise)",
       }}
     >
       <span
-        className="font-mono text-[9px] uppercase tracking-[0.22em]"
+        className="font-mono text-[9px] uppercase tracking-[0.1em]"
         style={{ color: "var(--ink-dim)" }}
       >
         {label}
@@ -224,7 +222,7 @@ function StatBlock({
           color: hero ? "var(--accent)" : "var(--ink)",
           fontSize: hero ? 26 : 20,
           letterSpacing: "0.04em",
-          textShadow: hero ? "0 0 10px rgba(245,182,81,0.3)" : "none",
+          textShadow: hero ? "0 0 10px color-mix(in srgb, var(--accent) 30%, transparent)" : "none",
         }}
       >
         {value.toLocaleString("en-US")}
@@ -264,7 +262,7 @@ function SubmissionLine({ status }: { status: SubmissionStatus }) {
   }
   return (
     <div
-      className="font-mono text-[10px] uppercase tracking-[0.22em]"
+      className="font-mono text-[10px] uppercase tracking-[0.1em]"
       style={{ color }}
     >
       {text}

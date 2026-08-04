@@ -20,7 +20,7 @@ export default function ColourForgePage() {
   return (
     <GameShell
       gameId={COLOUR_GAME}
-      title={<>COLOUR <span style={{ color: "var(--accent)" }}>FORGE</span></>}
+      title={<>Colour <span style={{ color: "var(--accent)" }}>Forge</span></>}
       trains="colour perception"
       pitch="mix to match the target across eight rounds — and learn which way your eye tends to lie."
       howTo={[
@@ -105,7 +105,7 @@ export function ColourGame({
         rounds.reduce((a, r) => a + r.errorPct, 0) / (rounds.length || 1) * 45,
       );
       if (record) recordSession(COLOUR_GAME, score, rounds);
-      const headline = acc >= 85 ? "TRUE EYE" : acc >= 65 ? "GOOD MIX" : "OFF-HUE";
+      const headline = acc >= 85 ? "True eye" : acc >= 65 ? "Good mix" : "Off-hue";
       onFinish({
         score,
         meta: { acc, avgDe },
@@ -164,10 +164,10 @@ export function ColourGame({
           <Detent
             type="button"
             onClick={lockIn}
-            className="font-display tracking-[0.24em] text-[13px] px-6 py-3 border w-full transition-all duration-150 hover:bg-[rgba(245,182,81,0.2)]"
-            style={{ borderColor: "var(--accent)", color: "var(--accent)", background: "rgba(245,182,81,0.1)" }}
+            className="font-display tracking-[0.06em] text-[13px] px-6 py-3 border w-full transition-all duration-150 hover-wash"
+            style={{ borderColor: "var(--accent)", color: "var(--accent)", background: "color-mix(in srgb, var(--accent) 10%, transparent)" }}
           >
-            ▣ LOCK IT IN
+            ▣ Lock it in
           </Detent>
         ) : undefined
       }
@@ -175,13 +175,13 @@ export function ColourGame({
       {/* Play / reveal area — the lit bench: warm paper, work in the light */}
       <div className="flex-1 min-h-0 flex items-center justify-center">
       <div
-        className="w-full rounded-[2px] border flex flex-col items-center justify-center gap-5 py-6 px-5"
+        className="w-full rounded-[6px] border flex flex-col items-center justify-center gap-5 py-6 px-5"
         style={{ maxWidth: 620, borderColor: "var(--panel-border-strong)", background: "var(--paper-bg)" }}
       >
         {!locked ? (
           <>
             <div
-              className="flex items-stretch gap-4 rounded-[2px] px-5 py-4"
+              className="flex items-stretch gap-4 rounded-[6px] px-5 py-4"
               style={{ background: "var(--mat-grey)" }}
             >
               <Swatch
@@ -232,13 +232,13 @@ export function ColourGame({
         ) : (
           <div className="flex flex-col items-center gap-3">
             {/* Butted comparison — on the appraisal mat, where colour is judged. */}
-            <div className="rounded-[2px] px-5 py-4" style={{ background: "var(--mat-grey)" }}>
-            <div className="flex rounded-[2px] overflow-hidden border" style={{ borderColor: "var(--paper-line)" }}>
+            <div className="rounded-[6px] px-5 py-4" style={{ background: "var(--mat-grey)" }}>
+            <div className="flex rounded-[6px] overflow-hidden border" style={{ borderColor: "var(--paper-line)" }}>
               <div style={{ width: 190, height: 150, background: hslToCss(round.target) }} />
               <div style={{ width: 190, height: 150, background: hslToCss(attempt) }} />
             </div>
             </div>
-            <div className="flex w-full justify-between font-mono text-[9px] uppercase tracking-[0.22em]" style={{ color: "var(--paper-dim)", maxWidth: 420 }}>
+            <div className="flex w-full justify-between font-mono text-[9px] uppercase tracking-[0.1em]" style={{ color: "var(--paper-dim)", maxWidth: 420 }}>
               <span>target</span>
               <span>
                 ΔE <span className="font-display" style={{ color: "var(--aim-ink)" }}>{locked.ev.deltaE.toFixed(1)}</span>
@@ -291,7 +291,7 @@ function Swatch({
   return (
     <div className="flex flex-col items-center gap-1.5">
       <div
-        className="rounded-[2px] border flex items-center justify-center"
+        className="rounded-[6px] border flex items-center justify-center"
         style={{
           width: 150,
           height: 150,
@@ -305,11 +305,11 @@ function Swatch({
           </span>
         )}
       </div>
-      <span className="font-mono text-[9px] uppercase tracking-[0.22em]" style={{ color: "var(--paper-ink)" }}>
+      <span className="font-mono text-[9px] uppercase tracking-[0.1em]" style={{ color: "var(--paper-ink)" }}>
         {label}
       </span>
       <span
-        className="font-mono text-[9px] tracking-[0.1em]"
+        className="font-mono text-[9px] tracking-[0.05em]"
         style={{ color: "var(--paper-dim)", minHeight: 12 }}
       >
         {caption ?? ""}
@@ -337,7 +337,7 @@ function DeltaBar({
   const half = Math.abs(frac) * 50;
   return (
     <div className="flex items-center gap-2">
-      <span className="font-mono text-[9px] uppercase tracking-[0.18em] text-right" style={{ color: "var(--paper-dim)", width: 38 }}>
+      <span className="font-mono text-[9px] uppercase tracking-[0.09em] text-right" style={{ color: "var(--paper-dim)", width: 38 }}>
         {label}
       </span>
       <div className={`relative flex-1 rounded-full ${worst ? "aberrate-edge" : ""}`} style={{ height: 6, background: "rgba(42,33,24,0.12)", border: "1px solid var(--paper-line)" }}>
@@ -354,7 +354,7 @@ function DeltaBar({
           }}
         />
       </div>
-      <span className="font-mono text-[9px] tracking-[0.08em] text-right" style={{ color: "var(--paper-ink)", width: 40 }}>
+      <span className="font-mono text-[9px] tracking-[0.03em] text-right" style={{ color: "var(--paper-ink)", width: 40 }}>
         {value > 0 ? "+" : ""}
         {Math.round(value)}
         {unit}
@@ -392,7 +392,7 @@ function ColourSlider({
 
   return (
     <div className="flex flex-col gap-1">
-      <div className="flex items-center justify-between font-mono text-[9px] uppercase tracking-[0.2em]" style={{ color: "var(--paper-dim)" }}>
+      <div className="flex items-center justify-between font-mono text-[9px] uppercase tracking-[0.1em]" style={{ color: "var(--paper-dim)" }}>
         <span>{label}</span>
         <span className="font-display" style={{ color: "var(--paper-ink)" }}>{value}</span>
       </div>
@@ -411,7 +411,7 @@ function ColourSlider({
           e.currentTarget.releasePointerCapture?.(e.pointerId);
         }}
         className="relative rounded-full"
-        style={{ height: 10, background: gradient, cursor: "pointer", touchAction: "none", border: "1px solid rgba(0,0,0,0.4)" }}
+        style={{ height: 10, background: gradient, cursor: "pointer", touchAction: "none", border: "1px solid color-mix(in srgb, var(--paper-ink) 40%, transparent)" }}
       >
         {/* hairline thumb — a precision caret, not a knob */}
         <div
@@ -425,7 +425,7 @@ function ColourSlider({
             background: "#fff",
             border: "1px solid #1a1108",
             borderRadius: 1,
-            boxShadow: "0 1px 4px rgba(0,0,0,0.5)",
+            boxShadow: "0 1px 4px color-mix(in srgb, var(--paper-ink) 50%, transparent)",
             pointerEvents: "none",
           }}
         />

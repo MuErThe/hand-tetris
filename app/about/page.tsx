@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { CATALOGUE } from "@/lib/games/registry";
 
 export const metadata: Metadata = {
   title: "About — what Squint is and how it trains your eye",
@@ -23,7 +25,7 @@ const FAQS: { q: string; a: string }[] = [
   },
   {
     q: "How long does a session take?",
-    a: "About five minutes. Each game is a short session of quick rounds, and the Daily Warm-Up chains one round of every game into a single five-minute ritual with streak tracking.",
+    a: "About five minutes. Each game is a short session of quick rounds, and the Daily Warm-Up chains one round of four games — a different set sampled each day — into a single five-minute ritual with streak tracking.",
   },
   {
     q: "What is the Thirty Circles exercise?",
@@ -49,33 +51,6 @@ const FAQ_JSON_LD = {
   })),
 };
 
-const GAMES: { name: string; trains: string; how: string }[] = [
-  {
-    name: "Eyeball It",
-    trains: "visual accuracy — the trained eye",
-    how: "Bisect lines, centre dots, judge angles, find thirds and the golden section purely by eye. Every round reveals the truth with a design-spec redline showing your error, plus the principle behind the miss (like why optical centre sits above geometric centre).",
-  },
-  {
-    name: "Kern Combat",
-    trains: "typographic craft — letter spacing",
-    how: "Drag letters until every gap feels even, then see the font's true kerning ghosted under your attempt with per-gap deviation marks. Teaches the optical rules: open pairs nest, rounds tuck in, straight stems need air.",
-  },
-  {
-    name: "Colour Forge",
-    trains: "colour perception",
-    how: "Mix hue, saturation and lightness to match a target — sometimes from memory, sometimes finding the complement. Scored perceptually (CIEDE2000) with a signed per-channel breakdown of which way your eye lies.",
-  },
-  {
-    name: "Thirty Circles",
-    trains: "divergent thinking",
-    how: "The classic creativity sprint: thirty circles, three minutes, a different thing in each. Draw with your webcam-tracked hand or a mouse; end with a reflection on fluency, flexibility and originality, and go again with a self-imposed constraint.",
-  },
-  {
-    name: "Hand Tetris",
-    trains: "spatial planning and hand–eye coordination",
-    how: "Tetris steered entirely by hand gestures through your webcam — slide to steer, pinch to rotate, dip to drop. All tracking runs on-device.",
-  },
-];
 
 export default function AboutPage() {
   return (
@@ -86,19 +61,22 @@ export default function AboutPage() {
       />
       <div className="min-h-full flex flex-col items-center px-5 py-10 md:py-14">
         <article className="w-full" style={{ maxWidth: 720 }}>
-          <Link
-            href="/"
-            className="font-mono text-[9px] uppercase tracking-[0.22em] transition-colors hover:text-[var(--accent)]"
-            style={{ color: "var(--ink-dim)" }}
-          >
-            ◂ back to the arcade
-          </Link>
+          <div className="flex items-center justify-between gap-4">
+            <Link
+              href="/"
+              className="font-mono text-[9px] uppercase tracking-[0.1em] transition-colors hover:text-[var(--accent)]"
+              style={{ color: "var(--ink-dim)" }}
+            >
+              ◂ back to the arcade
+            </Link>
+            <ThemeToggle />
+          </div>
 
           <h1
-            className="font-display tracking-[0.14em] leading-tight mt-6 mb-4"
+            className="font-display tracking-[0.07em] leading-tight mt-6 mb-4"
             style={{ color: "var(--ink)", fontSize: "clamp(26px, 5vw, 40px)" }}
           >
-            ABOUT <span style={{ color: "var(--accent)" }}>SQUINT</span>
+            About <span style={{ color: "var(--accent)" }}>SQUINT</span>
           </h1>
 
           <p className="font-mono text-[13px] leading-relaxed mb-4" style={{ color: "var(--ink)" }}>
@@ -113,24 +91,24 @@ export default function AboutPage() {
             yours, the error measured, and the design principle behind the miss.
             Progress is tracked locally so you can watch your accuracy trend over
             time, rounds adapt toward whatever you&apos;re worst at, and the Daily
-            Warm-Up chains everything into a five-minute ritual before the real
-            work begins. The interface itself is built in{" "}
+            Warm-Up chains a fresh set of four games into a five-minute ritual
+            before the real work begins. The interface itself is built in{" "}
             <Link href="/focalism" className="underline decoration-dotted underline-offset-4" style={{ color: "var(--accent)" }}>
               Focalism
             </Link>
             , a design language we invented where hierarchy is focus.
           </p>
 
-          <h2 className="font-display text-[14px] tracking-[0.22em] mb-4" style={{ color: "var(--accent)" }}>
-            THE GAMES
+          <h2 className="font-display text-[14px] tracking-[0.1em] mb-4" style={{ color: "var(--accent)" }}>
+            The games
           </h2>
           <dl className="mb-8 flex flex-col gap-4">
-            {GAMES.map((g) => (
-              <div key={g.name} className="rounded-[2px] border px-4 py-3" style={{ borderColor: "var(--panel-border)" }}>
-                <dt className="font-display text-[13px] tracking-[0.12em] mb-1" style={{ color: "var(--ink)" }}>
+            {CATALOGUE.map((g) => (
+              <div key={g.id} className="rounded-[6px] border px-4 py-3" style={{ borderColor: "var(--panel-border)" }}>
+                <dt className="font-display text-[13px] tracking-[0.04em] mb-1" style={{ color: "var(--ink)" }}>
                   {g.name}{" "}
-                  <span className="font-mono text-[10px] uppercase tracking-[0.16em]" style={{ color: "var(--ink-dim)" }}>
-                    · trains {g.trains}
+                  <span className="font-mono text-[10px] uppercase tracking-[0.08em]" style={{ color: "var(--ink-dim)" }}>
+                    · trains {g.trainsLong}
                   </span>
                 </dt>
                 <dd className="font-mono text-[12px] leading-relaxed" style={{ color: "var(--ink-dim)" }}>
@@ -140,8 +118,8 @@ export default function AboutPage() {
             ))}
           </dl>
 
-          <h2 className="font-display text-[14px] tracking-[0.22em] mb-4" style={{ color: "var(--accent)" }}>
-            QUESTIONS
+          <h2 className="font-display text-[14px] tracking-[0.1em] mb-4" style={{ color: "var(--accent)" }}>
+            Questions
           </h2>
           <div className="flex flex-col gap-5 mb-10">
             {FAQS.map(({ q, a }) => (
@@ -158,10 +136,10 @@ export default function AboutPage() {
 
           <Link
             href="/"
-            className="inline-block font-display tracking-[0.24em] text-[13px] px-6 py-3 border transition-all duration-150 hover:bg-[rgba(245,182,81,0.18)]"
-            style={{ borderColor: "var(--accent)", color: "var(--accent)", background: "rgba(245,182,81,0.08)" }}
+            className="inline-block font-display tracking-[0.06em] text-[13px] px-6 py-3 border transition-all duration-150 hover-wash"
+            style={{ borderColor: "var(--accent)", color: "var(--accent)", background: "color-mix(in srgb, var(--accent) 8%, transparent)" }}
           >
-            ▶ PLAY SQUINT
+            ▶ Play Squint
           </Link>
         </article>
       </div>

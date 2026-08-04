@@ -11,7 +11,7 @@ interface StreakData {
 }
 
 /** Days since the Unix epoch at the given date's LOCAL midnight. */
-function localDayNumber(d = new Date()): number {
+export function localDayNumber(d = new Date()): number {
   const midnight = new Date(d.getFullYear(), d.getMonth(), d.getDate());
   return Math.floor(midnight.getTime() / 86_400_000);
 }

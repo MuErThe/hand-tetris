@@ -194,10 +194,10 @@ export const VisionFeed = forwardRef<VisionFeedHandle, VisionFeedProps>(
 
     return (
       <div
-        className="relative w-full h-full rounded-[2px] overflow-hidden"
+        className="relative w-full h-full rounded-[6px] overflow-hidden"
         style={{
           background: "rgba(0,0,0,0.35)",
-          boxShadow: "inset 0 0 0 1px rgba(245,182,81,0.08)",
+          boxShadow: "inset 0 0 0 1px color-mix(in srgb, var(--accent) 8%, transparent)",
         }}
       >
         <video
@@ -225,9 +225,9 @@ export const VisionFeed = forwardRef<VisionFeedHandle, VisionFeedProps>(
 
         {/* Status pill */}
         <div
-          className="absolute top-2 right-2 flex items-center gap-1.5 px-2 py-1 rounded-[2px]"
+          className="absolute top-2 right-2 flex items-center gap-1.5 px-2 py-1 rounded-[6px]"
           style={{
-            background: "rgba(14,10,20,0.65)",
+            background: "var(--scrim)",
             backdropFilter: "blur(2px)",
             border: "1px solid var(--panel-border)",
           }}
@@ -237,7 +237,7 @@ export const VisionFeed = forwardRef<VisionFeedHandle, VisionFeedProps>(
             style={{ background: statusDot(status) }}
           />
           <span
-            className="font-mono text-[9px] uppercase tracking-[0.22em]"
+            className="font-mono text-[9px] uppercase tracking-[0.1em]"
             style={{ color: "var(--ink-dim)" }}
           >
             cam · {statusLabel(status)}
@@ -248,9 +248,9 @@ export const VisionFeed = forwardRef<VisionFeedHandle, VisionFeedProps>(
         {(status === "init" || status === "failed") && (
           <div className="absolute inset-0 flex items-center justify-center text-center font-mono text-xs px-6">
             <div
-              className="px-4 py-3 rounded-[2px] border max-w-[90%]"
+              className="px-4 py-3 rounded-[6px] border max-w-[90%]"
               style={{
-                background: "rgba(14,10,20,0.7)",
+                background: "var(--scrim)",
                 borderColor: "var(--panel-border)",
                 color: "var(--ink-dim)",
               }}

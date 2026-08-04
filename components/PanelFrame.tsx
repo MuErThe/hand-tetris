@@ -10,6 +10,12 @@ interface PanelFrameProps {
   hint?: string;
 }
 
+/**
+ * The panel. Surfaces first: a raised tonal step with a hairline, rather than
+ * the bordered cabinet it used to be. The corner brackets that used to sit at
+ * each corner were the arcade skin and have gone with it — the structure is
+ * carried by tone and spacing now.
+ */
 export function PanelFrame({
   label,
   children,
@@ -20,73 +26,31 @@ export function PanelFrame({
 }: PanelFrameProps) {
   return (
     <div
-      className={`panel-bg relative rounded-[2px] border overflow-hidden ${className}`}
-      style={{ borderColor: "var(--panel-border)" }}
+      className={`panel-bg relative border overflow-hidden ${className}`}
+      style={{
+        borderColor: "var(--panel-border)",
+        borderRadius: "var(--r-panel)",
+      }}
     >
-      <CornerBracket pos="tl" />
-      <CornerBracket pos="tr" />
-      <CornerBracket pos="bl" />
-      <CornerBracket pos="br" />
-
       <div className="px-4 pt-3 pb-2 flex items-center gap-3">
         <div className="flex flex-col">
-          <span
-            className="font-display text-[10px] tracking-[0.22em]"
-            style={{ color: "var(--accent)" }}
-          >
+          <span className="label-micro" style={{ color: "var(--ink-dim)" }}>
             {label}
           </span>
           {hint && (
             <span
-              className="font-mono text-[9px] uppercase tracking-[0.16em] -mt-0.5"
-              style={{ color: "var(--ink-dim)" }}
+              className="label-micro -mt-0.5"
+              style={{ color: "var(--ink-dim)", opacity: 0.75 }}
             >
               {hint}
             </span>
           )}
         </div>
-        <div className="flex-1 dashed-rule" />
+        <div className="flex-1" />
         {rightSlot}
       </div>
 
       <div className={`px-4 pb-4 ${contentClassName}`}>{children}</div>
-    </div>
-  );
-}
-
-function CornerBracket({ pos }: { pos: "tl" | "tr" | "bl" | "br" }) {
-  const map: Record<typeof pos, string> = {
-    tl: "top-1.5 left-1.5",
-    tr: "top-1.5 right-1.5",
-    bl: "bottom-1.5 left-1.5",
-    br: "bottom-1.5 right-1.5",
-  } as const;
-  const isLeft = pos.endsWith("l");
-  const isTop = pos.startsWith("t");
-  return (
-    <div className={`pointer-events-none absolute w-3 h-3 ${map[pos]}`}>
-      <div
-        className="absolute w-3 h-px"
-        style={{
-          background: "var(--accent)",
-          top: isTop ? 0 : "auto",
-          bottom: isTop ? "auto" : 0,
-          left: isLeft ? 0 : "auto",
-          right: isLeft ? "auto" : 0,
-          opacity: 0.7,
-        }}
-      />
-      <div
-        className="absolute w-px h-3"
-        style={{
-          background: "var(--accent)",
-          top: isTop ? 0 : "auto",
-          bottom: isTop ? "auto" : 0,
-          left: isLeft ? 0 : "auto",
-          right: isLeft ? "auto" : 0,
-          opacity: 0.7,
-        }}
-      />
     </div>
   );
 }

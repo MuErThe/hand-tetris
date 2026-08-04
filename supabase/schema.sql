@@ -146,7 +146,7 @@ declare
   v_level         int;
   v_max_plausible int;
 begin
-  if p_game not in ('tetris', 'eyeball-it', 'kern-combat', 'colour-forge') then
+  if p_game not in ('tetris', 'eyeball-it', 'kern-combat', 'colour-forge', 'double-take', 'contrast-call', 'steady-hand', 'cutout') then
     raise exception 'unknown_game';
   end if;
 

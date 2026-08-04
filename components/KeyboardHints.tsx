@@ -18,7 +18,7 @@ export function KeyboardHints({ className = "" }: KeyboardHintsProps) {
             {h.keys.map((k, j) => (
               <kbd
                 key={j}
-                className="font-display text-[10px] tracking-[0.04em] inline-flex items-center justify-center rounded-[2px] border"
+                className="font-display text-[10px] tracking-[0.02em] inline-flex items-center justify-center rounded-[6px] border"
                 style={{
                   minWidth: 18,
                   height: 18,
@@ -26,9 +26,9 @@ export function KeyboardHints({ className = "" }: KeyboardHintsProps) {
                   borderColor: "var(--panel-border-strong)",
                   color: "var(--ink)",
                   background:
-                    "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(0,0,0,0.18))",
+                    "linear-gradient(180deg, var(--raise), rgba(0,0,0,0.18))",
                   boxShadow:
-                    "inset 0 -1px 0 rgba(0,0,0,0.4), 0 1px 0 rgba(245,182,81,0.05)",
+                    "inset 0 -1px 0 rgba(0,0,0,0.4), 0 1px 0 color-mix(in srgb, var(--accent) 5%, transparent)",
                 }}
               >
                 {k}
@@ -36,7 +36,7 @@ export function KeyboardHints({ className = "" }: KeyboardHintsProps) {
             ))}
           </div>
           <span
-            className="font-mono text-[10px] uppercase tracking-[0.18em]"
+            className="font-mono text-[10px] uppercase tracking-[0.09em]"
             style={{ color: "var(--ink-dim)" }}
           >
             {h.label}

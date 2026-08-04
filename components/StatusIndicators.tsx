@@ -68,15 +68,15 @@ function Pill({
       animate={{
         backgroundColor: active
           ? tone === "hot"
-            ? "rgba(255, 120, 73, 0.18)"
-            : "rgba(245, 182, 81, 0.18)"
-          : "rgba(255, 255, 255, 0.03)",
+            ? "color-mix(in srgb, var(--accent-hot) 18%, transparent)"
+            : "color-mix(in srgb, var(--accent) 18%, transparent)"
+          : "var(--raise)",
         boxShadow: active
-          ? `0 0 14px ${tone === "hot" ? "rgba(255,120,73,0.55)" : "rgba(245,182,81,0.55)"}, inset 0 0 0 1px ${accent}`
+          ? `0 0 14px ${tone === "hot" ? "color-mix(in srgb, var(--accent-hot) 55%, transparent)" : "color-mix(in srgb, var(--accent) 55%, transparent)"}, inset 0 0 0 1px ${accent}`
           : "0 0 0 rgba(0,0,0,0)",
       }}
       transition={{ duration: 0.15, ease: "easeOut" }}
-      className="px-2 py-1 rounded-[2px] border font-display text-[9px] tracking-[0.22em] flex items-center gap-1.5"
+      className="px-2 py-1 rounded-[6px] border font-display text-[9px] tracking-[0.1em] flex items-center gap-1.5"
       style={{
         borderColor: active ? accent : "var(--panel-border)",
         color: active ? accent : "var(--ink-dim)",

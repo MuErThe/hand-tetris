@@ -87,7 +87,7 @@ export function LeaderboardModal({
           onClick={onClose}
           className="fixed inset-0 z-50 flex items-start md:items-center justify-center px-4 py-6 overflow-y-auto"
           style={{
-            background: "rgba(8,5,14,0.7)",
+            background: "var(--scrim)",
           }}
         >
           <motion.div
@@ -97,17 +97,13 @@ export function LeaderboardModal({
             exit={sharpenIn.exit}
             transition={RACK}
             onClick={(e) => e.stopPropagation()}
-            className="panel-bg relative rounded-[2px] border max-w-[640px] w-full overflow-hidden my-auto"
+            className="panel-bg relative rounded-[6px] border max-w-[640px] w-full overflow-hidden my-auto"
             style={{
               borderColor: "var(--panel-border-strong)",
               boxShadow:
-                "0 32px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(245,182,81,0.05)",
+                "0 32px 80px var(--shadow-strong), 0 0 0 1px color-mix(in srgb, var(--accent) 5%, transparent)",
             }}
           >
-            <CornerOrnament pos="tl" />
-            <CornerOrnament pos="tr" />
-            <CornerOrnament pos="bl" />
-            <CornerOrnament pos="br" />
 
             {/* Header */}
             <div
@@ -115,28 +111,25 @@ export function LeaderboardModal({
               style={{
                 borderColor: "var(--panel-border)",
                 background:
-                  "linear-gradient(180deg, rgba(245,182,81,0.10), rgba(245,182,81,0.02))",
+                  "linear-gradient(180deg, color-mix(in srgb, var(--accent) 10%, transparent), color-mix(in srgb, var(--accent) 2%, transparent))",
               }}
             >
               <div>
                 <div
-                  className="font-display text-[10px] tracking-[0.32em] mb-1"
+                  className="font-display text-[10px] tracking-[0.12em] mb-1"
                   style={{ color: "var(--accent)" }}
-                >
-                  ─── {eyebrow} ───
-                </div>
+                > {eyebrow} </div>
                 <h2
-                  className="font-display tracking-[0.2em] leading-none"
+                  className="font-display tracking-[0.1em] leading-none"
                   style={{
                     color: "var(--ink)",
                     fontSize: 26,
-                    textShadow: "0 0 16px rgba(245,182,81,0.32)",
                   }}
                 >
-                  LEADER<span style={{ color: "var(--accent)" }}>BOARD</span>
+                  Leader<span style={{ color: "var(--accent)" }}>board</span>
                 </h2>
                 <div
-                  className="font-mono text-[9px] uppercase tracking-[0.22em] mt-1"
+                  className="font-mono text-[9px] uppercase tracking-[0.1em] mt-1"
                   style={{ color: "var(--ink-dim)" }}
                 >
                   all-time · top 10 ·{" "}
@@ -147,11 +140,11 @@ export function LeaderboardModal({
                 type="button"
                 onClick={onClose}
                 aria-label="Close"
-                className="rounded-[2px] border w-9 h-9 flex items-center justify-center transition-colors"
+                className="rounded-[6px] border w-9 h-9 flex items-center justify-center transition-colors"
                 style={{
                   borderColor: "var(--panel-border-strong)",
                   color: "var(--ink-dim)",
-                  background: "rgba(0,0,0,0.25)",
+                  background: "var(--recess)",
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.color = "var(--ink)";
@@ -169,7 +162,7 @@ export function LeaderboardModal({
             <div className="px-6 py-5">
               {rows.length === 0 ? (
                 <div
-                  className="text-center py-10 font-mono text-[11px] uppercase tracking-[0.22em]"
+                  className="text-center py-10 font-mono text-[11px] tracking-[0.1em]"
                   style={{ color: "var(--ink-dim)" }}
                 >
                   {loading ? "loading top scores…" : "no scores yet · be first"}
@@ -200,14 +193,14 @@ export function LeaderboardModal({
                   {/* Rest of the list */}
                   {rest.length > 0 && (
                     <div
-                      className="rounded-[2px] border overflow-hidden"
+                      className="rounded-[6px] border overflow-hidden"
                       style={{
                         borderColor: "var(--panel-border)",
-                        background: "rgba(0,0,0,0.18)",
+                        background: "var(--recess)",
                       }}
                     >
                       <div
-                        className="grid px-3 py-1.5 border-b text-[9px] uppercase tracking-[0.22em]"
+                        className="grid px-3 py-1.5 border-b text-[9px] uppercase tracking-[0.1em]"
                         style={{
                           borderColor: "var(--panel-border)",
                           color: "var(--ink-dim)",
@@ -232,7 +225,7 @@ export function LeaderboardModal({
                             style={{
                               gridTemplateColumns,
                               background: isMe
-                                ? "linear-gradient(90deg, rgba(245,182,81,0.20), rgba(245,182,81,0.04))"
+                                ? "linear-gradient(90deg, color-mix(in srgb, var(--accent) 20%, transparent), color-mix(in srgb, var(--accent) 4%, transparent))"
                                 : "transparent",
                               boxShadow: isMe
                                 ? "inset 2px 0 0 var(--accent)"
@@ -246,7 +239,7 @@ export function LeaderboardModal({
                               {String(r.rank).padStart(2, "0")}
                             </span>
                             <span
-                              className="font-display tracking-[0.05em] text-[13px] truncate"
+                              className="font-display tracking-[0.02em] text-[13px] truncate"
                               style={{
                                 color: isMe ? "var(--accent)" : "var(--ink)",
                               }}
@@ -288,11 +281,11 @@ export function LeaderboardModal({
             </div>
 
             <div
-              className="px-6 py-2 font-mono text-[9px] uppercase tracking-[0.22em] border-t text-center"
+              className="px-6 py-2 font-mono text-[9px] uppercase tracking-[0.1em] border-t text-center"
               style={{
                 borderColor: "var(--panel-border)",
                 color: "var(--ink-dim)",
-                background: "rgba(0,0,0,0.25)",
+                background: "var(--recess)",
               }}
             >
               esc · close
@@ -331,7 +324,7 @@ function PodiumCell({
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: row.rank * 0.05 }}
-      className="relative rounded-[2px] border flex flex-col items-center justify-end px-2 py-3"
+      className="relative rounded-[6px] border flex flex-col items-center justify-end px-2 py-3"
       style={{
         borderColor: isMe
           ? "var(--accent)"
@@ -339,18 +332,18 @@ function PodiumCell({
             ? "var(--panel-border-strong)"
             : "var(--panel-border)",
         background: isMe
-          ? "linear-gradient(180deg, rgba(245,182,81,0.18), rgba(245,182,81,0.02))"
+          ? "linear-gradient(180deg, color-mix(in srgb, var(--accent) 18%, transparent), color-mix(in srgb, var(--accent) 2%, transparent))"
           : featured
-            ? "linear-gradient(180deg, rgba(245,182,81,0.08), rgba(0,0,0,0.20))"
-            : "linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.20))",
+            ? "linear-gradient(180deg, color-mix(in srgb, var(--accent) 8%, transparent), var(--recess))"
+            : "linear-gradient(180deg, var(--raise), var(--recess))",
         minHeight: featured ? 130 : 110,
         boxShadow: featured
-          ? "0 0 24px rgba(245,182,81,0.15), inset 0 -2px 0 rgba(0,0,0,0.35)"
-          : "inset 0 -2px 0 rgba(0,0,0,0.3)",
+          ? "0 0 24px color-mix(in srgb, var(--accent) 15%, transparent), inset 0 -2px 0 var(--bevel)"
+          : "inset 0 -2px 0 var(--bevel)",
       }}
     >
       <div
-        className="font-display text-[10px] tracking-[0.22em] mb-1"
+        className="font-display text-[10px] tracking-[0.1em] mb-1"
         style={{ color: "var(--ink-dim)" }}
       >
         #{String(row.rank).padStart(2, "0")}
@@ -362,11 +355,11 @@ function PodiumCell({
         {medal}
       </div>
       <div
-        className="font-display tracking-[0.06em] text-center truncate w-full"
+        className="font-display tracking-[0.03em] text-center truncate w-full"
         style={{
           color: main,
           fontSize: featured ? 13 : 11,
-          textShadow: featured ? "0 0 10px rgba(245,182,81,0.4)" : "none",
+          textShadow: featured ? "0 0 10px color-mix(in srgb, var(--accent) 40%, transparent)" : "none",
         }}
       >
         {row.name}
@@ -385,54 +378,19 @@ function PodiumCell({
           color: main,
           fontSize: featured ? 20 : 16,
           letterSpacing: "0.04em",
-          textShadow: featured ? "0 0 12px rgba(245,182,81,0.5)" : "none",
+          textShadow: featured ? "0 0 12px color-mix(in srgb, var(--accent) 50%, transparent)" : "none",
         }}
       >
         {row.score.toLocaleString("en-US")}
       </div>
       {subtitle && (
         <div
-          className="font-mono text-[8px] uppercase tracking-[0.18em] mt-0.5"
+          className="font-mono text-[8px] uppercase tracking-[0.09em] mt-0.5"
           style={{ color: "var(--ink-dim)" }}
         >
           {subtitle}
         </div>
       )}
     </motion.div>
-  );
-}
-
-function CornerOrnament({ pos }: { pos: "tl" | "tr" | "bl" | "br" }) {
-  const map: Record<typeof pos, string> = {
-    tl: "top-2 left-2",
-    tr: "top-2 right-2",
-    bl: "bottom-2 left-2",
-    br: "bottom-2 right-2",
-  } as const;
-  const isLeft = pos.endsWith("l");
-  const isTop = pos.startsWith("t");
-  return (
-    <div className={`pointer-events-none absolute w-4 h-4 ${map[pos]}`}>
-      <div
-        className="absolute w-4 h-px"
-        style={{
-          background: "var(--accent)",
-          top: isTop ? 0 : "auto",
-          bottom: isTop ? "auto" : 0,
-          left: isLeft ? 0 : "auto",
-          right: isLeft ? "auto" : 0,
-        }}
-      />
-      <div
-        className="absolute w-px h-4"
-        style={{
-          background: "var(--accent)",
-          top: isTop ? 0 : "auto",
-          bottom: isTop ? "auto" : 0,
-          left: isLeft ? 0 : "auto",
-          right: isLeft ? "auto" : 0,
-        }}
-      />
-    </div>
   );
 }

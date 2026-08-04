@@ -121,11 +121,11 @@ export function ThirtyCirclesSprint({ onFinish }: { onFinish: (fluency: number) 
   return (
     <div className="flex-1 min-h-0 flex flex-col gap-3">
       <div className="flex items-center justify-between shrink-0">
-        <span className="font-mono text-[10px] uppercase tracking-[0.2em]" style={{ color: "var(--ink-dim)" }}>
+        <span className="font-mono text-[10px] uppercase tracking-[0.1em]" style={{ color: "var(--ink-dim)" }}>
           six circles · a different thing in each
         </span>
         <div className="flex items-center gap-4">
-          <span className="font-mono text-[10px] uppercase tracking-[0.2em]" style={{ color: "var(--ink-dim)" }}>
+          <span className="font-mono text-[10px] uppercase tracking-[0.1em]" style={{ color: "var(--ink-dim)" }}>
             filled <span className="font-display" style={{ color: "var(--accent)" }}>{attempted}</span>/{TOTAL}
           </span>
           <span className="font-display text-lg" style={{ color: remaining <= 15000 ? "var(--accent-hot)" : "var(--ink)" }}>
@@ -134,10 +134,10 @@ export function ThirtyCirclesSprint({ onFinish }: { onFinish: (fluency: number) 
           <button
             type="button"
             onClick={finish}
-            className="font-display text-[10px] tracking-[0.22em] px-3 py-1.5 rounded-[2px] border transition-colors hover:bg-[rgba(245,182,81,0.14)]"
+            className="font-display text-[10px] tracking-[0.1em] px-3 py-1.5 rounded-[6px] border transition-colors hover-wash-soft"
             style={{ borderColor: "var(--accent)", color: "var(--accent)" }}
           >
-            DONE
+            Done
           </button>
         </div>
       </div>
@@ -156,7 +156,7 @@ export function ThirtyCirclesSprint({ onFinish }: { onFinish: (fluency: number) 
           downRef.current = false;
           lastRef.current = null;
         }}
-        className="flex-1 min-h-0 w-full rounded-[2px] border"
+        className="flex-1 min-h-0 w-full rounded-[6px] border"
         style={{ borderColor: "var(--panel-border-strong)", background: "var(--paper-bg)", cursor: "crosshair", touchAction: "none" }}
       />
     </div>

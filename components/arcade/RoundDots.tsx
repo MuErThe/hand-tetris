@@ -31,8 +31,11 @@ export function RoundDots({ total, current, results, accent }: RoundDotsProps) {
           <motion.span
             key={i}
             initial={false}
-            animate={{ scale: done ? [1.5, 1] : 1 }}
-            transition={{ duration: 0.25 }}
+            // A round landing is worth feeling: the dot springs out past its
+            // size and settles. Overshoot via a back-out curve, since keyframes
+            // and springs don't combine.
+            animate={{ scale: done ? [0.5, 1] : 1 }}
+            transition={{ duration: 0.42, ease: [0.34, 1.7, 0.5, 1] }}
             className="inline-block rounded-full"
             style={{
               width: 8,

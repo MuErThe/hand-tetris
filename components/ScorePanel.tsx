@@ -37,7 +37,7 @@ export function ScorePanel({
       <div className="flex items-end justify-between mb-3">
         <div className="flex flex-col">
           <span
-            className="font-mono text-[10px] uppercase tracking-[0.18em]"
+            className="font-mono text-[10px] uppercase tracking-[0.09em]"
             style={{ color: "var(--ink-dim)" }}
           >
             points
@@ -52,7 +52,7 @@ export function ScorePanel({
               color: "var(--accent)",
               fontSize: 44,
               textShadow:
-                "0 0 12px rgba(245,182,81,0.32), 0 2px 0 rgba(0,0,0,0.55)",
+                "0 0 12px color-mix(in srgb, var(--accent) 32%, transparent), 0 2px 0 rgba(0,0,0,0.55)",
             }}
           >
             {formatScore(score)}
@@ -70,14 +70,14 @@ export function ScorePanel({
       {/* Personal best chip */}
       {personalBest && personalBest.score > 0 && (
         <div
-          className="flex items-center justify-between mb-3 px-2 py-1 rounded-[2px]"
+          className="flex items-center justify-between mb-3 px-2 py-1 rounded-[6px]"
           style={{
-            background: "rgba(245,182,81,0.06)",
+            background: "color-mix(in srgb, var(--accent) 6%, transparent)",
             border: "1px solid var(--panel-border)",
           }}
         >
           <span
-            className="font-mono text-[9px] uppercase tracking-[0.22em]"
+            className="font-mono text-[9px] uppercase tracking-[0.1em]"
             style={{ color: "var(--ink-dim)" }}
           >
             personal best
@@ -99,13 +99,13 @@ export function ScorePanel({
       <div className="mb-4">
         <div className="flex justify-between mb-1">
           <span
-            className="font-mono text-[9px] uppercase tracking-[0.18em]"
+            className="font-mono text-[9px] uppercase tracking-[0.09em]"
             style={{ color: "var(--ink-dim)" }}
           >
             level progress
           </span>
           <span
-            className="font-mono text-[9px] uppercase tracking-[0.18em]"
+            className="font-mono text-[9px] uppercase tracking-[0.09em]"
             style={{ color: "var(--ink-dim)" }}
           >
             {linesIntoLevel}/10
@@ -113,7 +113,7 @@ export function ScorePanel({
         </div>
         <div
           className="h-1.5 w-full rounded-[1px] overflow-hidden"
-          style={{ background: "rgba(255,255,255,0.06)" }}
+          style={{ background: "var(--raise-strong)" }}
         >
           <motion.div
             className="h-full"
@@ -123,7 +123,7 @@ export function ScorePanel({
             style={{
               background:
                 "linear-gradient(90deg, var(--accent), var(--accent-hot))",
-              boxShadow: "0 0 6px rgba(245,182,81,0.5)",
+              boxShadow: "0 0 6px color-mix(in srgb, var(--accent) 50%, transparent)",
             }}
           />
         </div>
@@ -132,14 +132,14 @@ export function ScorePanel({
       {/* Next queue */}
       <div className="flex items-center gap-2 mb-2">
         <span
-          className="font-display text-[10px] tracking-[0.22em]"
+          className="font-display text-[10px] tracking-[0.1em]"
           style={{ color: "var(--accent)" }}
         >
-          NEXT
+          Next
         </span>
         <div className="flex-1 dashed-rule" />
         <span
-          className="font-mono text-[9px] uppercase tracking-[0.18em]"
+          className="font-mono text-[9px] uppercase tracking-[0.09em]"
           style={{ color: "var(--ink-dim)" }}
         >
           ×3
@@ -197,7 +197,7 @@ function Stat({
       }}
     >
       <span
-        className="font-mono text-[9px] uppercase tracking-[0.18em]"
+        className="font-mono text-[9px] uppercase tracking-[0.09em]"
         style={{ color: "var(--ink-dim)" }}
       >
         {label}
@@ -226,17 +226,17 @@ function LevelBadge({ level }: { level: number }) {
       initial={{ scale: 0.85, opacity: 0.6 }}
       animate={{ scale: 1, opacity: 1 }}
       transition={{ duration: 0.25, ease: "easeOut" }}
-      className="flex flex-col items-center justify-center rounded-[2px] border"
+      className="flex flex-col items-center justify-center rounded-[6px] border"
       style={{
         width: 60,
         height: 60,
         borderColor: "var(--panel-border-strong)",
         background:
-          "linear-gradient(180deg, rgba(245,182,81,0.06), rgba(245,182,81,0.02))",
+          "linear-gradient(180deg, color-mix(in srgb, var(--accent) 6%, transparent), color-mix(in srgb, var(--accent) 2%, transparent))",
       }}
     >
       <span
-        className="font-mono text-[8px] uppercase tracking-[0.22em]"
+        className="font-mono text-[8px] uppercase tracking-[0.1em]"
         style={{ color: "var(--ink-dim)" }}
       >
         lvl
@@ -246,7 +246,6 @@ function LevelBadge({ level }: { level: number }) {
         style={{
           color: "var(--ink)",
           fontSize: 28,
-          textShadow: "0 0 10px rgba(245,182,81,0.25)",
         }}
       >
         {level}

@@ -1,6 +1,50 @@
 @import "tailwindcss";
 
+/* ──────────────────────────────────────────────────────────────────────────
+   THEME — Squint runs in two lights: the cabinet (dark) and the studio
+   (light). Only the palette block below differs between them; everything
+   downstream reads var(--…) and re-themes for free.
+
+   `data-theme` is stamped on <html> before first paint by the inline script
+   in app/layout.tsx, so there is no flash of the wrong theme. The
+   prefers-color-scheme block is the no-JS fallback only — it deliberately
+   matches :root:not([data-theme]) so a stamped attribute always wins.
+
+   Two surfaces are exempt from the flip by design, via .force-dark:
+   the Tetris WebGL stage (a lit 3D scene needs its dark room) and anything
+   else that would be misread on paper. The Colour Forge mat stays a fixed
+   neutral grey in both themes — the surround is part of the colour
+   measurement, so it cannot be allowed to move.
+   ────────────────────────────────────────────────────────────────────────── */
+
+/* Theme-invariant tokens — these mean the same thing in either light. */
 :root {
+  /* Lit artboards — the work always sits on warm paper. In dark mode the
+     paper is a lit object in a dark room; in light mode the room caught up.
+     Either way the play surface itself does not change, so a score earned in
+     one theme is comparable with a score earned in the other. */
+  --paper-bg: #f2ecdf;
+  --paper-line: rgba(42, 33, 24, 0.18);
+  --paper-tick: rgba(42, 33, 24, 0.38);
+  --paper-ink: #2a2118;
+  --paper-dim: rgba(42, 33, 24, 0.55);
+  /* Neutral appraisal mat — the colour-science surround for judging colour.
+     Text on the mat must use --paper-ink; --accent only reaches 3.4:1 here. */
+  --mat-grey: #b8b4ab;
+  /* Signal inks, tuned to clear 4.5:1 on --paper-bg. */
+  --truth-ink: #2f6b2a;
+  --guess-ink: #b23a06;
+  --aim-ink: #856011;
+  /* The focus rack — the one easing every macro transition uses. */
+  --rack-ms: 340ms;
+  --rack-ease: cubic-bezier(0.33, 0, 0.15, 1);
+}
+
+/* ── Palette: dark (default) ─────────────────────────────────────────────── */
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
+
   --bg-0: #0e0a14;
   --bg-1: #16101e;
   --bg-2: #1f1830;
@@ -8,9 +52,16 @@
   --ink-dim: #8a8398;
   --accent: #f5b651;
   --accent-hot: #ff7849;
-  --panel-border: rgba(245, 182, 81, 0.18);
-  --panel-border-strong: rgba(245, 182, 81, 0.35);
+  /* Neutral, not amber. Borders are a last resort now that surfaces carry the
+     structure — an accent-tinted hairline round every panel was the loudest
+     part of the arcade skin. */
+  --panel-border: color-mix(in srgb, var(--ink) 12%, transparent);
+  --panel-border-strong: color-mix(in srgb, var(--ink) 22%, transparent);
 
+  /* Game tints. Identity colours, but they also carry label text, so the
+     light theme needs its own set — the vivid versions manage ~1.9:1 on
+     paper. The WebGL tetromino colours are separate hex constants in
+     lib/render/palette.ts and are unaffected by these. */
   --c-I: #5be7e0;
   --c-O: #f5d76e;
   --c-T: #b86dc9;
@@ -19,40 +70,202 @@
   --c-J: #5b8def;
   --c-L: #f0a04b;
 
-  /* Exercise register — the "artboard" mounted inside the cabinet.
-     Slightly lighter than the page, precise hairlines, quiet ticks. */
-  --board-bg: #17141f;
-  --board-line: rgba(236, 230, 216, 0.14);
-  --board-tick: rgba(236, 230, 216, 0.28);
-
-  /* ──────────────────────────────────────────────────────────────
-     FOCALISM — the interface is a lens.
-     Depth is focal distance; these are the doctrine's tokens.
-     ────────────────────────────────────────────────────────────── */
-  /* Warm-monochrome field scale (surfaces, darkest → most raised). */
+  /* Warm-monochrome field scale (surfaces, recessed → most raised). */
   --field-0: #0e0a14;
   --field-1: #141019;
   --field-2: #191420;
   --field-3: #201a28;
-  /* Lit artboards — the work sits on warm paper; the room stays dark.
-     Play surfaces use the paper register; the cabinet never does. */
-  --paper-bg: #f2ecdf;
-  --paper-line: rgba(42, 33, 24, 0.18);
-  --paper-tick: rgba(42, 33, 24, 0.38);
-  --paper-ink: #2a2118;
-  --paper-dim: rgba(42, 33, 24, 0.55);
-  /* Neutral appraisal mat — the colour-science surround for judging colour. */
-  --mat-grey: #b8b4ab;
-  /* Signal inks tuned for light ground (dark-ground variants fail contrast). */
-  --truth-ink: #2f6b2a;
-  --guess-ink: #c2410c;
-  --aim-ink: #8f6410;
-  /* The focus rack — the one easing every macro transition uses. */
-  --rack-ms: 340ms;
-  --rack-ease: cubic-bezier(0.33, 0, 0.15, 1);
-  /* Aberration fringes (colour = signal; error/defocus fringe like a lens). */
+
+  /* Neutral lifts and scrims — the greys that were hardcoded rgba before.
+     --raise is "a surface nudged toward the viewer"; in dark that means
+     adding light, in light it means adding ink. */
+  --raise: rgba(255, 255, 255, 0.04);
+  --raise-strong: rgba(255, 255, 255, 0.07);
+  --scrim: rgba(14, 10, 20, 0.72);
+  --scrim-soft: rgba(14, 10, 20, 0.55);
+  --shadow-col: rgba(0, 0, 0, 0.35);
+  --shadow-strong: rgba(0, 0, 0, 0.55);
+  /* --recess is a surface pushed away from the viewer (a well);
+     --bevel is the hairline that sells the push. Both were literal
+     black before, which reads as soot on paper. */
+  --recess: rgba(0, 0, 0, 0.22);
+  --bevel: rgba(0, 0, 0, 0.35);
+
+  /* Room texture — CRT whisper and vignette. */
+  --scanline-col: rgba(0, 0, 0, 0.22);
+  --scanline-opacity: 0.3;
+  --vignette-col: rgba(0, 0, 0, 0.55);
+
+  /* Aberration fringes (colour = signal; error/defocus fringes like a lens). */
   --ab-red: rgba(255, 70, 70, 0.4);
   --ab-cyan: rgba(80, 220, 255, 0.35);
+}
+
+/* ── Palette: light ──────────────────────────────────────────────────────── */
+[data-theme="light"] {
+  color-scheme: light;
+
+  /* Whites and neutral greys — the studio is daylit, not a coffee stain.
+     Every value here clears 4.5:1 against the surface it sits on. */
+  --bg-0: #ececeb;
+  --bg-1: #f7f7f6;
+  --bg-2: #efefee;
+  --ink: #1c1c1a;
+  --ink-dim: #5a5a55;
+  /* Amber deepens so it can carry text: 5.01:1 on --bg-0.
+     The bright dark-mode amber manages 1.5:1 on white. */
+  --accent: #8a5a00;
+  --accent-hot: #b23a06;
+  --panel-border: color-mix(in srgb, var(--ink) 13%, transparent);
+  --panel-border-strong: color-mix(in srgb, var(--ink) 24%, transparent);
+
+  /* Tints darkened to clear 4.5:1 as label text on white. */
+  --c-I: #2e7470;
+  --c-O: #766735;
+  --c-T: #8c5399;
+  --c-S: #487244;
+  --c-Z: #a05151;
+  --c-J: #4267ae;
+  --c-L: #8e5e2c;
+
+  --field-0: #ececeb;
+  --field-1: #f2f2f1;
+  --field-2: #f7f7f6;
+  --field-3: #fcfcfb;
+
+  /* The artboard stays the brightest thing on screen, so it still reads as
+     the lit object the doctrine calls for — the cream stock would look like
+     a stain against white. Safe to move: Colour Forge judges on --mat-grey,
+     which never changes, and the paper inks all gain contrast here. */
+  --paper-bg: #fdfdfc;
+
+  --raise: rgba(0, 0, 0, 0.04);
+  --raise-strong: rgba(0, 0, 0, 0.07);
+  --scrim: rgba(20, 20, 22, 0.55);
+  --scrim-soft: rgba(20, 20, 22, 0.38);
+  --shadow-col: rgba(0, 0, 0, 0.14);
+  --shadow-strong: rgba(0, 0, 0, 0.22);
+  --recess: rgba(0, 0, 0, 0.05);
+  --bevel: rgba(0, 0, 0, 0.1);
+
+  /* Scanlines and vignette would grey the whites — a trace, not a texture. */
+  --scanline-col: rgba(0, 0, 0, 0.1);
+  --scanline-opacity: 0.08;
+  --vignette-col: rgba(0, 0, 0, 0.07);
+
+  --ab-red: rgba(200, 30, 30, 0.45);
+  --ab-cyan: rgba(0, 130, 180, 0.4);
+}
+
+/* No-JS fallback: honour the OS preference when nothing has been stamped. */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    color-scheme: light;
+
+    /* Whites and neutral greys — the studio is daylit, not a coffee stain.
+       Every value here clears 4.5:1 against the surface it sits on. */
+    --bg-0: #ececeb;
+    --bg-1: #f7f7f6;
+    --bg-2: #efefee;
+    --ink: #1c1c1a;
+    --ink-dim: #5a5a55;
+    /* Amber deepens so it can carry text: 5.01:1 on --bg-0.
+       The bright dark-mode amber manages 1.5:1 on white. */
+    --accent: #8a5a00;
+    --accent-hot: #b23a06;
+    --panel-border: color-mix(in srgb, var(--ink) 13%, transparent);
+    --panel-border-strong: color-mix(in srgb, var(--ink) 24%, transparent);
+
+    /* Tints darkened to clear 4.5:1 as label text on white. */
+    --c-I: #2e7470;
+    --c-O: #766735;
+    --c-T: #8c5399;
+    --c-S: #487244;
+    --c-Z: #a05151;
+    --c-J: #4267ae;
+    --c-L: #8e5e2c;
+
+    --field-0: #ececeb;
+    --field-1: #f2f2f1;
+    --field-2: #f7f7f6;
+    --field-3: #fcfcfb;
+
+    /* The artboard stays the brightest thing on screen, so it still reads as
+       the lit object the doctrine calls for — the cream stock would look like
+       a stain against white. Safe to move: Colour Forge judges on --mat-grey,
+       which never changes, and the paper inks all gain contrast here. */
+    --paper-bg: #fdfdfc;
+
+    --raise: rgba(0, 0, 0, 0.04);
+    --raise-strong: rgba(0, 0, 0, 0.07);
+    --scrim: rgba(20, 20, 22, 0.55);
+    --scrim-soft: rgba(20, 20, 22, 0.38);
+    --shadow-col: rgba(0, 0, 0, 0.14);
+    --shadow-strong: rgba(0, 0, 0, 0.22);
+    --recess: rgba(0, 0, 0, 0.05);
+    --bevel: rgba(0, 0, 0, 0.1);
+
+    /* Scanlines and vignette would grey the whites — a trace, not a texture. */
+    --scanline-col: rgba(0, 0, 0, 0.1);
+    --scanline-opacity: 0.08;
+    --vignette-col: rgba(0, 0, 0, 0.07);
+
+    --ab-red: rgba(200, 30, 30, 0.45);
+    --ab-cyan: rgba(0, 130, 180, 0.4);
+  }
+}
+
+/* Surfaces that stay in the dark whatever the page is doing — the WebGL
+   stage above all. Re-declares the dark palette for its subtree. */
+.force-dark {
+  color-scheme: dark;
+
+  --bg-0: #0e0a14;
+  --bg-1: #16101e;
+  --bg-2: #1f1830;
+  --ink: #ece6d8;
+  --ink-dim: #8a8398;
+  --accent: #f5b651;
+  --accent-hot: #ff7849;
+  /* Neutral, not amber. Borders are a last resort now that surfaces carry the
+     structure — an accent-tinted hairline round every panel was the loudest
+     part of the arcade skin. */
+  --panel-border: color-mix(in srgb, var(--ink) 12%, transparent);
+  --panel-border-strong: color-mix(in srgb, var(--ink) 22%, transparent);
+
+  --paper-bg: #f2ecdf;
+
+  /* Vivid tints — the stage is dark here whatever the page is doing. */
+  --c-I: #5be7e0;
+  --c-O: #f5d76e;
+  --c-T: #b86dc9;
+  --c-S: #7cc576;
+  --c-Z: #e57373;
+  --c-J: #5b8def;
+  --c-L: #f0a04b;
+
+  --field-0: #0e0a14;
+  --field-1: #141019;
+  --field-2: #191420;
+  --field-3: #201a28;
+
+  --raise: rgba(255, 255, 255, 0.04);
+  --raise-strong: rgba(255, 255, 255, 0.07);
+  --scrim: rgba(14, 10, 20, 0.72);
+  --scrim-soft: rgba(14, 10, 20, 0.55);
+  --shadow-col: rgba(0, 0, 0, 0.35);
+  --shadow-strong: rgba(0, 0, 0, 0.55);
+  /* --recess is a surface pushed away from the viewer (a well);
+     --bevel is the hairline that sells the push. Both were literal
+     black before, which reads as soot on paper. */
+  --recess: rgba(0, 0, 0, 0.22);
+  --bevel: rgba(0, 0, 0, 0.35);
+
+  --ab-red: rgba(255, 70, 70, 0.4);
+  --ab-cyan: rgba(80, 220, 255, 0.35);
+
+  background: var(--bg-0);
+  color: var(--ink);
 }
 
 @theme inline {
@@ -63,7 +276,7 @@
   --color-ink-dim: var(--ink-dim);
   --color-accent: var(--accent);
   --color-accent-hot: var(--accent-hot);
-  --font-display: var(--font-silkscreen);
+  --font-display: var(--font-display-face);
   --font-mono: var(--font-jetbrains-mono);
 }
 
@@ -79,49 +292,43 @@ body {
   overflow-x: hidden;
 }
 
-/* CRT scanlines — heritage whisper (Focalism metabolised the arcade) */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 50;
-  background-image: repeating-linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0) 0,
-    rgba(0, 0, 0, 0) 2px,
-    rgba(0, 0, 0, 0.22) 3px,
-    rgba(0, 0, 0, 0) 4px
-  );
-  mix-blend-mode: multiply;
-  opacity: 0.3;
-}
-
-/* Vignette */
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 49;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(0, 0, 0, 0) 40%,
-    rgba(0, 0, 0, 0.55) 100%
-  );
-}
+/* The CRT scanlines and vignette that used to live here are gone: the room
+   texture was the arcade skin, not the doctrine. Depth is carried by the lit
+   artboards and the focus system, which is what Focalism actually claims. */
 
 .font-display {
-  font-family: var(--font-silkscreen), monospace;
-  letter-spacing: 0.08em;
+  font-family: var(--font-display-face), ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: -0.01em;
+  font-weight: 600;
 }
 
 .font-mono {
   font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
 }
 
+/* Micro-labels — the one place uppercase survives the calm pass. Structural
+   names only (panel titles, round counters, units), small and quiet, tracked
+   far tighter than the arcade version's 0.2–0.4em shout. */
+.label-micro {
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  line-height: 1.4;
+}
+
+/* Panels are a raised surface step, not a bordered box. This is the whole of
+   "surfaces first": tone does the separating, so the hairline can almost
+   disappear. */
 .panel-bg {
-  background: linear-gradient(180deg, var(--bg-1), var(--bg-2));
+  background: var(--field-2);
+}
+
+/* Radius scale. Small controls stay tight; panels, modals and artboards get
+   the calmer corner. */
+:root {
+  --r-chip: 6px;
+  --r-panel: 12px;
 }
 
 .dashed-rule {
@@ -129,7 +336,7 @@ body::after {
     to right,
     var(--panel-border-strong) 0%,
     var(--panel-border-strong) 60%,
-    rgba(245, 182, 81, 0) 100%
+    transparent 100%
   );
   background-size: 8px 1px;
   background-repeat: repeat-x;
@@ -194,6 +401,13 @@ button {
   0% { filter: hue-rotate(110deg); }
   55%, 85% { filter: hue-rotate(0deg); }
   100% { filter: hue-rotate(110deg); }
+}
+
+/* cutout: the shared region of two shapes keeps being selected */
+@keyframes vg-boolean {
+  0%, 18% { opacity: 0; }
+  42%, 72% { opacity: 1; }
+  94%, 100% { opacity: 0; }
 }
 
 /* circles: a doodle gets stroke-drawn inside one circle */
@@ -295,6 +509,140 @@ button {
   .fz-3 { opacity: 0.35; }
 }
 
+/* Amber hover wash — the site's one hover idiom for bordered buttons.
+   Derived from --accent rather than a literal amber, so it brightens a button
+   in the cabinet and deepens one on paper. Elements carry their own
+   transition classes; this only supplies the colour.
+   Two strengths replace the six near-identical alphas these grew into. */
+.hover-wash:hover,
+.hover-wash:focus-visible {
+  background-color: color-mix(in srgb, var(--accent) 20%, transparent);
+}
+.hover-wash-soft:hover,
+.hover-wash-soft:focus-visible {
+  background-color: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+.hover-wash-hot:hover,
+.hover-wash-hot:focus-visible {
+  background-color: color-mix(in srgb, var(--accent-hot) 14%, transparent);
+}
+
+/* Contrast Call's rail. A real range input laid transparently over the drawn
+   rail: the visuals stay Focalism, the keyboard and screen-reader behaviour
+   stay native. The thumb is invisible because the drawn caret IS the thumb. */
+.contrast-rail {
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  cursor: pointer;
+  margin: 0;
+}
+.contrast-rail:disabled {
+  cursor: default;
+}
+.contrast-rail::-webkit-slider-runnable-track {
+  background: transparent;
+  height: 24px;
+}
+.contrast-rail::-moz-range-track {
+  background: transparent;
+  height: 24px;
+}
+.contrast-rail::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 24px;
+  height: 24px;
+  background: transparent;
+  border: none;
+}
+.contrast-rail::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  background: transparent;
+  border: none;
+}
+/* The reticle has to land on the rail, since the input itself is invisible. */
+.contrast-rail:focus-visible {
+  outline: 1px dashed color-mix(in srgb, var(--accent) 80%, transparent);
+  outline-offset: 6px;
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   Theme control — a segmented detent. Selection is carried by border, fill
+   AND weight, never by colour alone.
+   ──────────────────────────────────────────────────────────────────────── */
+
+.theme-seg {
+  display: inline-flex;
+  align-items: stretch;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--panel-border);
+  border-radius: 3px;
+  background: var(--raise);
+}
+
+.theme-seg__opt {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 9px;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  cursor: pointer;
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--ink-dim);
+  transition: color 0.15s ease, background-color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.theme-seg__opt:hover {
+  color: var(--ink);
+}
+
+/* Selected: raised fill + hairline + full-strength ink. The fill is painted by
+   the sliding marker when motion is on, and by this rule when it isn't. */
+.theme-seg__opt:has(input:checked) {
+  border-color: var(--panel-border-strong);
+  background: var(--raise-strong);
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* The travelling selection. Sits behind the label; the label's own background
+   is transparent so the two never double up. */
+.theme-seg__marker {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--r-chip);
+  background: var(--raise-strong);
+  box-shadow: inset 0 0 0 1px var(--panel-border-strong);
+}
+.theme-seg__opt:has(.theme-seg__marker) {
+  background: transparent;
+  border-color: transparent;
+}
+.theme-seg__text {
+  position: relative;
+  z-index: 1;
+}
+
+/* The reticle has to land on the label — the input itself is sr-only. */
+.theme-seg__opt:has(input:focus-visible) {
+  outline: 1px dashed color-mix(in srgb, var(--accent) 80%, transparent);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-seg__opt {
+    transition: none;
+  }
+}
+
 /* ────────────────────────────────────────────────────────────────────────
    Hub bento grid + cards
    ──────────────────────────────────────────────────────────────────────── */
@@ -311,16 +659,25 @@ button {
     "eyeball"
     "kern"
     "colour"
-    "circles";
+    "circles"
+    "double"
+    "contrast"
+    "steady"
+    "cutout";
 }
 
+/* The area names come from `area` on each registry entry — adding a game
+   means adding its name here too. Tetris holds the tall feature column and
+   the rest flow in reading order, which is also the tab order. */
 @media (min-width: 900px) {
   .hub-bento {
     grid-template-columns: 1.25fr 1fr 1fr;
     grid-template-areas:
       "warmup warmup warmup"
       "tetris eyeball kern"
-      "tetris colour circles";
+      "tetris colour circles"
+      "double contrast steady"
+      "cutout cutout cutout";
   }
 }
 
@@ -367,7 +724,7 @@ button {
 .bento-card:focus-visible {
   transform: translateY(-2px);
   border-color: color-mix(in srgb, var(--tint) 65%, transparent);
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35),
+  box-shadow: 0 8px 28px var(--shadow-col),
     0 0 22px color-mix(in srgb, var(--tint) 18%, transparent);
   outline: none;
 }

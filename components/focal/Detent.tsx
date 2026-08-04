@@ -15,8 +15,11 @@ export function Detent({ tick = true, onPointerDown, children, ...rest }: Detent
   const reduced = useReducedMotion();
   return (
     <motion.button
-      whileTap={reduced ? undefined : { scale: 0.97 }}
-      transition={{ type: "spring", stiffness: 900, damping: 30 }}
+      whileTap={reduced ? undefined : { scale: 0.96 }}
+      // Under-damped on purpose: the control dips under the finger and springs
+      // back a hair past rest before settling. That overshoot is the whole
+      // point of a detent — it reads as a mechanism, not a fade.
+      transition={{ type: "spring", stiffness: 520, damping: 13, mass: 0.5 }}
       onPointerDown={(e) => {
         if (tick) playSfx("step");
         onPointerDown?.(e);

@@ -217,15 +217,15 @@ export function GameShell({
           <Link
             href="/"
             title="Back to the arcade"
-            className="font-mono text-[9px] uppercase tracking-[0.22em] self-center transition-colors hover:text-[var(--accent)]"
+            className="font-mono text-[9px] uppercase tracking-[0.1em] self-center transition-colors hover:text-[var(--accent)]"
             style={{ color: "var(--ink-dim)" }}
           >
             ◂ arcade
           </Link>
-          <h1 className="font-display text-lg md:text-xl tracking-[0.2em] leading-none" style={{ color: "var(--ink)" }}>
+          <h1 className="font-display text-lg md:text-xl tracking-[0.1em] leading-none" style={{ color: "var(--ink)" }}>
             {title}
           </h1>
-          <span className="font-mono text-[9px] uppercase tracking-[0.22em]" style={{ color: "var(--ink-dim)" }}>
+          <span className="font-mono text-[9px] uppercase tracking-[0.1em]" style={{ color: "var(--ink-dim)" }}>
             {trains}
           </span>
         </div>
@@ -240,10 +240,10 @@ export function GameShell({
             <button
               type="button"
               onClick={quit}
-              className="font-display text-[10px] tracking-[0.22em] px-3 py-1.5 rounded-[2px] border transition-colors hover:bg-[rgba(255,120,73,0.14)]"
+              className="font-display text-[10px] tracking-[0.1em] px-3 py-1.5 rounded-[6px] border transition-colors hover-wash-hot"
               style={{ borderColor: "var(--accent-hot)", color: "var(--accent-hot)" }}
             >
-              QUIT
+              Quit
             </button>
           )}
         </div>
@@ -276,15 +276,15 @@ export function GameShell({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
             className="fixed inset-0 z-40 flex items-center justify-center px-6 py-6 overflow-y-auto"
-            style={{ background: "rgba(14,10,20,0.55)" }}
+            style={{ background: "var(--scrim-soft)" }}
           >
             <motion.div
               initial={sharpenIn.initial}
               animate={sharpenIn.animate}
               exit={sharpenIn.exit}
               transition={RACK}
-              className="panel-bg relative rounded-[2px] border w-full overflow-hidden my-auto"
-              style={{ maxWidth: 520, borderColor: "var(--panel-border-strong)", boxShadow: "0 24px 60px rgba(0,0,0,0.55)" }}
+              className="panel-bg relative rounded-[6px] border w-full overflow-hidden my-auto"
+              style={{ maxWidth: 520, borderColor: "var(--panel-border-strong)", boxShadow: "0 24px 60px var(--shadow-strong)" }}
             >
               {vignette && (
                 <div className="border-b" style={{ borderColor: "var(--panel-border)", height: 84 }}>
@@ -292,20 +292,18 @@ export function GameShell({
                 </div>
               )}
               <div className="px-8 py-7">
-                <div className="font-display text-[10px] tracking-[0.32em] mb-2 text-center" style={{ color: "var(--accent)" }}>
-                  ─── {trains} ───
-                </div>
-                <h2 className="font-display tracking-[0.14em] leading-[0.95] mb-3 text-center" style={{ color: "var(--ink)", fontSize: "clamp(30px, 6vw, 46px)" }}>
+                <div className="font-display text-[10px] tracking-[0.12em] mb-2 text-center" style={{ color: "var(--accent)" }}> {trains} </div>
+                <h2 className="font-display tracking-[0.07em] leading-[0.95] mb-3 text-center" style={{ color: "var(--ink)", fontSize: "clamp(30px, 6vw, 46px)" }}>
                   {title}
                 </h2>
-                <p className="font-mono text-[11px] uppercase tracking-[0.14em] leading-relaxed text-center mb-5" style={{ color: "var(--ink-dim)" }}>
+                <p className="font-mono text-[11px] tracking-[0.07em] leading-relaxed text-center mb-5" style={{ color: "var(--ink-dim)" }}>
                   {pitch}
                 </p>
 
                 {howTo.length > 0 && (
                   <ul className="flex flex-col gap-1.5 mb-5">
                     {howTo.map((line, i) => (
-                      <li key={i} className="flex items-start gap-2 font-mono text-[10px] uppercase tracking-[0.1em]" style={{ color: "var(--ink-dim)" }}>
+                      <li key={i} className="flex items-start gap-2 font-mono text-[11px] tracking-[0.02em] leading-relaxed" style={{ color: "var(--ink-dim)" }}>
                         <span style={{ color: "var(--accent)" }}>{String(i + 1).padStart(2, "0")}</span>
                         {line}
                       </li>
@@ -315,9 +313,9 @@ export function GameShell({
 
                 {/* Trend */}
                 {trend.length >= 2 && (
-                  <div className="flex items-center justify-between rounded-[2px] border px-3 py-2 mb-5" style={{ borderColor: "var(--panel-border)" }}>
+                  <div className="flex items-center justify-between rounded-[6px] border px-3 py-2 mb-5" style={{ borderColor: "var(--panel-border)" }}>
                     <div className="flex flex-col">
-                      <span className="font-mono text-[9px] uppercase tracking-[0.2em]" style={{ color: "var(--ink-dim)" }}>
+                      <span className="font-mono text-[9px] uppercase tracking-[0.1em]" style={{ color: "var(--ink-dim)" }}>
                         your last {trend.length}
                       </span>
                       <span className="font-display text-[12px]" style={{ color: "var(--accent)" }}>
@@ -331,14 +329,14 @@ export function GameShell({
                 {/* Name */}
                 <div className="mb-4">
                   <div className="flex items-center justify-between mb-1.5">
-                    <label className="font-display text-[10px] tracking-[0.22em]" style={{ color: "var(--accent)" }}>
-                      YOUR TAG
+                    <label className="font-display text-[10px] tracking-[0.1em]" style={{ color: "var(--accent)" }}>
+                      Your tag
                     </label>
-                    <span className="font-mono text-[9px] uppercase tracking-[0.18em]" style={{ color: "var(--ink-dim)" }}>
+                    <span className="font-mono text-[9px] uppercase tracking-[0.09em]" style={{ color: "var(--ink-dim)" }}>
                       {name.length}/{NAME_RULES.max}
                     </span>
                   </div>
-                  <div className="flex gap-2 rounded-[2px] border p-1.5" style={{ borderColor: "var(--panel-border-strong)", background: "rgba(0,0,0,0.2)" }}>
+                  <div className="flex gap-2 rounded-[6px] border p-1.5" style={{ borderColor: "var(--panel-border-strong)", background: "var(--recess)" }}>
                     <input
                       value={name}
                       onChange={(e) => {
@@ -351,7 +349,7 @@ export function GameShell({
                       placeholder="leave blank to auto-generate"
                       spellCheck={false}
                       autoComplete="off"
-                      className="flex-1 bg-transparent outline-none font-display tracking-[0.16em] px-2"
+                      className="flex-1 bg-transparent outline-none font-display tracking-[0.08em] px-2"
                       style={{ color: "var(--ink)", fontSize: 16, caretColor: "var(--accent)" }}
                     />
                     <button
@@ -361,21 +359,21 @@ export function GameShell({
                         setName(generateRandomName());
                         setError(null);
                       }}
-                      className="px-3 font-display text-[10px] tracking-[0.22em] rounded-[2px] border transition-colors hover:bg-[rgba(245,182,81,0.18)]"
+                      className="px-3 font-display text-[10px] tracking-[0.1em] rounded-[6px] border transition-colors hover-wash"
                       style={{ borderColor: "var(--panel-border-strong)", color: "var(--accent)" }}
                     >
-                      GENERATE
+                      Generate
                     </button>
                   </div>
                   {!lbOnline && (
-                    <div className="font-mono text-[9px] uppercase tracking-[0.18em] mt-1.5" style={{ color: "var(--ink-dim)" }}>
+                    <div className="font-mono text-[9px] uppercase tracking-[0.09em] mt-1.5" style={{ color: "var(--ink-dim)" }}>
                       ⓘ leaderboard offline · scores stay local
                     </div>
                   )}
                 </div>
 
                 {error && (
-                  <div className="font-mono text-[11px] mb-4 px-3 py-2 rounded-[2px] border" style={{ borderColor: "rgba(255,120,73,0.4)", background: "rgba(255,120,73,0.08)", color: "var(--accent-hot)" }}>
+                  <div className="font-mono text-[11px] mb-4 px-3 py-2 rounded-[6px] border" style={{ borderColor: "color-mix(in srgb, var(--accent-hot) 40%, transparent)", background: "color-mix(in srgb, var(--accent-hot) 8%, transparent)", color: "var(--accent-hot)" }}>
                     {error}
                   </div>
                 )}
@@ -383,10 +381,10 @@ export function GameShell({
                 <Detent
                   disabled={busy}
                   onClick={handleStart}
-                  className="font-display tracking-[0.24em] text-sm px-6 py-3.5 border w-full transition-all duration-150 disabled:opacity-50 hover:bg-[rgba(245,182,81,0.22)]"
-                  style={{ borderColor: "var(--accent)", color: "var(--accent)", background: "rgba(245,182,81,0.1)", boxShadow: "0 0 24px rgba(245,182,81,0.18)" }}
+                  className="font-display tracking-[0.06em] text-sm px-6 py-3.5 border w-full transition-all duration-150 disabled:opacity-50 hover-wash"
+                  style={{ borderColor: "var(--accent)", color: "var(--accent)", background: "color-mix(in srgb, var(--accent) 10%, transparent)", boxShadow: "0 0 24px color-mix(in srgb, var(--accent) 18%, transparent)" }}
                 >
-                  {busy ? "WORKING…" : "▶ START"}
+                  {busy ? "Working…" : "▶ Start"}
                 </Detent>
               </div>
 
@@ -394,8 +392,8 @@ export function GameShell({
                 <button
                   type="button"
                   onClick={() => setBoardOpen(true)}
-                  className="w-full px-8 py-3 font-mono text-[10px] uppercase tracking-[0.22em] border-t transition-colors flex items-center justify-center gap-2 hover:bg-[rgba(245,182,81,0.08)]"
-                  style={{ borderColor: "var(--panel-border)", color: "var(--ink-dim)", background: "rgba(0,0,0,0.25)" }}
+                  className="w-full px-8 py-3 font-mono text-[10px] uppercase tracking-[0.1em] border-t transition-colors flex items-center justify-center gap-2 hover-wash-soft"
+                  style={{ borderColor: "var(--panel-border)", color: "var(--ink-dim)", background: "var(--recess)" }}
                 >
                   🏆 view leaderboard
                 </button>
@@ -404,8 +402,8 @@ export function GameShell({
 
             <Link
               href="/"
-              className="fixed top-4 left-4 z-[55] font-mono text-[10px] uppercase tracking-[0.24em] px-3 py-2 rounded-[2px] border transition-all duration-150 hover:-translate-y-px"
-              style={{ borderColor: "var(--panel-border-strong)", color: "var(--ink-dim)", background: "rgba(0,0,0,0.35)", backdropFilter: "blur(6px)" }}
+              className="fixed top-4 left-4 z-[55] font-mono text-[10px] uppercase tracking-[0.06em] px-3 py-2 rounded-[6px] border transition-all duration-150 hover:-translate-y-px"
+              style={{ borderColor: "var(--panel-border-strong)", color: "var(--ink-dim)", background: "var(--recess)", backdropFilter: "blur(6px)" }}
             >
               ◂ arcade
             </Link>
@@ -454,30 +452,30 @@ function GameOverPanel({
         className="w-full"
         style={{ maxWidth: 520 }}
       >
-        <PanelFrame label={result.headline ?? "RESULTS"} hint="session complete" className="flex flex-col">
+        <PanelFrame label={result.headline ?? "Results"} hint="session complete" className="flex flex-col">
           <div className="text-center pt-1">
             {newBest ? (
-              <div className="font-display text-[12px] tracking-[0.22em] mb-2" style={{ color: "var(--accent)", textShadow: "0 0 10px rgba(245,182,81,0.5)" }}>
+              <div className="font-display text-[12px] tracking-[0.1em] mb-2" style={{ color: "var(--accent)", textShadow: "0 0 10px color-mix(in srgb, var(--accent) 50%, transparent)" }}>
                 ★ new personal best ★
               </div>
             ) : (
-              <div className="font-mono text-[10px] uppercase tracking-[0.22em] mb-2" style={{ color: "var(--ink-dim)" }}>
+              <div className="font-mono text-[10px] uppercase tracking-[0.1em] mb-2" style={{ color: "var(--ink-dim)" }}>
                 personal best · {personalBest.toLocaleString("en-US")}
               </div>
             )}
 
-            <div className="font-mono text-[9px] uppercase tracking-[0.22em]" style={{ color: "var(--ink-dim)" }}>
+            <div className="font-mono text-[9px] uppercase tracking-[0.1em]" style={{ color: "var(--ink-dim)" }}>
               score
             </div>
-            <div className="font-display mb-4" style={{ color: "var(--accent)", fontSize: 40, textShadow: "0 0 14px rgba(245,182,81,0.3)" }}>
+            <div className="font-display mb-4" style={{ color: "var(--accent)", fontSize: 40, textShadow: "0 0 14px color-mix(in srgb, var(--accent) 30%, transparent)" }}>
               {result.score.toLocaleString("en-US")}
             </div>
 
             {result.stats.length > 0 && (
               <div className="grid gap-2 mb-4" style={{ gridTemplateColumns: `repeat(${Math.min(result.stats.length, 4)}, 1fr)` }}>
                 {result.stats.map((s) => (
-                  <div key={s.label} className="flex flex-col items-center justify-center rounded-[2px] border py-2.5" style={{ borderColor: "var(--panel-border)", background: "rgba(255,255,255,0.02)" }}>
-                    <span className="font-mono text-[9px] uppercase tracking-[0.2em]" style={{ color: "var(--ink-dim)" }}>
+                  <div key={s.label} className="flex flex-col items-center justify-center rounded-[6px] border py-2.5" style={{ borderColor: "var(--panel-border)", background: "var(--raise)" }}>
+                    <span className="font-mono text-[9px] uppercase tracking-[0.1em]" style={{ color: "var(--ink-dim)" }}>
                       {s.label}
                     </span>
                     <span className="font-display" style={{ color: "var(--ink)", fontSize: 18 }}>
@@ -496,7 +494,7 @@ function GameOverPanel({
                 loading={loadingBoard}
                 columns={columns}
                 highlightName={null}
-                title="LEADERBOARD ─ TOP 10"
+                title="Leaderboard · top 10"
                 emptyMessage={submission.state === "skipped" ? "playing locally · scores saved on this device" : "no scores yet · you could be first"}
               />
             </div>
@@ -504,14 +502,14 @@ function GameOverPanel({
             <div className="flex flex-col gap-2">
               <Detent
                 onClick={onPlayAgain}
-                className="font-display tracking-[0.24em] text-sm px-6 py-3 border w-full transition-all duration-150 hover:bg-[rgba(245,182,81,0.22)]"
-                style={{ borderColor: "var(--accent)", color: "var(--accent)", background: "rgba(245,182,81,0.1)" }}
+                className="font-display tracking-[0.06em] text-sm px-6 py-3 border w-full transition-all duration-150 hover-wash"
+                style={{ borderColor: "var(--accent)", color: "var(--accent)", background: "color-mix(in srgb, var(--accent) 10%, transparent)" }}
               >
-                ↻ PLAY AGAIN
+                ↻ Play again
               </Detent>
               <Link
                 href="/"
-                className="font-mono uppercase tracking-[0.22em] text-[11px] px-6 py-2 w-full text-center transition-colors hover:text-[var(--ink)]"
+                className="font-mono tracking-[0.1em] text-[11px] px-6 py-2 w-full text-center transition-colors hover:text-[var(--ink)]"
                 style={{ color: "var(--ink-dim)" }}
               >
                 ← back to arcade
@@ -551,7 +549,7 @@ function SubmissionLine({ status }: { status: SubmissionStatus }) {
       break;
   }
   return (
-    <div className="font-mono text-[10px] uppercase tracking-[0.22em]" style={{ color }}>
+    <div className="font-mono text-[10px] uppercase tracking-[0.1em]" style={{ color }}>
       {text}
     </div>
   );

@@ -283,7 +283,7 @@ export default function ThirtyCirclesPage() {
   const ss = String(secs % 60).padStart(2, "0");
   const skipped = CATEGORIES.filter((c) => !picked.includes(c));
 
-  if (!mounted) return <div className="fixed inset-0" style={{ background: "#000" }} aria-hidden />;
+  if (!mounted) return <div className="fixed inset-0" style={{ background: "var(--bg-0)" }} aria-hidden />;
   if (vpBlocked) return <MobileGate />;
 
   return (
@@ -293,31 +293,31 @@ export default function ThirtyCirclesPage() {
       {/* Header */}
       <header className="shrink-0 flex items-center justify-between flex-wrap gap-3 mb-3">
         <div className="flex items-baseline gap-3">
-          <Link href="/" className="font-mono text-[9px] uppercase tracking-[0.22em] self-center transition-colors hover:text-[var(--accent)]" style={{ color: "var(--ink-dim)" }}>
+          <Link href="/" className="font-mono text-[9px] uppercase tracking-[0.1em] self-center transition-colors hover:text-[var(--accent)]" style={{ color: "var(--ink-dim)" }}>
             ◂ arcade
           </Link>
-          <h1 className="font-display text-lg md:text-xl tracking-[0.2em] leading-none" style={{ color: "var(--ink)" }}>
-            THIRTY <span style={{ color: "var(--accent)" }}>CIRCLES</span>
+          <h1 className="font-display text-lg md:text-xl tracking-[0.1em] leading-none" style={{ color: "var(--ink)" }}>
+            Thirty <span style={{ color: "var(--accent)" }}>Circles</span>
           </h1>
-          <span className="font-mono text-[9px] uppercase tracking-[0.22em]" style={{ color: "var(--ink-dim)" }}>
+          <span className="font-mono text-[9px] uppercase tracking-[0.1em]" style={{ color: "var(--ink-dim)" }}>
             divergent thinking
           </span>
         </div>
         {phase === "drawing" && (
           <div className="flex items-center gap-4">
-            <span className="font-mono text-[10px] uppercase tracking-[0.2em]" style={{ color: "var(--ink-dim)" }}>
+            <span className="font-mono text-[10px] uppercase tracking-[0.1em]" style={{ color: "var(--ink-dim)" }}>
               filled <span className="font-display" style={{ color: "var(--accent)" }}>{attempted}</span>/{TOTAL_CIRCLES}
             </span>
-            <span className="font-display text-lg tracking-[0.1em]" style={{ color: secs <= 20 ? "var(--accent-hot)" : "var(--ink)" }}>
+            <span className="font-display text-lg tracking-[0.05em]" style={{ color: secs <= 20 ? "var(--accent-hot)" : "var(--ink)" }}>
               {mm}:{ss}
             </span>
             <button
               type="button"
               onClick={finishDrawing}
-              className="font-display text-[10px] tracking-[0.22em] px-3 py-1.5 rounded-[2px] border transition-colors hover:bg-[rgba(245,182,81,0.14)]"
+              className="font-display text-[10px] tracking-[0.1em] px-3 py-1.5 rounded-[6px] border transition-colors hover-wash-soft"
               style={{ borderColor: "var(--accent)", color: "var(--accent)" }}
             >
-              DONE
+              Done
             </button>
           </div>
         )}
@@ -329,7 +329,7 @@ export default function ThirtyCirclesPage() {
           <div className="flex-1 min-h-0 flex gap-3">
             <div className="relative flex-1 min-h-0">
               {constraint && (
-                <div className="absolute top-2 left-1/2 -translate-x-1/2 z-10 px-3 py-1 rounded-[2px] font-mono text-[10px] uppercase tracking-[0.2em]" style={{ background: "rgba(14,10,20,0.8)", border: "1px solid var(--panel-border)", color: "var(--accent)" }}>
+                <div className="absolute top-2 left-1/2 -translate-x-1/2 z-10 px-3 py-1 rounded-[6px] font-mono text-[10px] uppercase tracking-[0.1em]" style={{ background: "var(--paper-bg)", border: "1px solid var(--paper-line)", color: "var(--paper-ink)" }}>
                   constraint · {constraint}
                 </div>
               )}
@@ -338,7 +338,7 @@ export default function ThirtyCirclesPage() {
                 onPointerDown={onPointerDown}
                 onPointerMove={onPointerMove}
                 onPointerUp={onPointerUp}
-                className="w-full h-full rounded-[2px] border"
+                className="w-full h-full rounded-[6px] border"
                 style={{ borderColor: "var(--panel-border-strong)", background: "var(--paper-bg)", cursor: mode === "mouse" ? "crosshair" : "none", touchAction: "none" }}
               />
               {mode === "camera" && (
@@ -352,7 +352,7 @@ export default function ThirtyCirclesPage() {
             {mode === "camera" && (
               <div className="w-[220px] shrink-0 flex flex-col gap-2">
                 <VisionFeed ref={visionRef} gestureRef={gestureRef} movementFreezeUntilRef={movementFreezeUntilRef} />
-                <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-center" style={{ color: "var(--ink-dim)" }}>
+                <p className="font-mono text-[9px] uppercase tracking-[0.09em] text-center" style={{ color: "var(--ink-dim)" }}>
                   pinch to draw · release to lift
                 </p>
               </div>
@@ -406,29 +406,27 @@ function StartOverlay({
   onCamera: () => void;
 }) {
   return (
-    <div className="fixed inset-0 z-40 flex items-center justify-center px-6 py-6 overflow-y-auto" style={{ background: "rgba(14,10,20,0.55)" }}>
-      <Link href="/" className="fixed top-4 left-4 z-[55] font-mono text-[10px] uppercase tracking-[0.24em] px-3 py-2 rounded-[2px] border hover:-translate-y-px transition-transform" style={{ borderColor: "var(--panel-border-strong)", color: "var(--ink-dim)", background: "rgba(0,0,0,0.35)" }}>
+    <div className="fixed inset-0 z-40 flex items-center justify-center px-6 py-6 overflow-y-auto" style={{ background: "var(--scrim-soft)" }}>
+      <Link href="/" className="fixed top-4 left-4 z-[55] font-mono text-[10px] uppercase tracking-[0.06em] px-3 py-2 rounded-[6px] border hover:-translate-y-px transition-transform" style={{ borderColor: "var(--panel-border-strong)", color: "var(--ink-dim)", background: "var(--recess)" }}>
         ◂ arcade
       </Link>
-      <div className="panel-bg relative rounded-[2px] border w-full overflow-hidden" style={{ maxWidth: 540, borderColor: "var(--panel-border-strong)", boxShadow: "0 24px 60px rgba(0,0,0,0.55)" }}>
+      <div className="panel-bg relative rounded-[6px] border w-full overflow-hidden" style={{ maxWidth: 540, borderColor: "var(--panel-border-strong)", boxShadow: "0 24px 60px var(--shadow-strong)" }}>
         <div className="border-b" style={{ borderColor: "var(--panel-border)", height: 84 }}>
           <Vignette kind="circles" tint="var(--c-J)" className="h-full" />
         </div>
         <div className="px-8 py-7">
-          <div className="font-display text-[10px] tracking-[0.32em] mb-2 text-center" style={{ color: "var(--accent)" }}>
-            ─── divergent thinking ───
-          </div>
-          <h2 className="font-display tracking-[0.14em] leading-[0.95] mb-3 text-center" style={{ color: "var(--ink)", fontSize: "clamp(30px, 6vw, 46px)" }}>
-            THIRTY <span style={{ color: "var(--accent)" }}>CIRCLES</span>
+          <div className="font-display text-[10px] tracking-[0.12em] mb-2 text-center" style={{ color: "var(--accent)" }}> divergent thinking </div>
+          <h2 className="font-display tracking-[0.07em] leading-[0.95] mb-3 text-center" style={{ color: "var(--ink)", fontSize: "clamp(30px, 6vw, 46px)" }}>
+            Thirty <span style={{ color: "var(--accent)" }}>Circles</span>
           </h2>
-          <p className="font-mono text-[11px] uppercase tracking-[0.14em] leading-relaxed text-center mb-5" style={{ color: "var(--ink-dim)" }}>
+          <p className="font-mono text-[11px] tracking-[0.07em] leading-relaxed text-center mb-5" style={{ color: "var(--ink-dim)" }}>
             three minutes. thirty circles. turn each into a different thing — a clock, a face, a planet. quantity beats quality. don&apos;t overthink it.
           </p>
 
           {trend.length >= 2 && (
-            <div className="flex items-center justify-between rounded-[2px] border px-3 py-2 mb-5" style={{ borderColor: "var(--panel-border)" }}>
+            <div className="flex items-center justify-between rounded-[6px] border px-3 py-2 mb-5" style={{ borderColor: "var(--panel-border)" }}>
               <div className="flex flex-col">
-                <span className="font-mono text-[9px] uppercase tracking-[0.2em]" style={{ color: "var(--ink-dim)" }}>fluency · last {trend.length}</span>
+                <span className="font-mono text-[9px] uppercase tracking-[0.1em]" style={{ color: "var(--ink-dim)" }}>fluency · last {trend.length}</span>
                 <span className="font-display text-[12px]" style={{ color: "var(--accent)" }}>best {best}/{TOTAL_CIRCLES}</span>
               </div>
               <Sparkline values={trend} />
@@ -436,19 +434,19 @@ function StartOverlay({
           )}
 
           {constraint && (
-            <div className="text-center font-mono text-[10px] uppercase tracking-[0.2em] mb-4" style={{ color: "var(--accent)" }}>
+            <div className="text-center font-mono text-[10px] uppercase tracking-[0.1em] mb-4" style={{ color: "var(--accent)" }}>
               this run&apos;s constraint · {constraint}
             </div>
           )}
 
           <div className="flex flex-col gap-2">
-            <button onClick={onCamera} className="font-display tracking-[0.24em] text-sm px-6 py-3.5 border w-full transition-all duration-150 hover:bg-[rgba(245,182,81,0.22)]" style={{ borderColor: "var(--accent)", color: "var(--accent)", background: "rgba(245,182,81,0.1)", boxShadow: "0 0 24px rgba(245,182,81,0.18)" }}>
-              ▶ DRAW WITH HANDS
+            <button onClick={onCamera} className="font-display tracking-[0.06em] text-sm px-6 py-3.5 border w-full transition-all duration-150 hover-wash" style={{ borderColor: "var(--accent)", color: "var(--accent)", background: "color-mix(in srgb, var(--accent) 10%, transparent)", boxShadow: "0 0 24px color-mix(in srgb, var(--accent) 18%, transparent)" }}>
+              ▶ Draw with hands
             </button>
-            <button onClick={onMouse} className="font-mono uppercase tracking-[0.22em] text-[11px] px-6 py-2.5 w-full transition-colors hover:text-[var(--ink)]" style={{ color: "var(--ink-dim)" }}>
+            <button onClick={onMouse} className="font-mono tracking-[0.1em] text-[11px] px-6 py-2.5 w-full transition-colors hover:text-[var(--ink)]" style={{ color: "var(--ink-dim)" }}>
               draw with mouse →
             </button>
-            <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-center mt-1" style={{ color: "var(--ink-dim)", opacity: 0.8 }}>
+            <p className="font-mono text-[9px] uppercase tracking-[0.09em] text-center mt-1" style={{ color: "var(--ink-dim)", opacity: 0.8 }}>
               🔒 camera runs on-device · pinch to draw
             </p>
           </div>
@@ -488,7 +486,7 @@ function ReflectScreen({
       <div className="w-full grid gap-4" style={{ maxWidth: 980, gridTemplateColumns: "1.4fr 1fr" }}>
         {/* Gallery — mounted on a mat, like a framed print */}
         <div
-          className="rounded-[2px] border"
+          className="rounded-[6px] border"
           style={{ borderColor: "var(--panel-border-strong)", background: "var(--paper-bg)", padding: 14 }}
         >
           {gallery ? (
@@ -507,51 +505,51 @@ function ReflectScreen({
         {/* Reflection */}
         <div className="flex flex-col gap-4">
           <div className="text-center">
-            <div className="font-mono text-[9px] uppercase tracking-[0.22em]" style={{ color: "var(--ink-dim)" }}>fluency</div>
+            <div className="font-mono text-[9px] uppercase tracking-[0.1em]" style={{ color: "var(--ink-dim)" }}>fluency</div>
             <div className="font-display" style={{ color: "var(--accent)", fontSize: 40 }}>{attempted}<span style={{ color: "var(--ink-dim)", fontSize: 18 }}>/{TOTAL_CIRCLES}</span></div>
             {trend.length >= 2 && (
               <div className="flex items-center justify-center gap-2 mt-1">
-                <span className="font-mono text-[9px] uppercase tracking-[0.2em]" style={{ color: "var(--ink-dim)" }}>best {best}</span>
+                <span className="font-mono text-[9px] uppercase tracking-[0.1em]" style={{ color: "var(--ink-dim)" }}>best {best}</span>
                 <Sparkline values={trend} width={120} height={28} />
               </div>
             )}
           </div>
 
           {/* Flexibility self-check */}
-          <div className="rounded-[2px] border p-3" style={{ borderColor: "var(--panel-border)" }}>
-            <div className="font-display text-[10px] tracking-[0.22em] mb-2" style={{ color: "var(--accent)" }}>WHICH DID YOU DRAW?</div>
+          <div className="rounded-[6px] border p-3" style={{ borderColor: "var(--panel-border)" }}>
+            <div className="font-display text-[10px] tracking-[0.1em] mb-2" style={{ color: "var(--accent)" }}>Which did you draw?</div>
             <div className="flex flex-wrap gap-1.5">
               {categories.map((c) => {
                 const on = picked.includes(c);
                 return (
-                  <button key={c} type="button" onClick={() => onToggle(c)} className="px-2.5 py-1 rounded-[2px] border font-mono text-[10px] uppercase tracking-[0.14em] transition-colors" style={{ borderColor: on ? "var(--accent)" : "var(--panel-border)", color: on ? "var(--accent)" : "var(--ink-dim)", background: on ? "rgba(245,182,81,0.12)" : "transparent" }}>
+                  <button key={c} type="button" onClick={() => onToggle(c)} className="px-2.5 py-1 rounded-[6px] border font-mono text-[10px] uppercase tracking-[0.07em] transition-colors" style={{ borderColor: on ? "var(--accent)" : "var(--panel-border)", color: on ? "var(--accent)" : "var(--ink-dim)", background: on ? "color-mix(in srgb, var(--accent) 12%, transparent)" : "transparent" }}>
                     {c}
                   </button>
                 );
               })}
             </div>
             {picked.length > 0 && skipped.length > 0 && (
-              <p className="font-mono text-[10px] tracking-[0.04em] mt-2 leading-snug" style={{ color: "var(--ink-dim)" }}>
+              <p className="font-mono text-[10px] tracking-[0.02em] mt-2 leading-snug" style={{ color: "var(--ink-dim)" }}>
                 you skipped <span style={{ color: "var(--ink)" }}>{skipped.join(", ")}</span> — that&apos;s where the unexpected ideas hide.
               </p>
             )}
           </div>
 
           {/* Rotating reflection prompt */}
-          <div className="rounded-[2px] px-3 py-3 flex items-start gap-2" style={{ background: "rgba(245,182,81,0.06)", border: "1px solid var(--panel-border)" }}>
+          <div className="rounded-[6px] px-3 py-3 flex items-start gap-2" style={{ background: "color-mix(in srgb, var(--accent) 6%, transparent)", border: "1px solid var(--panel-border)" }}>
             <span className="font-display text-[10px] mt-px" style={{ color: "var(--accent)" }}>✦</span>
             <p className="font-mono text-[11px] leading-snug" style={{ color: "var(--ink)" }}>{reflection}</p>
           </div>
 
           <div className="flex flex-col gap-2 mt-1">
-            <button onClick={onAgain} className="font-display tracking-[0.24em] text-sm px-6 py-3 border w-full transition-all duration-150 hover:bg-[rgba(245,182,81,0.22)]" style={{ borderColor: "var(--accent)", color: "var(--accent)", background: "rgba(245,182,81,0.1)" }}>
-              ↻ GO AGAIN — WITH A TWIST
+            <button onClick={onAgain} className="font-display tracking-[0.06em] text-sm px-6 py-3 border w-full transition-all duration-150 hover-wash" style={{ borderColor: "var(--accent)", color: "var(--accent)", background: "color-mix(in srgb, var(--accent) 10%, transparent)" }}>
+              ↻ Go again — with a twist
             </button>
             <div className="flex gap-2">
-              <button onClick={onExport} disabled={!gallery} className="flex-1 font-mono uppercase tracking-[0.2em] text-[11px] px-4 py-2 border transition-colors disabled:opacity-40 hover:text-[var(--ink)]" style={{ color: "var(--ink-dim)", borderColor: "var(--panel-border)" }}>
+              <button onClick={onExport} disabled={!gallery} className="flex-1 font-mono tracking-[0.1em] text-[11px] px-4 py-2 border transition-colors disabled:opacity-40 hover:text-[var(--ink)]" style={{ color: "var(--ink-dim)", borderColor: "var(--panel-border)" }}>
                 ⤓ save png
               </button>
-              <Link href="/" className="flex-1 text-center font-mono uppercase tracking-[0.2em] text-[11px] px-4 py-2 border transition-colors hover:text-[var(--ink)]" style={{ color: "var(--ink-dim)", borderColor: "var(--panel-border)" }}>
+              <Link href="/" className="flex-1 text-center font-mono tracking-[0.1em] text-[11px] px-4 py-2 border transition-colors hover:text-[var(--ink)]" style={{ color: "var(--ink-dim)", borderColor: "var(--panel-border)" }}>
                 ← arcade
               </Link>
             </div>
@@ -564,15 +562,15 @@ function ReflectScreen({
 
 function MobileGate() {
   return (
-    <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center px-6 text-center" style={{ background: "#000" }}>
-      <div className="font-display text-[10px] tracking-[0.32em] mb-3" style={{ color: "var(--accent)" }}>─── need more room ───</div>
-      <h1 className="font-display tracking-[0.18em] leading-[0.95] mb-4" style={{ color: "var(--ink)", fontSize: "clamp(30px, 8vw, 48px)" }}>
-        THIRTY<br /><span style={{ color: "var(--accent)" }}>CIRCLES</span>
+    <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center px-6 text-center" style={{ background: "var(--bg-0)" }}>
+      <div className="font-display text-[10px] tracking-[0.12em] mb-3" style={{ color: "var(--accent)" }}> need more room </div>
+      <h1 className="font-display tracking-[0.09em] leading-[0.95] mb-4" style={{ color: "var(--ink)", fontSize: "clamp(30px, 8vw, 48px)" }}>
+        Thirty<br /><span style={{ color: "var(--accent)" }}>Circles</span>
       </h1>
-      <p className="font-mono text-[10px] uppercase tracking-[0.22em] leading-relaxed max-w-[300px]" style={{ color: "var(--ink-dim)" }}>
+      <p className="font-mono text-[11px] tracking-[0.02em] leading-relaxed max-w-[320px]" style={{ color: "var(--ink-dim)" }}>
         thirty circles need a wide canvas.<br />flip to landscape or hop on a laptop.
       </p>
-      <Link href="/" className="mt-6 font-mono text-[10px] uppercase tracking-[0.24em] px-4 py-2 border rounded-[2px]" style={{ borderColor: "var(--panel-border-strong)", color: "var(--accent)" }}>◂ back to arcade</Link>
+      <Link href="/" className="mt-6 font-mono text-[10px] uppercase tracking-[0.06em] px-4 py-2 border rounded-[6px]" style={{ borderColor: "var(--panel-border-strong)", color: "var(--accent)" }}>◂ back to arcade</Link>
     </div>
   );
 }

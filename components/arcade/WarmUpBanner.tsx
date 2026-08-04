@@ -20,7 +20,7 @@ export function WarmUpBanner() {
   return (
     <Link
       href="/warm-up"
-      className="bento-card group panel-bg rounded-[2px] overflow-hidden flex items-stretch"
+      className="bento-card group panel-bg rounded-[6px] overflow-hidden flex items-stretch"
       style={{ "--tint": "var(--accent)", gridArea: "warmup" } as React.CSSProperties}
     >
       <div className="shrink-0 hidden sm:block" style={{ width: 132 }}>
@@ -28,11 +28,11 @@ export function WarmUpBanner() {
       </div>
       <div className="flex-1 flex items-center justify-between gap-4 px-5 py-4">
         <div className="flex flex-col gap-0.5">
-          <span className="font-display text-[13px] tracking-[0.2em]" style={{ color: "var(--ink)" }}>
-            DAILY <span style={{ color: "var(--accent)" }}>WARM-UP</span>
+          <span className="font-display text-[13px] tracking-[0.1em]" style={{ color: "var(--ink)" }}>
+            Daily <span style={{ color: "var(--accent)" }}>warm-up</span>
           </span>
-          <span className="font-mono text-[9px] uppercase tracking-[0.2em]" style={{ color: "var(--ink-dim)" }}>
-            one round of each · five minutes · before the real work
+          <span className="font-mono text-[9px] uppercase tracking-[0.1em]" style={{ color: "var(--ink-dim)" }}>
+            four games, drawn daily · five minutes · before the real work
           </span>
         </div>
         <div className="flex items-center gap-4 shrink-0">
@@ -41,16 +41,16 @@ export function WarmUpBanner() {
               <span className="font-display text-[16px]" style={{ color: "var(--accent)" }}>
                 🔥 {streak}
               </span>
-              <span className="font-mono text-[8px] uppercase tracking-[0.2em]" style={{ color: "var(--ink-dim)" }}>
+              <span className="font-mono text-[8px] uppercase tracking-[0.1em]" style={{ color: "var(--ink-dim)" }}>
                 day streak{done ? " · done ✓" : ""}
               </span>
             </div>
           )}
           <span
-            className="font-display text-[11px] tracking-[0.22em] px-3.5 py-2 rounded-[2px] border transition-colors group-hover:bg-[rgba(245,182,81,0.16)]"
+            className="font-display text-[11px] tracking-[0.1em] px-3.5 py-2 rounded-[6px] border transition-colors group-hover-wash"
             style={{ borderColor: "var(--accent)", color: "var(--accent)" }}
           >
-            {mounted && done ? "AGAIN ▸" : "START ▸"}
+            {mounted && done ? "Again ▸" : "Start ▸"}
           </span>
         </div>
       </div>
