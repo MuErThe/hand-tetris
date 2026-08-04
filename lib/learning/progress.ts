@@ -46,23 +46,35 @@ function safeSet(k: string, v: string): void {
   }
 }
 
+/** Validate an unknown value (parsed JSON, remote payload) into sessions. */
+export function sanitizeSessions(value: unknown): SessionRecord[] {
+  if (!Array.isArray(value)) return [];
+  return value.filter(
+    (s): s is SessionRecord =>
+      s &&
+      typeof s.score === "number" &&
+      typeof s.rounds === "number" &&
+      typeof s.at === "number" &&
+      typeof s.byType === "object",
+  );
+}
+
 export function loadSessions(game: string): SessionRecord[] {
   const raw = safeGet(key(game));
   if (!raw) return [];
   try {
-    const parsed = JSON.parse(raw);
-    if (!Array.isArray(parsed)) return [];
-    return parsed.filter(
-      (s): s is SessionRecord =>
-        s &&
-        typeof s.score === "number" &&
-        typeof s.rounds === "number" &&
-        typeof s.at === "number" &&
-        typeof s.byType === "object",
-    );
+    return sanitizeSessions(JSON.parse(raw));
   } catch {
     return [];
   }
+}
+
+/**
+ * Overwrite a game's history with a merged set (account sync). Deliberately
+ * does NOT nudge the syncer — sync-driven writes must not re-trigger a push.
+ */
+export function replaceSessions(game: string, sessions: SessionRecord[]): void {
+  safeSet(key(game), JSON.stringify(sessions.slice(-MAX_SESSIONS)));
 }
 
 /**
@@ -93,6 +105,13 @@ export function recordSession(
   // Keep the most recent MAX_SESSIONS.
   const trimmed = all.slice(-MAX_SESSIONS);
   safeSet(key(game), JSON.stringify(trimmed));
+  // Nudge the account syncer (lib/auth/sync listens; an event rather than an
+  // import so this store stays dependency-free).
+  try {
+    window.dispatchEvent(new Event("arcade:state-dirty"));
+  } catch {
+    /* ignore */
+  }
   return session;
 }
 

@@ -11,6 +11,7 @@ import { leaderboardConfigured } from "./supabase";
 import { saveStoredPlayer, loadStoredPlayer, type StoredPlayer } from "./local";
 import { validateName, nameValidationMessage, NAME_RULES } from "./profanity";
 import { generateRandomName } from "./random-name";
+import { ensureSession, linkPlayerToSession } from "@/lib/auth/session";
 
 export type ResolveResult =
   | { ok: true; player: StoredPlayer; name: string }
@@ -26,6 +27,9 @@ export async function resolveIdentity(rawName: string): Promise<ResolveResult> {
 
   const stored = loadStoredPlayer();
   if (stored && stored.name.toLowerCase() === candidate.toLowerCase()) {
+    // Link the pre-auth identity to an (anonymous) auth user in the
+    // background so a later Google log-in inherits its history.
+    void linkPlayerToSession(stored);
     return { ok: true, player: stored, name: candidate };
   }
 
@@ -43,6 +47,10 @@ export async function resolveIdentity(rawName: string): Promise<ResolveResult> {
     saveStoredPlayer(p);
     return { ok: true, player: p, name: candidate };
   }
+
+  // Session first, so reserve_name can stamp the auth uid on the new
+  // identity. Fails soft (null) when anonymous sign-ins aren't available.
+  await ensureSession();
 
   let attempt = candidate;
   for (let i = 0; i < 4; i++) {

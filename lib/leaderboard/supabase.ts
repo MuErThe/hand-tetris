@@ -18,7 +18,11 @@ export function getSupabase(): SupabaseClient | null {
     return null;
   }
   cached = createClient(url, key, {
-    auth: { persistSession: false, autoRefreshToken: false },
+    // Sessions persist so the anonymous auth user (see lib/auth/session)
+    // survives reloads; auto-refresh keeps its JWT alive mid-session. PKCE
+    // is the OAuth flow that works on a static export — the Google redirect
+    // lands back on any page and the client exchanges the code from the URL.
+    auth: { persistSession: true, autoRefreshToken: true, flowType: "pkce" },
   });
   return cached;
 }

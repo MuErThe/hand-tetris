@@ -3,6 +3,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
+import { AccountRow } from "@/components/AccountRow";
 import { Leaderboard } from "@/components/Leaderboard";
 import { LeaderboardModal } from "@/components/LeaderboardModal";
 import { SessionTimer } from "@/components/SessionTimer";
@@ -386,6 +387,8 @@ export function GameShell({
                 >
                   {busy ? "Working…" : "▶ Start"}
                 </Detent>
+
+                <AccountRow className="mt-4" />
               </div>
 
               {lbOnline && (

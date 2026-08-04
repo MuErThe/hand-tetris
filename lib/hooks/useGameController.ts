@@ -59,6 +59,10 @@ export function useGameController({
     const onKeyDown = (e: KeyboardEvent) => {
       const s = gameRef.current;
       if (s.isOver) return;
+      // Never steal keys from a form field — the start screen's name input
+      // shares the window with this listener, and Space/S are typeable there.
+      const target = e.target as HTMLElement | null;
+      if (target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA")) return;
       // Suppress repeats
       if (held.has(e.code)) return;
       held.add(e.code);

@@ -6,6 +6,8 @@ import { Detent } from "@/components/focal/Detent";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { reserveName } from "@/lib/leaderboard/api";
+import { ensureSession, linkPlayerToSession } from "@/lib/auth/session";
+import { AccountRow } from "./AccountRow";
 import { LeaderboardModal } from "./LeaderboardModal";
 import { leaderboardConfigured } from "@/lib/leaderboard/supabase";
 import {
@@ -68,6 +70,9 @@ export function StartScreen({ show, onStart, onDismiss }: StartScreenProps) {
       stored &&
       stored.name.toLowerCase() === candidate.toLowerCase()
     ) {
+      // Link the pre-auth identity to an (anonymous) auth user in the
+      // background so a later Google log-in inherits its history.
+      void linkPlayerToSession(stored);
       return stored;
     }
 
@@ -85,6 +90,9 @@ export function StartScreen({ show, onStart, onDismiss }: StartScreenProps) {
     }
 
     setBusyReason("reserving name…");
+    // Session first, so reserve_name can stamp the auth uid on the new
+    // identity. Fails soft when anonymous sign-ins aren't available.
+    await ensureSession();
     let attempt = candidate;
     for (let i = 0; i < 4; i++) {
       const res = await reserveName(attempt);
@@ -326,6 +334,8 @@ export function StartScreen({ show, onStart, onDismiss }: StartScreenProps) {
                 >
                   🔒 video is processed on-device · never leaves your browser
                 </p>
+
+                <AccountRow className="mt-3" />
               </div>
             </div>
 

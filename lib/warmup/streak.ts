@@ -5,7 +5,7 @@
 
 const KEY = "arcade/v1/warmup-streak";
 
-interface StreakData {
+export interface StreakData {
   count: number;
   lastDay: number; // local day number (days since epoch, local midnight)
 }
@@ -62,6 +62,7 @@ export function recordToday(): number {
   const s = load();
   if (!s) {
     save({ count: 1, lastDay: today });
+    markDirty();
     return 1;
   }
   if (s.lastDay === today) return s.count;
@@ -69,5 +70,29 @@ export function recordToday(): number {
   // gap 1 = yesterday, gap 2 = one missed day (forgiven). Otherwise reset.
   const count = gap === 1 || gap === 2 ? s.count + 1 : 1;
   save({ count, lastDay: today });
+  markDirty();
   return count;
+}
+
+// Nudges the account syncer (lib/auth/sync listens; an event rather than an
+// import so this store stays dependency-free).
+function markDirty(): void {
+  try {
+    window.dispatchEvent(new Event("arcade:state-dirty"));
+  } catch {
+    /* ignore */
+  }
+}
+
+/** The stored streak as-is, alive or not (account sync). */
+export function rawStreak(): StreakData | null {
+  return load();
+}
+
+/**
+ * Overwrite the stored streak with a merged one (account sync). Deliberately
+ * does NOT nudge the syncer — sync-driven writes must not re-trigger a push.
+ */
+export function replaceStreak(d: StreakData): void {
+  save(d);
 }
