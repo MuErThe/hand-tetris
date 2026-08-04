@@ -8,7 +8,9 @@ import { useEffect, useRef, useState } from "react";
 import { reserveName } from "@/lib/leaderboard/api";
 import { ensureSession, linkPlayerToSession } from "@/lib/auth/session";
 import { AccountRow } from "./AccountRow";
+import { GameSplash } from "./arcade/GameSplash";
 import { LeaderboardModal } from "./LeaderboardModal";
+import { game } from "@/lib/games/registry";
 import { leaderboardConfigured } from "@/lib/leaderboard/supabase";
 import {
   loadStoredPlayer,
@@ -44,6 +46,9 @@ export function StartScreen({ show, onStart, onDismiss }: StartScreenProps) {
   // renders during SSR/hydration where the value could mismatch.
   const [stored, setStored] = useState<StoredPlayer | null>(loadStoredPlayer);
   const [name, setName] = useState(() => loadStoredPlayer()?.name ?? "");
+  // Splash front door first (every visit); the pilot/mode panel follows.
+  // Tetris never skips the panel — the camera/keyboard choice lives there.
+  const [step, setStep] = useState<"splash" | "panel">("splash");
   const [busy, setBusy] = useState(false);
   const [busyReason, setBusyReason] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
@@ -142,6 +147,7 @@ export function StartScreen({ show, onStart, onDismiss }: StartScreenProps) {
       );
       const result = await onStart(mode, player);
       if (result.ok) {
+        setStep("splash"); // next visit to this screen starts at the front door
         onDismiss();
       } else {
         setError(
@@ -172,6 +178,22 @@ export function StartScreen({ show, onStart, onDismiss }: StartScreenProps) {
             background: "var(--scrim)",
           }}
         >
+          {step === "splash" ? (
+            <GameSplash
+              gameId={TETRIS_GAME}
+              title={
+                <>
+                  Hand <span style={{ color: "var(--accent)" }}>Tetris</span>
+                </>
+              }
+              trains={game(TETRIS_GAME).trains}
+              pitch={game(TETRIS_GAME).blurb}
+              vignette={game(TETRIS_GAME).vignette}
+              accent="var(--accent)"
+              onPlay={() => setStep("panel")}
+              onBoard={lbOnline ? () => setBoardOpen(true) : undefined}
+            />
+          ) : (
           <motion.div
             initial={sharpenIn.initial}
             animate={sharpenIn.animate}
@@ -361,6 +383,7 @@ export function StartScreen({ show, onStart, onDismiss }: StartScreenProps) {
               </button>
             )}
           </motion.div>
+          )}
           <Link
             href="/"
             className="fixed top-4 left-4 z-[55] font-mono text-[10px] uppercase tracking-[0.06em] px-3 py-2 rounded-[6px] border transition-all duration-150 hover:-translate-y-px"

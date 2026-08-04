@@ -8,6 +8,7 @@ import { Leaderboard } from "@/components/Leaderboard";
 import { LeaderboardModal } from "@/components/LeaderboardModal";
 import { SessionTimer } from "@/components/SessionTimer";
 import { PanelFrame } from "@/components/PanelFrame";
+import { GameSplash } from "./GameSplash";
 import { Sparkline } from "./Sparkline";
 import { Vignette, type VignetteKind } from "./Vignette";
 import { FocalPlane, RACK, sharpenIn } from "@/components/focal/FocalPlane";
@@ -92,6 +93,10 @@ export function GameShell({
 }: GameShellProps) {
   const [mounted, setMounted] = useState(false);
   const [phase, setPhase] = useState<"start" | "playing" | "over">("start");
+  // The start overlay is two steps: the splash front door (every visit),
+  // then the tag/how-to card — reached only by first-timers or on an
+  // identity error.
+  const [overlayStep, setOverlayStep] = useState<"splash" | "setup">("splash");
   const [runKey, setRunKey] = useState(0);
 
   const [name, setName] = useState("");
@@ -131,7 +136,7 @@ export function GameShell({
     playSfx("start");
   }, [gameId]);
 
-  const handleStart = useCallback(async () => {
+  const handleStart = useCallback(async (): Promise<boolean> => {
     setBusy(true);
     setError(null);
     unlockAudio();
@@ -140,15 +145,27 @@ export function GameShell({
       if (!res.ok) {
         setError(res.error);
         setName(res.name);
-        return;
+        return false;
       }
       setName(res.name);
       setPlayer(res.player);
       beginPlay();
+      return true;
     } finally {
       setBusy(false);
     }
   }, [name, beginPlay]);
+
+  // Splash Play: a returning player goes straight in; a first-timer (or an
+  // identity error, e.g. their name was freed server-side) gets the card.
+  const handlePlay = useCallback(async () => {
+    if (!player) {
+      setOverlayStep("setup");
+      return;
+    }
+    const ok = await handleStart();
+    if (!ok) setOverlayStep("setup");
+  }, [player, handleStart]);
 
   const refreshBoard = useCallback(async () => {
     if (!lbOnline) return;
@@ -198,10 +215,16 @@ export function GameShell({
     [player, lbOnline, gameId, refreshBoard],
   );
 
-  const quit = useCallback(() => setPhase("start"), []);
+  const quit = useCallback(() => {
+    setOverlayStep("splash");
+    setPhase("start");
+  }, []);
   const playAgain = useCallback(() => {
     if (player) beginPlay();
-    else setPhase("start");
+    else {
+      setOverlayStep("splash");
+      setPhase("start");
+    }
   }, [player, beginPlay]);
 
   return (
@@ -279,6 +302,19 @@ export function GameShell({
             className="fixed inset-0 z-40 flex items-center justify-center px-6 py-6 overflow-y-auto"
             style={{ background: "var(--scrim-soft)" }}
           >
+            {overlayStep === "splash" ? (
+              <GameSplash
+                gameId={gameId}
+                title={title}
+                trains={trains}
+                pitch={pitch}
+                vignette={vignette}
+                accent={accent}
+                busy={busy}
+                onPlay={() => void handlePlay()}
+                onBoard={lbOnline ? () => setBoardOpen(true) : undefined}
+              />
+            ) : (
             <motion.div
               initial={sharpenIn.initial}
               animate={sharpenIn.animate}
@@ -402,6 +438,7 @@ export function GameShell({
                 </button>
               )}
             </motion.div>
+            )}
 
             <Link
               href="/"
