@@ -9,7 +9,7 @@ interface RoundRevealProps {
   maxPoints: number;
   /** e.g. "you: 0.54 · true: 0.50 · off by 4%". */
   detail: string;
-  /** The design principle matched to the mistake — this is the lesson. */
+  /** The design principle matched to the mistake: this is the lesson. */
   principle: string;
   isLast: boolean;
   onContinue: () => void;

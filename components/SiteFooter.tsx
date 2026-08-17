@@ -1,4 +1,4 @@
-// Site footer for the document pages (hub, about, focalism) — the SQUINT
+// Site footer for the document pages (hub, about, focalism): the SQUINT
 // logomark on the left (linking home, tagline beneath), links on the right,
 // and the arcade's basement underneath (see FooterRun). Game routes are
 // full-viewport and footer-free.

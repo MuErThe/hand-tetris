@@ -3,7 +3,7 @@
 --
 -- The default mode below is conservative: it collapses duplicates only
 -- within the SAME player. The aggressive mode (commented out) also
--- collapses identical stats across different player names — useful when
+-- collapses identical stats across different player names: useful when
 -- a single person registered under more than one spelling.
 
 -- ============================================================

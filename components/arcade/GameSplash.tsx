@@ -1,6 +1,6 @@
 "use client";
 
-// The game's front door — a calm landing in the Wordle tradition: glyph,
+// The game's front door, a calm landing in the Wordle tradition: glyph,
 // name, one line, Play. Shown on every visit. Players with a stored tag go
 // straight into the game from here; the tag/how-to card is first-visit only.
 // Renders client-side only (parents gate on mounted), so reading the date
@@ -18,7 +18,7 @@ interface GameSplashProps {
   gameId: string;
   /** Wordmark, already styled (accent span etc.). */
   title: ReactNode;
-  /** The skill it trains — the eyebrow line. */
+  /** The skill it trains: the eyebrow line. */
   trains: string;
   /** One-line what/why pitch. */
   pitch: string;

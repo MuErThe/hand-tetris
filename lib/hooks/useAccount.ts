@@ -28,7 +28,7 @@ function toAccount(user: User | null | undefined): Account | null {
 
 /**
  * The logged-in account, live across sign-in/out and the OAuth redirect
- * return. Never creates a session — it only observes.
+ * return. Never creates a session: it only observes.
  */
 export function useAccount(): Account | null {
   const [account, setAccount] = useState<Account | null>(null);

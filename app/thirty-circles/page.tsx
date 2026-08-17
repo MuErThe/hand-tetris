@@ -262,7 +262,7 @@ export default function ThirtyCirclesPage() {
   }, []);
 
   const goAgain = useCallback(() => {
-    // A self-imposed constraint pulled from the deck — the classic rut-breaker.
+    // A self-imposed constraint pulled from the deck: the classic rut-breaker.
     setConstraint(CONSTRAINTS[Math.floor(Math.random() * CONSTRAINTS.length)]);
     beginRun(mode);
   }, [beginRun, mode]);
@@ -288,7 +288,7 @@ export default function ThirtyCirclesPage() {
 
   return (
     <div className="relative flex-1 flex flex-col w-full h-screen overflow-hidden" style={{ padding: "16px 18px" }}>
-      {/* Focalism: the page defocuses behind the start overlay — no glass veil. */}
+      {/* Focalism: the page defocuses behind the start overlay; no glass veil. */}
       <FocalPlane level={phase === "start" ? 2 : 0} className="flex-1 flex flex-col min-h-0">
       {/* Header */}
       <header className="shrink-0 flex items-center justify-between flex-wrap gap-3 mb-3">
@@ -420,7 +420,7 @@ function StartOverlay({
             Thirty <span style={{ color: "var(--accent)" }}>Circles</span>
           </h2>
           <p className="font-mono text-[11px] tracking-[0.07em] leading-relaxed text-center mb-5" style={{ color: "var(--ink-dim)" }}>
-            three minutes. thirty circles. turn each into a different thing — a clock, a face, a planet. quantity beats quality. don&apos;t overthink it.
+            three minutes. thirty circles. turn each into a different thing: a clock, a face, a planet. quantity beats quality. don&apos;t overthink it.
           </p>
 
           {trend.length >= 2 && (
@@ -484,7 +484,7 @@ function ReflectScreen({
   return (
     <div className="flex-1 min-h-0 overflow-y-auto flex justify-center py-2">
       <div className="w-full grid gap-4" style={{ maxWidth: 980, gridTemplateColumns: "1.4fr 1fr" }}>
-        {/* Gallery — mounted on a mat, like a framed print */}
+        {/* Gallery: mounted on a mat, like a framed print */}
         <div
           className="rounded-[6px] border"
           style={{ borderColor: "var(--panel-border-strong)", background: "var(--paper-bg)", padding: 14 }}
@@ -530,7 +530,7 @@ function ReflectScreen({
             </div>
             {picked.length > 0 && skipped.length > 0 && (
               <p className="font-mono text-[10px] tracking-[0.02em] mt-2 leading-snug" style={{ color: "var(--ink-dim)" }}>
-                you skipped <span style={{ color: "var(--ink)" }}>{skipped.join(", ")}</span> — that&apos;s where the unexpected ideas hide.
+                you skipped <span style={{ color: "var(--ink)" }}>{skipped.join(", ")}</span>, and that&apos;s where the unexpected ideas hide.
               </p>
             )}
           </div>
@@ -543,7 +543,7 @@ function ReflectScreen({
 
           <div className="flex flex-col gap-2 mt-1">
             <button onClick={onAgain} className="font-display tracking-[0.06em] text-sm px-6 py-3 border w-full transition-all duration-150 hover-wash" style={{ borderColor: "var(--accent)", color: "var(--accent)", background: "color-mix(in srgb, var(--accent) 10%, transparent)" }}>
-              ↻ Go again — with a twist
+              ↻ Go again, with a twist
             </button>
             <div className="flex gap-2">
               <button onClick={onExport} disabled={!gallery} className="flex-1 font-mono tracking-[0.1em] text-[11px] px-4 py-2 border transition-colors disabled:opacity-40 hover:text-[var(--ink)]" style={{ color: "var(--ink-dim)", borderColor: "var(--panel-border)" }}>

@@ -34,7 +34,7 @@ const START_RADIUS = 0.09;
 /**
  * Canvas cannot resolve `var(--…)`, so the tokens have to be read off the
  * document and handed over as concrete colours. Resolved once per frame rather
- * than per stroke call — one getComputedStyle, not six.
+ * than per stroke call: one getComputedStyle, not six.
  */
 function inkPalette() {
   const cs = getComputedStyle(document.documentElement);
@@ -58,7 +58,7 @@ export default function SteadyHandPage() {
         </>
       }
       trains="hand control"
-      pitch="eight curves, one stroke each. no undo, no easing — just how steady you actually are."
+      pitch="eight curves, one stroke each. no undo, no easing, just how steady you actually are."
       howTo={[
         "press on the marker and trace the curve in a single stroke",
         "you're scored on how close you stayed and how much you covered",
@@ -136,7 +136,7 @@ export function SteadyHandGame({
     ctx.lineWidth = 1.25;
     ctx.stroke();
 
-    // Start marker (filled) and end marker (hollow) — direction is part of
+    // Start marker (filled) and end marker (hollow): direction is part of
     // the task, so the two ends must never be confusable.
     const a = poly[0];
     const z = poly[poly.length - 1];
@@ -276,7 +276,7 @@ export function SteadyHandGame({
         locked
           ? "here's how you did →"
           : nudge
-            ? "Start on the filled marker — the stroke has to begin there."
+            ? "Start on the filled marker. The stroke has to begin there."
             : challenge.prompt
       }
       accent="var(--c-L)"

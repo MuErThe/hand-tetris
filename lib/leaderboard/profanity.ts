@@ -1,5 +1,5 @@
 // Client-side profanity gate. The server runs the same check as a defense
-// in depth — see supabase/schema.sql. Keep this list in sync if you edit
+// in depth; see supabase/schema.sql. Keep this list in sync if you edit
 // either side.
 
 const BLOCKLIST = [
@@ -56,7 +56,7 @@ export function nameValidationMessage(v: NameValidation): string | null {
   if (v.ok) return null;
   switch (v.reason) {
     case "length":
-      return `name must be ${NAME_RULES.min}–${NAME_RULES.max} characters`;
+      return `name must be ${NAME_RULES.min}-${NAME_RULES.max} characters`;
     case "charset":
       return "letters, digits, underscore and dash only";
     case "profanity":

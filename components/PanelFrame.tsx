@@ -13,7 +13,7 @@ interface PanelFrameProps {
 /**
  * The panel. Surfaces first: a raised tonal step with a hairline, rather than
  * the bordered cabinet it used to be. The corner brackets that used to sit at
- * each corner were the arcade skin and have gone with it — the structure is
+ * each corner were the arcade skin and have gone with it: the structure is
  * carried by tone and spacing now.
  */
 export function PanelFrame({

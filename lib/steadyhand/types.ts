@@ -1,4 +1,4 @@
-// Steady Hand — trace the curve. A Bézier path is drawn on the artboard and
+// Steady Hand: trace the curve. A Bézier path is drawn on the artboard and
 // the player follows it in one stroke; the score is how close the stroke stayed
 // and how much of the path it actually covered.
 //
@@ -6,7 +6,7 @@
 // the engine never needs to know the pixel size of the surface.
 
 export type CurveType =
-  | "arc" // one gentle bend — the baseline
+  | "arc" // one gentle bend: the baseline
   | "s-curve" // an inflection: the hand has to reverse its bias
   | "tight" // small radius, where corners get cut
   | "sweep" // long and shallow, where drift accumulates

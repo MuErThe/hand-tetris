@@ -1,4 +1,4 @@
-// Steady Hand — pure geometry + scoring. No React, no DOM.
+// Steady Hand: pure geometry + scoring. No React, no DOM.
 
 import {
   type Challenge,
@@ -33,8 +33,8 @@ export function cubicAt(c: Cubic, t: number): Pt {
 }
 
 /**
- * Dense polyline for a path. Everything downstream — drawing, nearest-point
- * search, arc length, coverage — works off this one approximation, so the
+ * Dense polyline for a path. Everything downstream (drawing, nearest-point
+ * search, arc length, coverage) works off this one approximation, so the
  * thing being scored is exactly the thing being drawn.
  */
 export function samplePath(segments: Cubic[], perSegment = 90): Pt[] {
@@ -145,12 +145,12 @@ const RECIPES: Record<CurveType, Recipe> = {
 };
 
 const PROMPTS: Record<CurveType, string> = {
-  arc: "Trace the arc in one stroke — start at the marker.",
-  "s-curve": "Follow the S through its turn — one stroke, no lifting.",
+  arc: "Trace the arc in one stroke, starting at the marker.",
+  "s-curve": "Follow the S through its turn: one stroke, no lifting.",
   tight: "Take the tight bend without cutting the corner.",
-  sweep: "Long and shallow — hold the line all the way across.",
+  sweep: "Long and shallow: hold the line all the way across.",
   hook: "Straight, then the hook. Don't round off the transition.",
-  wave: "Ride every inflection — one continuous stroke.",
+  wave: "Ride every inflection: one continuous stroke.",
 };
 
 function flip(segments: Cubic[], flipX: boolean, flipY: boolean): Cubic[] {
@@ -199,11 +199,11 @@ export function evaluate(challenge: Challenge, trace: Pt[]): Evaluation {
       coverage: 0,
       guessDisplay: "no stroke",
       targetDisplay: "the full path",
-      errorDisplay: "—",
+      errorDisplay: "n/a",
     };
   }
 
-  // Nearest path point for each traced sample — this is the deviation.
+  // Nearest path point for each traced sample: this is the deviation.
   let sumDev = 0;
   let maxDev = 0;
   // Signed offsets, for telling corner-cutting from swinging wide.
@@ -239,8 +239,8 @@ export function evaluate(challenge: Challenge, trace: Pt[]): Evaluation {
 
   // Coverage is measured from the PATH's side: for every point on the path,
   // how close did the stroke ever come? Asking it this way round answers "how
-  // much of this did you actually trace". Asking it the other way round — which
-  // path points a stroke landed on — undercounts badly, because a fast stroke
+  // much of this did you actually trace". Asking it the other way round, which
+  // path points a stroke landed on: undercounts badly, because a fast stroke
   // samples sparsely while still passing along the whole path.
   const reached = poly.map((p) => {
     let best = Infinity;

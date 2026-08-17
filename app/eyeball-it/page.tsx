@@ -37,7 +37,7 @@ export default function EyeballItPage() {
         </>
       }
       trains="the trained eye"
-      pitch="ten quick calls of the eye — bisect, centre, angle, proportion. Then see exactly how close you were."
+      pitch="ten quick calls of the eye: bisect, centre, angle, proportion. Then see exactly how close you were."
       howTo={[
         "aim with your pointer, click to lock in your guess",
         "the truth is revealed with a one-line lesson each round",
@@ -66,7 +66,7 @@ export function EyeballGame({
   const seqRef = useRef<EyeballType[]>([]);
   const roundsRef = useRef<RoundRecord[]>([]);
   const seenLessonsRef = useRef<Set<string>>(new Set());
-  // Ignore commits fired in the first moments of a round — stops the click that
+  // Ignore commits fired in the first moments of a round: stops the click that
   // dismissed the start overlay (or a double-tap) from committing instantly.
   const roundStartRef = useRef(0);
 
@@ -266,7 +266,7 @@ function PlaySurface({
   );
 }
 
-/** Faint ruler ticks along the top and left edges — the artboard's measure. */
+/** Faint ruler ticks along the top and left edges: the artboard's measure. */
 function Rulers() {
   const ticks = [];
   for (let i = 10; i <= 90; i += 10) {
@@ -298,7 +298,7 @@ function RedlineLinear({
   const p2 = Math.max(a, b) * 100;
   const mid = (p1 + p2) / 2;
   if (p2 - p1 < 0.6) {
-    // Nearly on top of each other — just the label.
+    // Nearly on top of each other: just the label.
     return (
       <text
         x={horizontal ? mid : at}
@@ -370,7 +370,7 @@ function LinearLayer({
           {challenge.type === "optical-centre" &&
             challenge.geometric !== undefined &&
             line(challenge.geometric, "var(--paper-dim)", "1 2", 0.4)}
-          {/* the erring mark fringes — the lens caught the miss */}
+          {/* the erring mark fringes: the lens caught the miss */}
           {guessVal !== null && line(guessVal - 0.002, "var(--ab-red)", undefined, 0.5)}
           {guessVal !== null && line(guessVal + 0.002, "var(--ab-cyan)", undefined, 0.5)}
           {guessVal !== null && line(guessVal, GUESS)}
@@ -405,7 +405,7 @@ function PointLayer({
   return (
     <>
       <rect x={b.x * 100} y={b.y * 100} width={b.w * 100} height={b.h * 100} fill="rgba(42,33,24,0.04)" stroke="var(--paper-tick)" strokeWidth="0.45" />
-      {/* full crosshair while aiming — a designer's cursor, not a dot */}
+      {/* full crosshair while aiming: a designer's cursor, not a dot */}
       {!locked && p && (
         <>
           <line x1={p.x * 100} y1={2} x2={p.x * 100} y2={98} stroke={AIM} strokeWidth="0.35" opacity="0.6" />

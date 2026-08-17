@@ -2,8 +2,8 @@
 
 // Accounts: a silent anonymous auth session underneath the existing
 // name+token identity, upgraded in place by "Continue with Google". The
-// session is created lazily on first real play — never on page load, which
-// would mint an auth user for every visitor — and the player row is linked
+// session is created lazily on first real play; never on page load, which
+// would mint an auth user for every visitor, and the player row is linked
 // to it so the log-in inherits the history. Everything here fails soft: no
 // session means no linking, and the guest flow carries on untouched.
 
@@ -11,14 +11,14 @@ import { getSupabase } from "@/lib/leaderboard/supabase";
 import type { StoredPlayer } from "@/lib/leaderboard/local";
 
 // `${uid}:${name}` of the last successful claim. Scoped to the auth uid so
-// a sign-out, account switch, or new device self-heals — a different uid
+// a sign-out, account switch, or new device self-heals: a different uid
 // doesn't match the stamp and the claim is simply retried.
 const CLAIMED_KEY = "arcade/v1/auth-claimed";
 
 /**
  * The current auth user id, creating an anonymous session if none exists.
  * Null when Supabase is unconfigured, unreachable, or anonymous sign-ins
- * are disabled in the dashboard — callers carry on with the legacy flow.
+ * are disabled in the dashboard: callers carry on with the legacy flow.
  */
 export async function ensureSession(): Promise<string | null> {
   const sb = getSupabase();
@@ -70,7 +70,7 @@ export async function linkPlayerToSession(player: StoredPlayer): Promise<void> {
 
 /**
  * Send the player to Google. An anonymous session upgrades IN PLACE via
- * linkIdentity — same user id, history intact. If that Google identity
+ * linkIdentity: same user id, history intact. If that Google identity
  * already belongs to an existing account (or manual linking is off), fall
  * back to signing into it. Both paths leave for Google and return here via
  * redirect; the supabase client picks the session out of the URL on return.
@@ -87,7 +87,7 @@ export async function signInWithGoogle(): Promise<void> {
     }
     await sb.auth.signInWithOAuth({ provider: "google", options });
   } catch {
-    /* provider not configured — the row stays as it was */
+    /* provider not configured: the row stays as it was */
   }
 }
 

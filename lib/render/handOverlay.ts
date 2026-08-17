@@ -25,11 +25,11 @@ const THEME = {
 export interface OverlayDotState {
   /** Animated radii per fingertip landmark index. */
   radii: Map<number, number>;
-  /** Last seen tick (ms) per landmark — older dots fade out. */
+  /** Last seen tick (ms) per landmark: older dots fade out. */
   lastSeen: Map<number, number>;
-  /** Skeleton alpha — fades when hand disappears. */
+  /** Skeleton alpha: fades when hand disappears. */
   skeletonAlpha: number;
-  /** Reusable pixel-space landmark buffer — avoids 21 allocations per frame. */
+  /** Reusable pixel-space landmark buffer: avoids 21 allocations per frame. */
   pts: { x: number; y: number }[];
 }
 
@@ -49,7 +49,7 @@ export interface DebugDrawInfo {
   smoothedX: number;
   targetColumn: number;
   indexTipY: number;
-  /** Drop-zone thresholds (normalized video Y) — drawn as guide lines. */
+  /** Drop-zone thresholds (normalized video Y): drawn as guide lines. */
   dropEnter: number;
   dropExit: number;
 }
@@ -103,7 +103,7 @@ export function drawHandOverlay({
     });
   }
 
-  // Target skeleton alpha — fades as hand disappears
+  // Target skeleton alpha: fades as hand disappears
   const targetSkelAlpha = landmarks ? 1 : 0;
   state.skeletonAlpha = lerp(state.skeletonAlpha, targetSkelAlpha, 0.18);
 
@@ -209,7 +209,7 @@ function drawDebugPanel(
     handVisible: boolean;
   },
 ) {
-  // Drop-zone guide lines (horizontal — unaffected by the CSS mirror).
+  // Drop-zone guide lines (horizontal: unaffected by the CSS mirror).
   ctx.save();
   ctx.lineWidth = 1;
   ctx.setLineDash([6, 4]);
@@ -230,7 +230,7 @@ function drawDebugPanel(
   ctx.restore();
 
   // Text block. The canvas is CSS-mirrored (scaleX(-1)) so landmarks line up
-  // with the flipped video — counter-flip here or the text renders reversed.
+  // with the flipped video: counter-flip here or the text renders reversed.
   ctx.save();
   ctx.translate(width, 0);
   ctx.scale(-1, 1);

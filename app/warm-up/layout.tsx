@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Daily Warm-Up — five minutes before the real work",
+  title: "Daily Warm-Up: five minutes before the real work",
   description:
     "Four Squint games sampled fresh each day, chained into a five-minute ritual with streak tracking. Warm up before you open your design tools.",
   alternates: { canonical: "./" },

@@ -1,16 +1,16 @@
-// Contrast Call — read a colour pair and call its WCAG contrast ratio.
+// Contrast Call: read a colour pair and call its WCAG contrast ratio.
 //
 // One interaction throughout (place a caret on the ratio rail); what changes
 // between challenge types is the STIMULUS, because that is where the learning
 // is. Warm hues flatter themselves, deep blues read darker than they measure,
-// and two saturated hues can vibrate while failing badly — the eye has
+// and two saturated hues can vibrate while failing badly: the eye has
 // specific, teachable biases and each type targets one.
 
 export type ContrastType =
-  | "mono" // neutral greys — the honest baseline
+  | "mono" // neutral greys: the honest baseline
   | "warm" // reds/oranges/yellows, which read brighter than they measure
   | "cool" // blues/greens/purples, which read darker than they measure
-  | "clash" // two saturated hues at similar luminance — vibration ≠ contrast
+  | "clash" // two saturated hues at similar luminance: vibration ≠ contrast
   | "threshold" // clustered around 4.5:1, where the decision actually happens
   | "extreme"; // the compressed ends of the scale
 
@@ -61,7 +61,7 @@ export interface Evaluation {
   passes: { aaBody: boolean; aaLarge: boolean; aaaBody: boolean };
 }
 
-/** The rail runs 1:1 … 21:1 — the full range a pair of sRGB colours can span. */
+/** The rail runs 1:1 … 21:1; the full range a pair of sRGB colours can span. */
 export const RAIL_MIN = 1;
 export const RAIL_MAX = 21;
 

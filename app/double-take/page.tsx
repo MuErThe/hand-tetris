@@ -4,14 +4,16 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { GameShell, type GameResult } from "@/components/arcade/GameShell";
 import { GameLayout } from "@/components/arcade/GameLayout";
 import { RoundReveal } from "@/components/arcade/RoundReveal";
-import { contentWidth, evaluate, generate } from "@/lib/doubletake/engine";
+import { evaluate, generate } from "@/lib/doubletake/engine";
+import { GLYPHS } from "@/lib/doubletake/icons";
 import {
-  type Copy,
+  type Archetype,
+  type El,
   type Evaluation,
   type FlawType,
-  type Mock,
   type Rect,
   type Round,
+  CARD,
   FLAW_TYPES,
   MAX_ROUND_POINTS,
   PANEL_H,
@@ -32,17 +34,10 @@ import {
 } from "@/lib/learning/progress";
 import { playSfx } from "@/lib/audio/sfx";
 
-/**
- * The mock's colours are pinned rather than themed. One of the six flaws IS a
- * contrast failure, so the ground has to be a constant or the same round would
- * pose a different question in each theme — the same reasoning that keeps the
- * Colour Forge mat fixed.
- */
-const CARD_GROUND = "#ffffff";
-const CARD_INK = "#1c1c1a";
-const CARD_BAR = "#d9d9d7";
-const CARD_AVATAR = "#e4e4e2";
+/** The card sits on a neutral mat, as the Colour Forge swatch does. */
 const MAT = "var(--mat-grey)";
+const CARD_FONT = "ui-sans-serif, system-ui, sans-serif";
+const CARD_MONO = "ui-monospace, SFMono-Regular, Menlo, monospace";
 
 export default function DoubleTakePage() {
   return (
@@ -56,7 +51,7 @@ export default function DoubleTakePage() {
       trains="the critical eye"
       pitch="two versions of the same card. one of them is wrong. ten rounds to prove you can still tell."
       howTo={[
-        "click the version you think is correct — or press A / B",
+        "click the version you think is correct, or press A / B",
         "the flaw is revealed and named, with the principle behind it",
         "answer faster to score higher; rounds get subtler as you go",
       ]}
@@ -84,6 +79,8 @@ export function DoubleTakeGame({
   const seenLessonsRef = useRef<Set<string>>(new Set());
   const roundStartRef = useRef(0);
   const streakRef = useRef({ current: 0, best: 0 });
+  // So the same card kind doesn't come round twice running.
+  const lastCardRef = useRef<Archetype | undefined>(undefined);
 
   const [rounds, setRounds] = useState<RoundRecord[]>([]);
   const [roundIdx, setRoundIdx] = useState(0);
@@ -95,7 +92,7 @@ export function DoubleTakeGame({
   } | null>(null);
   const [score, setScore] = useState(0);
 
-  // Later rounds ask a finer question — the flaw magnitude shrinks across the
+  // Later rounds ask a finer question: the flaw magnitude shrinks across the
   // session, so the last few are genuinely hard to call.
   const subtletyFor = useCallback(
     (idx: number) => (roundCount <= 1 ? 0.5 : idx / (roundCount - 1)),
@@ -109,13 +106,15 @@ export function DoubleTakeGame({
       roundCount,
     );
     roundStartRef.current = performance.now();
-    setRound(generate(seqRef.current[0], subtletyFor(0)));
+    const first = generate(seqRef.current[0], subtletyFor(0));
+    lastCardRef.current = first.archetype;
+    setRound(first);
   }, [roundCount, subtletyFor]);
 
   const choose = useCallback(
     (choice: 0 | 1) => {
       if (!round || locked) return;
-      // Ignore a click landing in the first moments of a round — stops the
+      // Ignore a click landing in the first moments of a round: stops the
       // click that dismissed an overlay from committing an answer instantly.
       const elapsed = performance.now() - roundStartRef.current;
       if (elapsed < 200) return;
@@ -164,10 +163,16 @@ export function DoubleTakeGame({
     setRoundIdx(nextIdx);
     setLocked(null);
     roundStartRef.current = performance.now();
-    setRound(generate(seqRef.current[nextIdx], subtletyFor(nextIdx)));
+    const r = generate(
+      seqRef.current[nextIdx],
+      subtletyFor(nextIdx),
+      lastCardRef.current,
+    );
+    lastCardRef.current = r.archetype;
+    setRound(r);
   }, [roundIdx, score, onFinish, roundCount, record, subtletyFor, rounds]);
 
-  // A / B as a speed aid. Deliberately not arrow keys — those belong to the
+  // A / B as a speed aid. Deliberately not arrow keys: those belong to the
   // browser's own focus movement between the two option buttons.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -215,13 +220,12 @@ export function DoubleTakeGame({
         >
           {panels.map((idx) => {
             const isClean = idx === round.cleanIdx;
-            const mock = isClean ? round.clean : round.flawed;
+            const label = idx === 0 ? "A" : "B";
             return (
               <OptionPanel
-                key={idx}
-                label={idx === 0 ? "A" : "B"}
-                mock={mock}
-                copy={round.copy}
+                key={label}
+                label={label}
+                els={isClean ? round.clean : round.flawed}
                 locked={!!locked}
                 chosen={locked?.choice === idx}
                 isClean={isClean}
@@ -238,8 +242,7 @@ export function DoubleTakeGame({
 
 function OptionPanel({
   label,
-  mock,
-  copy,
+  els,
   locked,
   chosen,
   isClean,
@@ -247,8 +250,7 @@ function OptionPanel({
   onChoose,
 }: {
   label: string;
-  mock: Mock;
-  copy: Copy;
+  els: El[];
   locked: boolean;
   chosen: boolean;
   isClean: boolean;
@@ -256,7 +258,7 @@ function OptionPanel({
   onChoose: () => void;
 }) {
   // Once locked, the verdict is carried by the word AND the icon AND the
-  // border — never by colour alone.
+  // border; never by colour alone.
   const verdict = !locked ? null : isClean ? "✓ correct" : "✕ flawed";
   const verdictInk = isClean ? "var(--truth-ink)" : "var(--guess-ink)";
 
@@ -266,12 +268,12 @@ function OptionPanel({
         type="button"
         onClick={onChoose}
         disabled={locked}
-        aria-label={`Option ${label}${locked ? (isClean ? " — correct" : " — flawed") : ""}`}
-        className="relative block rounded-[4px] transition-transform"
+        aria-label={`Option ${label}${locked ? (isClean ? ": correct" : ": flawed") : ""}`}
+        className="relative block overflow-hidden rounded-[6px] transition-transform"
         style={{
           width: PANEL_W,
           height: PANEL_H,
-          background: CARD_GROUND,
+          background: CARD.ground,
           cursor: locked ? "default" : "pointer",
           outline: locked
             ? `2px solid ${verdictInk}`
@@ -281,7 +283,7 @@ function OptionPanel({
           outlineOffset: 0,
         }}
       >
-        <MockCard mock={mock} copy={copy} />
+        <CardSurface els={els} uid={label} />
         {mark && (
           <span
             aria-hidden="true"
@@ -299,8 +301,8 @@ function OptionPanel({
       <span
         className="font-mono text-[10px] uppercase tracking-[0.1em] px-2 py-0.5 rounded-[6px]"
         style={{
-          color: locked ? verdictInk : CARD_INK,
-          background: CARD_GROUND,
+          color: locked ? verdictInk : CARD.ink,
+          background: CARD.ground,
         }}
       >
         {verdict ?? label}
@@ -310,102 +312,201 @@ function OptionPanel({
   );
 }
 
-/** The card itself — every visual property comes from the mock spec. */
-function MockCard({ mock: m, copy }: { mock: Mock; copy: Copy }) {
-  const cw = contentWidth(m);
-  const lineTop = 96;
-  const lineY = [0, m.gaps[0], m.gaps[0] + m.gaps[1]].map((d) => lineTop + d);
-
-  const btnH = 26;
-  const btnTop = 150;
-  const primaryW = 66;
-  const secondaryW = 60;
-  const right = PANEL_W - m.padR;
-
+/**
+ * The card itself. Every visual property arrives already computed by the
+ * layout, so this draws elements and makes no design decisions of its own,
+ * which is what keeps the two panels differing by exactly one number.
+ */
+function CardSurface({ els, uid }: { els: El[]; uid: string }) {
   return (
     <span aria-hidden="true">
-      {/* Header: avatar, title, label */}
-      <span
-        className="absolute block rounded-full"
-        style={{ left: m.padL, top: 22, width: 26, height: 26, background: CARD_AVATAR }}
-      />
-      <span
-        className="absolute block whitespace-nowrap"
-        style={{
-          left: m.padL + 36,
-          top: 22,
-          fontSize: m.titleSize,
-          lineHeight: 1.15,
-          fontWeight: 600,
-          color: CARD_INK,
-          fontFamily: "ui-sans-serif, system-ui, sans-serif",
-        }}
-      >
-        {copy.title}
-      </span>
-      <span
-        className="absolute block whitespace-nowrap"
-        style={{
-          left: m.padL + 36,
-          top: 22 + m.titleSize + 8,
-          fontSize: m.subSize,
-          lineHeight: 1.15,
-          color: CARD_INK,
-          opacity: m.subAlpha,
-          fontFamily: "ui-sans-serif, system-ui, sans-serif",
-        }}
-      >
-        {copy.subtitle}
-      </span>
-
-      {/* Body: three rules carrying the vertical rhythm and the left column */}
-      {lineY.map((y, i) => (
-        <span
-          key={i}
-          className="absolute block rounded-[6px]"
-          style={{
-            left: m.padL + m.bodyIndent,
-            top: y,
-            width: cw * m.lineW[i],
-            height: 7,
-            background: CARD_BAR,
-          }}
-        />
+      {els.map((el, i) => (
+        <Element key={i} el={el} uid={`${uid}-${i}`} />
       ))}
-
-      {/* Actions, right-aligned to the card's right padding */}
-      <span
-        className="absolute flex items-center justify-center"
-        style={{
-          left: right - primaryW - 10 - secondaryW,
-          top: btnTop,
-          width: secondaryW,
-          height: btnH,
-          borderRadius: m.btnRadius[0],
-          border: "1px solid #cfcfcd",
-          fontSize: 11,
-          color: CARD_INK,
-          fontFamily: "ui-sans-serif, system-ui, sans-serif",
-        }}
-      >
-        {copy.secondary}
-      </span>
-      <span
-        className="absolute flex items-center justify-center"
-        style={{
-          left: right - primaryW,
-          top: btnTop,
-          width: primaryW,
-          height: btnH,
-          borderRadius: m.btnRadius[1],
-          background: CARD_INK,
-          color: CARD_GROUND,
-          fontSize: 11,
-          fontFamily: "ui-sans-serif, system-ui, sans-serif",
-        }}
-      >
-        {copy.primary}
-      </span>
     </span>
   );
+}
+
+function Element({ el, uid }: { el: El; uid: string }) {
+  const base = {
+    position: "absolute" as const,
+    left: el.x,
+    top: el.y,
+    width: el.w,
+    height: el.h,
+  };
+
+  switch (el.kind) {
+    case "box":
+      return (
+        <span
+          style={{
+            ...base,
+            display: "block",
+            background: el.fill,
+            border: el.border ? `1px solid ${el.border}` : undefined,
+            borderRadius: el.radius,
+          }}
+        />
+      );
+
+    case "text":
+      return (
+        <span
+          style={{
+            ...base,
+            display: "flex",
+            alignItems: "center",
+            justifyContent:
+              el.align === "right"
+                ? "flex-end"
+                : el.align === "center"
+                  ? "center"
+                  : "flex-start",
+            fontFamily: el.mono ? CARD_MONO : CARD_FONT,
+            fontSize: el.size,
+            fontWeight: el.weight ?? 400,
+            letterSpacing: el.mono ? "0.04em" : "-0.005em",
+            lineHeight: 1.1,
+            color: el.colour ?? CARD.ink,
+            opacity: el.alpha ?? 1,
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+          }}
+        >
+          {el.text}
+        </span>
+      );
+
+    case "icon": {
+      const g = GLYPHS[el.icon];
+      return (
+        <svg
+          viewBox="0 0 24 24"
+          style={{ ...base, display: "block", color: el.colour, opacity: el.alpha ?? 1 }}
+        >
+          <path
+            d={g.d}
+            fill={g.filled ? "currentColor" : "none"}
+            stroke={g.filled ? "none" : "currentColor"}
+            strokeWidth={2}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      );
+    }
+
+    case "art": {
+      const gid = `dt-grad-${uid}`;
+      return (
+        <svg
+          viewBox={`0 0 ${el.w} ${el.h}`}
+          style={{ ...base, display: "block", borderRadius: el.radius }}
+        >
+          <defs>
+            <linearGradient id={gid} x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stopColor={el.from} />
+              <stop offset="1" stopColor={el.to} />
+            </linearGradient>
+          </defs>
+          <rect width={el.w} height={el.h} fill={`url(#${gid})`} />
+          <Motif motif={el.motif} w={el.w} h={el.h} />
+        </svg>
+      );
+    }
+
+    case "spark":
+      return (
+        <svg
+          viewBox={`0 0 ${el.w} ${el.h}`}
+          style={{ ...base, display: "block" }}
+          preserveAspectRatio="none"
+        >
+          <path
+            d={sparkPath(el.points, el.w, el.h, true)}
+            fill={el.colour}
+            opacity={0.12}
+          />
+          <path
+            d={sparkPath(el.points, el.w, el.h, false)}
+            fill="none"
+            stroke={el.colour}
+            strokeWidth={2}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            vectorEffect="non-scaling-stroke"
+          />
+          <line
+            x1={0}
+            y1={el.h - 0.5}
+            x2={el.w}
+            y2={el.h - 0.5}
+            stroke={CARD.line}
+            strokeWidth={1}
+            vectorEffect="non-scaling-stroke"
+          />
+        </svg>
+      );
+  }
+}
+
+/** Generated cover art: a gradient plus one repeating figure. */
+function Motif({ motif, w, h }: { motif: string; w: number; h: number }) {
+  const light = "rgba(255,255,255,0.26)";
+  switch (motif) {
+    case "arcs":
+      return (
+        <g fill="none" stroke={light} strokeWidth={2}>
+          <circle cx={w * 0.8} cy={h * 1.05} r={h * 0.42} />
+          <circle cx={w * 0.8} cy={h * 1.05} r={h * 0.72} />
+          <circle cx={w * 0.8} cy={h * 1.05} r={h * 1.02} />
+        </g>
+      );
+    case "grid": {
+      const dots = [];
+      for (let x = w * 0.06; x < w; x += 16) {
+        for (let y = h * 0.16; y < h; y += 16) {
+          dots.push(<circle key={`${x}-${y}`} cx={x} cy={y} r={1.6} />);
+        }
+      }
+      return <g fill={light}>{dots}</g>;
+    }
+    case "wave":
+      return (
+        <g fill="none" stroke={light} strokeWidth={2}>
+          <path
+            d={`M0 ${h * 0.72} Q ${w * 0.25} ${h * 0.42} ${w * 0.5} ${h * 0.62} T ${w} ${h * 0.5}`}
+          />
+          <path
+            d={`M0 ${h * 0.9} Q ${w * 0.25} ${h * 0.6} ${w * 0.5} ${h * 0.8} T ${w} ${h * 0.68}`}
+          />
+        </g>
+      );
+    default:
+      return (
+        <g fill={light}>
+          <rect x={w * 0.58} y={h * 0.18} width={w * 0.3} height={h * 0.5} rx={6} />
+          <rect
+            x={w * 0.42}
+            y={h * 0.42}
+            width={w * 0.3}
+            height={h * 0.5}
+            rx={6}
+            opacity={0.7}
+          />
+        </g>
+      );
+  }
+}
+
+/** Polyline through the samples; `close` returns the filled area beneath it. */
+function sparkPath(points: number[], w: number, h: number, close: boolean): string {
+  if (points.length < 2) return "";
+  const step = w / (points.length - 1);
+  const y = (v: number) => h - 3 - v * (h - 8);
+  const line = points
+    .map((v, i) => `${i === 0 ? "M" : "L"}${(i * step).toFixed(2)} ${y(v).toFixed(2)}`)
+    .join(" ");
+  return close ? `${line} L${w} ${h} L0 ${h} Z` : line;
 }

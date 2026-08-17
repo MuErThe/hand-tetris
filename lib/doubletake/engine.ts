@@ -1,12 +1,15 @@
-// Double Take — pure generators + scoring. No React, no DOM.
+// Double Take: pure generators + scoring. No React, no DOM.
 
 import {
-  type Copy,
+  type Archetype,
+  type El,
   type Evaluation,
   type FlawType,
-  type Mock,
   type Rect,
+  type Role,
   type Round,
+  type Spec,
+  ARCHETYPES,
   BASE_POINTS,
   MAX_ROUND_POINTS,
   PANEL_H,
@@ -14,10 +17,8 @@ import {
   SPEED_WINDOW_MS,
   TYPE_HINT,
 } from "./types";
-import {
-  blend,
-  contrastRatio as wcagContrast,
-} from "@/lib/colour/space";
+import { COPY, NOUNS, baseSpec, layout, rolesOf } from "./archetypes";
+import { blend, contrastRatio as wcagContrast } from "@/lib/colour/space";
 
 function rand(): number {
   return Math.random();
@@ -25,31 +26,6 @@ function rand(): number {
 
 function pick<T>(arr: readonly T[]): T {
   return arr[Math.floor(rand() * arr.length)];
-}
-
-/** A believable card, so the eye judges a UI rather than an abstract diagram. */
-const COPY: Copy[] = [
-  { title: "Monthly report", subtitle: "Updated 3 hours ago", primary: "Export", secondary: "Cancel" },
-  { title: "Team settings", subtitle: "12 members · 3 pending", primary: "Invite", secondary: "Close" },
-  { title: "Payment method", subtitle: "Visa ending 4417", primary: "Update", secondary: "Remove" },
-  { title: "Release notes", subtitle: "Version 2.4 · draft", primary: "Publish", secondary: "Discard" },
-  { title: "Storage plan", subtitle: "84% of 2 TB used", primary: "Upgrade", secondary: "Details" },
-];
-
-/** The flawless baseline. Every flaw is a departure from exactly one of these. */
-function baseMock(): Mock {
-  return {
-    padL: 20,
-    padR: 20,
-    gaps: [13, 13],
-    bodyIndent: 0,
-    titleSize: 15,
-    subSize: 10.5,
-    // 0.72 over the card ground clears 4.5:1 comfortably.
-    subAlpha: 0.72,
-    btnRadius: [4, 4],
-    lineW: [1, 0.84, 0.58],
-  };
 }
 
 /**
@@ -61,10 +37,10 @@ function lerp(a: number, b: number, t: number): number {
 }
 
 /**
- * Effective WCAG contrast of the subtitle ink at a given opacity, against the
- * card ground. The card is pinned to fixed colours (see CARD_GROUND/CARD_INK
- * in the renderer) precisely so this number means the same thing in either
- * theme — the ground is part of the measurement, as with the Colour Forge mat.
+ * Effective WCAG contrast of the meta ink at a given opacity, against the card
+ * ground. The card palette is pinned (see CARD in ./types) precisely so this
+ * number means the same thing in either theme: the ground is part of the
+ * measurement, as with the Colour Forge mat.
  */
 export function contrastRatio(alpha: number): number {
   const ground = { r: 255, g: 255, b: 255 };
@@ -72,62 +48,123 @@ export function contrastRatio(alpha: number): number {
   return wcagContrast(blend(ink, ground, alpha), ground);
 }
 
-/** Where each flaw lives on the card, for the reveal's marker. */
-const FOCUS: Record<FlawType, Rect> = {
-  alignment: { x: 12, y: 90, w: PANEL_W - 24, h: 46 },
-  spacing: { x: 12, y: 90, w: PANEL_W - 24, h: 46 },
-  hierarchy: { x: 48, y: 16, w: PANEL_W - 64, h: 46 },
-  contrast: { x: 48, y: 38, w: PANEL_W - 64, h: 24 },
-  radius: { x: 126, y: 144, w: 142, h: 38 },
-  padding: { x: 4, y: 8, w: PANEL_W - 8, h: PANEL_H - 16 },
+/**
+ * The role each flaw lives on. The marker is then a box the layout actually
+ * produced, so it cannot drift out of step with the card the way a hard-coded
+ * table of rectangles did.
+ */
+const FOCUS_ROLES: Record<FlawType, Role[]> = {
+  alignment: ["drift"],
+  spacing: ["stack"],
+  hierarchy: ["title", "meta"],
+  contrast: ["meta"],
+  radius: ["sibB"],
+  padding: [],
+  placement: ["nudge"],
+  proximity: ["title", "meta"],
+  consistency: ["iconRow"],
 };
 
+/** The role a flaw needs the card to have before it can be asked there. */
+const REQUIRES: Partial<Record<FlawType, Role>> = {
+  radius: "sibB",
+  placement: "nudge",
+  consistency: "iconRow",
+};
+
+const SUPPORT: Record<Archetype, Set<FlawType>> = ARCHETYPES.reduce(
+  (acc, a) => {
+    const roles = rolesOf(a);
+    acc[a] = new Set(
+      (Object.keys(FOCUS_ROLES) as FlawType[]).filter((f) => {
+        const need = REQUIRES[f];
+        return need === undefined || roles.has(need);
+      }),
+    );
+    return acc;
+  },
+  {} as Record<Archetype, Set<FlawType>>,
+);
+
+export function hostsFor(type: FlawType): Archetype[] {
+  return ARCHETYPES.filter((a) => SUPPORT[a].has(type));
+}
+
+/** Bounding box of the elements carrying any of `roles`, with breathing room. */
+function focusRect(els: El[], roles: Role[]): Rect {
+  const hits = els.filter((e) => e.roles?.some((r) => roles.includes(r)));
+  if (hits.length === 0) return { x: 3, y: 3, w: PANEL_W - 6, h: PANEL_H - 6 };
+  const x0 = Math.min(...hits.map((e) => e.x));
+  const y0 = Math.min(...hits.map((e) => e.y));
+  const x1 = Math.max(...hits.map((e) => e.x + e.w));
+  const y1 = Math.max(...hits.map((e) => e.y + e.h));
+  const pad = 6;
+  const x = Math.max(2, x0 - pad);
+  const y = Math.max(2, y0 - pad);
+  return {
+    x,
+    y,
+    w: Math.min(PANEL_W - 2, x1 + pad) - x,
+    h: Math.min(PANEL_H - 2, y1 + pad) - y,
+  };
+}
+
 /**
- * Build one round: a clean card and a copy with a single flaw applied.
+ * Build one round: a clean card and a copy of it with a single flaw applied.
  *
  * @param subtlety 0 = the most obvious version of this flaw, 1 = the subtlest.
+ * @param avoid    an archetype not to repeat back-to-back, where there's a choice.
  */
-export function generate(type: FlawType, subtlety = 0.5): Round {
-  const clean = baseMock();
-  const flawed = baseMock();
-  const copy = pick(COPY);
+export function generate(
+  type: FlawType,
+  subtlety = 0.5,
+  avoid?: Archetype,
+): Round {
+  const hosts = hostsFor(type);
+  const pool = hosts.filter((a) => a !== avoid);
+  const archetype = pick(pool.length > 0 ? pool : hosts);
+  const copy = pick(COPY[archetype]);
+  const nouns = NOUNS[archetype];
+
+  const clean: Spec = baseSpec();
+  const flawed: Spec = baseSpec();
   let flawLabel: string;
 
   switch (type) {
     case "alignment": {
-      // The body stack drifts off the column the title established.
+      // A group drifts off the column the rest of the card shares.
       const d = lerp(9, 3, subtlety) * (rand() < 0.5 ? -1 : 1);
-      flawed.bodyIndent = d;
-      flawLabel = `the body lines sit ${Math.abs(d).toFixed(0)}px ${d > 0 ? "right of" : "left of"} the column everything else uses`;
+      flawed.driftX = d;
+      flawLabel = `${nouns.drift} sits ${Math.abs(d).toFixed(0)}px ${d > 0 ? "right of" : "left of"} the column everything else uses`;
       break;
     }
     case "spacing": {
       // One gap in the rhythm runs loose.
       const d = lerp(8, 2.5, subtlety);
-      flawed.gaps = [clean.gaps[0], clean.gaps[1] + d];
-      flawLabel = `the last gap is ${d.toFixed(1)}px wider than the one above it`;
+      flawed.gapDrift = d;
+      flawLabel = `the gap above ${nouns.stack} runs ${(clean.gap + d).toFixed(1)}px against the ${clean.gap}px used everywhere else`;
       break;
     }
     case "hierarchy": {
-      // The subtitle creeps up until it competes with the title.
+      // The meta line creeps up until it competes with the title.
       const target = lerp(14.2, 12.6, subtlety);
-      flawed.subSize = target;
-      flawLabel = `the label grew to ${target.toFixed(1)}px against a ${clean.titleSize}px title — too close to rank`;
+      flawed.leadSize = target;
+      flawLabel = `${nouns.meta} grew to ${target.toFixed(1)}px against a ${clean.titleSize}px title, too close to rank`;
       break;
     }
     case "contrast": {
       // Faint enough to fail AA against the card ground. Even the subtlest
-      // instance lands at 3.3:1 — the "tasteful grey" that fails real people.
+      // instance lands at 3.3:1; the "tasteful grey" that fails real people.
       const a = lerp(0.3, 0.5, subtlety);
-      flawed.subAlpha = a;
-      flawLabel = `the label sits at ${contrastRatio(a).toFixed(1)}:1 against the card — under the 4.5:1 minimum for body text`;
+      flawed.leadAlpha = a;
+      flawLabel = `${nouns.meta} sits at ${contrastRatio(a).toFixed(1)}:1 against the card, under the 4.5:1 minimum for body text`;
       break;
     }
     case "radius": {
-      // One button forgets the system's corner value.
+      // One control forgets the system's corner value.
       const d = lerp(6, 2, subtlety);
-      flawed.btnRadius = [clean.btnRadius[0], clean.btnRadius[1] + d];
-      flawLabel = `one button is rounded to ${(clean.btnRadius[1] + d).toFixed(0)}px while its sibling stays at ${clean.btnRadius[1]}px`;
+      flawed.radiusDrift = d;
+      flawLabel = `one of ${nouns.sib} is rounded to ${(clean.radius + d).toFixed(0)}px while its sibling stays at ${clean.radius}px`;
       break;
     }
     case "padding": {
@@ -137,19 +174,44 @@ export function generate(type: FlawType, subtlety = 0.5): Round {
       flawLabel = `the right padding runs ${d.toFixed(1)}px deeper than the left`;
       break;
     }
+    case "placement": {
+      // An icon stops sitting on the centreline of what it labels.
+      const d = lerp(4, 1.5, subtlety) * (rand() < 0.5 ? -1 : 1);
+      flawed.nudgeY = d;
+      flawLabel = `${nouns.nudge} sits ${Math.abs(d).toFixed(1)}px ${d > 0 ? "below" : "above"} the centreline of what it labels`;
+      break;
+    }
+    case "proximity": {
+      // The pair loosens until it stops reading as one thing. Layouts advance
+      // by GROUP_GAP rather than this value, so nothing below the pair moves.
+      const d = lerp(9, 3.5, subtlety);
+      const g = clean.groupGap + d;
+      flawed.groupGap = g;
+      flawLabel = `${nouns.meta} drifted to ${g.toFixed(1)}px under ${nouns.title} while whole blocks sit ${clean.gap}px apart, and a pair has to be clearly tighter than that to read as one thing`;
+      break;
+    }
+    case "consistency": {
+      // One sibling in a set is drawn off-size.
+      const d = lerp(5, 1.75, subtlety);
+      flawed.iconDrift = d;
+      flawLabel = `one icon in ${nouns.iconRow} is drawn at ${(clean.iconSize + d).toFixed(1)}px while the rest are ${clean.iconSize}px`;
+      break;
+    }
   }
 
+  const cleanEls = layout(archetype, clean, copy);
+  const flawedEls = layout(archetype, flawed, copy);
   const cleanIdx: 0 | 1 = rand() < 0.5 ? 0 : 1;
 
   return {
     type,
-    prompt: `Pick the one that's right — ${TYPE_HINT[type]}.`,
-    copy,
+    archetype,
+    prompt: `Pick the one that's right: ${TYPE_HINT[type]}.`,
     cleanIdx,
-    clean,
-    flawed,
+    clean: cleanEls,
+    flawed: flawedEls,
     flawLabel,
-    focus: FOCUS[type],
+    focus: focusRect(flawedEls, FOCUS_ROLES[type]),
     subtlety,
   };
 }
@@ -185,9 +247,4 @@ export function evaluate(
     tag: "caught",
     detail: round.flawLabel,
   };
-}
-
-/** Layout maths shared by the renderer, kept beside the spec it derives from. */
-export function contentWidth(m: Mock): number {
-  return PANEL_W - m.padL - m.padR;
 }

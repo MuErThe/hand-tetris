@@ -1,4 +1,4 @@
-// Eyeball It — train the designer's eye. Each challenge type is a distinct
+// Eyeball It: train the designer's eye. Each challenge type is a distinct
 // "trained eye" skill with a crisp, defensible target so scoring is objective.
 // All geometry is normalised to a 0..1 play area (y = 0 top, y = 1 bottom).
 

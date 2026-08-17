@@ -54,7 +54,7 @@ export function AccountRow({ className = "" }: { className?: string }) {
           onClick={() => void signInWithGoogle()}
           className="underline decoration-dotted underline-offset-2 transition-colors hover:text-[var(--accent)]"
         >
-          continue with Google — keep your streak on every device
+          continue with Google to keep your streak on every device
         </button>
       )}
     </div>

@@ -6,7 +6,7 @@ import { PanelFrame } from "@/components/PanelFrame";
 import { RoundDots } from "./RoundDots";
 
 interface GameLayoutProps {
-  /** Current challenge-type label, e.g. "BISECT" — the playfield panel label. */
+  /** Current challenge-type label, e.g. "BISECT": the playfield panel label. */
   typeLabel: string;
   roundIdx: number;
   roundCount: number;
@@ -15,7 +15,7 @@ interface GameLayoutProps {
   prompt: string;
   /** Game accent colour (CSS value, e.g. "var(--c-S)"). */
   accent: string;
-  /** Per-round quality so far, each 0..1 — drives the round dots. */
+  /** Per-round quality so far, each 0..1: drives the round dots. */
   results: number[];
   /** Rail content once a round is locked (compact RoundReveal); null while aiming. */
   reveal: ReactNode | null;
@@ -76,7 +76,7 @@ export function GameLayout({
 
       {/* The rail stays sharp. It used to sit at fz-1 while aiming and rack in
           on the reveal, but the score and round dots are things you glance at
-          mid-round — blurring them makes the player fight the interface for
+          mid-round: blurring them makes the player fight the interface for
           information it is already showing. Focus-pull still does real work on
           the hub and behind the start overlay, where there genuinely is one
           subject. */}
@@ -116,7 +116,7 @@ export function GameLayout({
               className="py-6 text-center font-mono text-[10px] uppercase tracking-[0.1em] leading-relaxed"
               style={{ color: "var(--ink-dim)", opacity: 0.7 }}
             >
-              make your call —<br />
+              make your call<br />
               the truth appears here
             </div>
           )}

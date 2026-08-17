@@ -21,7 +21,7 @@ import { dailyWarmUpGames, wordmark } from "@/lib/games/registry";
 
 /**
  * The day's rotation: four games sampled deterministically from the registry's
- * warm-up pool — the same set for everyone on a given day, drawn fresh each
+ * warm-up pool: the same set for everyone on a given day, drawn fresh each
  * day. Only the id -> component mapping below stays manual: the registry is
  * plain data and must not pull every game's bundle into itself.
  */
@@ -165,7 +165,7 @@ export default function WarmUpPage() {
                 Daily <span style={{ color: "var(--accent)" }}>warm-up</span>
               </h2>
               <p className="font-mono text-[11px] tracking-[0.07em] leading-relaxed text-center mb-5" style={{ color: "var(--ink-dim)" }}>
-                four games drawn fresh each day — today&apos;s set below. five minutes before you open the real work.
+                four games drawn fresh each day. today&apos;s set below. five minutes before you open the real work.
               </p>
 
               <div className="flex flex-col gap-1.5 mb-5">
@@ -249,7 +249,7 @@ function Summary({ steps, streak, results }: { steps: Step[]; streak: number; re
           </div>
 
           <p className="font-mono text-[11px] leading-snug mb-6 px-2" style={{ color: "var(--ink)" }}>
-            Sharpest today: <span style={{ color: "var(--accent)" }}>{steps[bestIdx].label}</span>. The mind&apos;s warm — go make something. Come back tomorrow to keep the flame.
+            Sharpest today: <span style={{ color: "var(--accent)" }}>{steps[bestIdx].label}</span>. The mind&apos;s warm, so go make something. Come back tomorrow to keep the flame.
           </p>
 
           <Link href="/" className="inline-block font-display tracking-[0.06em] text-sm px-8 py-3 border transition-all duration-150 hover-wash" style={{ borderColor: "var(--accent)", color: "var(--accent)", background: "color-mix(in srgb, var(--accent) 10%, transparent)" }}>

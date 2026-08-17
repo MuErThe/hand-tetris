@@ -1,4 +1,4 @@
-// Cutout — pure generators + scoring. No React, no DOM.
+// Cutout: pure generators + scoring. No React, no DOM.
 
 import {
   type BoolOp,
@@ -63,7 +63,7 @@ export function contains(s: Shape, px: number, py: number): boolean {
 
 /**
  * Overlap of B with A, as a fraction of the smaller shape's area. Sampled on a
- * coarse grid — precision doesn't matter here, only whether the overlap is a
+ * coarse grid: precision doesn't matter here, only whether the overlap is a
  * real region rather than a sliver or a containment.
  */
 function overlapFraction(a: Shape, b: Shape): number {
@@ -168,7 +168,7 @@ export function generate(op: BoolOp): Round {
 
 /**
  * Score a pick. Correct banks BASE_POINTS plus a speed share; a wrong pick
- * scores nothing — with five named operations there is no partial credit for
+ * scores nothing: with five named operations there is no partial credit for
  * choosing the wrong one.
  */
 export function evaluate(

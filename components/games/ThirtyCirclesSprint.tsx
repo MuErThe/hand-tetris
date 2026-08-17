@@ -11,7 +11,7 @@ type Point = { x: number; y: number };
 
 /**
  * A 60-second, six-circle sprint of Thirty Circles for the daily warm-up.
- * Mouse-only, no reflection — reports how many circles got ink.
+ * Mouse-only, no reflection: reports how many circles got ink.
  */
 export function ThirtyCirclesSprint({ onFinish }: { onFinish: (fluency: number) => void }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);

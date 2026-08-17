@@ -22,7 +22,7 @@ export default function ColourForgePage() {
       gameId={COLOUR_GAME}
       title={<>Colour <span style={{ color: "var(--accent)" }}>Forge</span></>}
       trains="colour perception"
-      pitch="mix to match the target across eight rounds — and learn which way your eye tends to lie."
+      pitch="mix to match the target across eight rounds, and learn which way your eye tends to lie."
       howTo={[
         "drag the H · S · L sliders to mix your colour",
         "match, match from memory, or find the complement",
@@ -172,7 +172,7 @@ export function ColourGame({
         ) : undefined
       }
     >
-      {/* Play / reveal area — the lit bench: warm paper, work in the light */}
+      {/* Play / reveal area, the lit bench: warm paper, work in the light */}
       <div className="flex-1 min-h-0 flex items-center justify-center">
       <div
         className="w-full rounded-[6px] border flex flex-col items-center justify-center gap-5 py-6 px-5"
@@ -231,7 +231,7 @@ export function ColourGame({
           </>
         ) : (
           <div className="flex flex-col items-center gap-3">
-            {/* Butted comparison — on the appraisal mat, where colour is judged. */}
+            {/* Butted comparison: on the appraisal mat, where colour is judged. */}
             <div className="rounded-[6px] px-5 py-4" style={{ background: "var(--mat-grey)" }}>
             <div className="flex rounded-[6px] overflow-hidden border" style={{ borderColor: "var(--paper-line)" }}>
               <div style={{ width: 190, height: 150, background: hslToCss(round.target) }} />
@@ -246,7 +246,7 @@ export function ColourGame({
               <span>your mix</span>
             </div>
 
-            {/* Signed per-channel misses — which way your eye lied. The worst
+            {/* Signed per-channel misses, which way your eye lied. The worst
                 channel fringes: the lens caught it. */}
             {(() => {
               const dh = hueDelta(round.target.h, attempt.h);
@@ -330,7 +330,7 @@ function DeltaBar({
   value: number;
   range: number;
   unit?: string;
-  /** The dominant miss — fringes with chromatic aberration. */
+  /** The dominant miss: fringes with chromatic aberration. */
   worst?: boolean;
 }) {
   const frac = Math.max(-1, Math.min(1, value / range));
@@ -413,7 +413,7 @@ function ColourSlider({
         className="relative rounded-full"
         style={{ height: 10, background: gradient, cursor: "pointer", touchAction: "none", border: "1px solid color-mix(in srgb, var(--paper-ink) 40%, transparent)" }}
       >
-        {/* hairline thumb — a precision caret, not a knob */}
+        {/* hairline thumb: a precision caret, not a knob */}
         <div
           className="absolute"
           style={{

@@ -33,7 +33,7 @@ interface UseGameControllerOpts {
 }
 
 /**
- * The non-render half of the controller — keyboard, throttling, and a helper to
+ * The non-render half of the controller: keyboard, throttling, and a helper to
  * call once per frame from useFrame. The render-loop call is exported as
  * `stepGame` so we can keep this hook free of R3F.
  */
@@ -59,7 +59,7 @@ export function useGameController({
     const onKeyDown = (e: KeyboardEvent) => {
       const s = gameRef.current;
       if (s.isOver) return;
-      // Never steal keys from a form field — the start screen's name input
+      // Never steal keys from a form field: the start screen's name input
       // shares the window with this listener, and Space/S are typeable there.
       const target = e.target as HTMLElement | null;
       if (target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA")) return;
@@ -125,7 +125,7 @@ export function useGameController({
         tryMoveTo(s, g.targetColumn);
       }
 
-      // Drop interval — gesture-driven fast fall overrides level interval
+      // Drop interval: gesture-driven fast fall overrides level interval
       const interval = g.dropZoneActive ? 50 : s.dropIntervalMs;
       s.msSinceDrop += deltaMs;
       if (s.msSinceDrop >= interval) {

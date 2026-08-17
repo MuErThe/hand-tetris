@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { bestScore, scoreTrend } from "@/lib/learning/progress";
 import { Sparkline } from "./Sparkline";
 
-/** Per-game progress footer for a hub card — best score + a trend sparkline. */
+/** Per-game progress footer for a hub card: best score + a trend sparkline. */
 export function CardStats({ gameId, unit = "" }: { gameId: string; unit?: string }) {
   const [mounted, setMounted] = useState(false);
   const [best, setBest] = useState(0);

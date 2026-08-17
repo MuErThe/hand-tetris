@@ -1,6 +1,6 @@
 "use client";
 
-// Local, per-game practice history. No server, no auth — this is the player's
+// Local, per-game practice history. No server, no auth: this is the player's
 // private record of how their eye/hand is improving over time. Mirrors the
 // defensive localStorage pattern in lib/leaderboard/local.ts.
 
@@ -42,7 +42,7 @@ function safeSet(k: string, v: string): void {
   try {
     if (typeof window !== "undefined") window.localStorage.setItem(k, v);
   } catch {
-    /* quota / private mode — ignore */
+    /* quota / private mode; ignore */
   }
 }
 
@@ -71,7 +71,7 @@ export function loadSessions(game: string): SessionRecord[] {
 
 /**
  * Overwrite a game's history with a merged set (account sync). Deliberately
- * does NOT nudge the syncer — sync-driven writes must not re-trigger a push.
+ * does NOT nudge the syncer: sync-driven writes must not re-trigger a push.
  */
 export function replaceSessions(game: string, sessions: SessionRecord[]): void {
   safeSet(key(game), JSON.stringify(sessions.slice(-MAX_SESSIONS)));

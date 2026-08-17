@@ -134,7 +134,7 @@ export default function CutoutPage() {
       pitch="two shapes in, one shape out. name the operation that got you there."
       howTo={[
         "compare the A/B pair with the result, then pick the operation",
-        "order matters — A minus B is not B minus A",
+        "order matters: A minus B is not B minus A",
         "get it wrong and you'll see what your answer would have made",
       ]}
       columns={CUTOUT_COLUMNS}
@@ -260,7 +260,7 @@ export function CutoutGame({
             maxPoints={MAX_ROUND_POINTS}
             detail={
               locked.ev.correct
-                ? `${OP_LABEL[round.type]} — ${describe(round.type)}`
+                ? `${OP_LABEL[round.type]}: ${describe(round.type)}`
                 : `it was ${OP_LABEL[round.type]} (${describe(round.type)}), not ${OP_LABEL[locked.ev.picked]}`
             }
             principle={locked.principle}

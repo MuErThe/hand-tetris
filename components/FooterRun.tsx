@@ -2,13 +2,13 @@
 
 // The footer's basement: an endless runner in the arcade's own language.
 // The Eyeball It reticle hops Tetris pieces, colour chips and letterforms
-// along an artboard baseline. Calm at rest — nothing moves until the player
+// along an artboard baseline. Calm at rest: nothing moves until the player
 // starts it, and reduced-motion users get a still scene instead of a game.
 // Runs only while visible, pauses when the tab hides, and the best score
 // lives in localStorage only: this is an easter egg, not a tenth game.
 //
 // The whole driver (draw/tick loop/input) lives inside one effect as plain
-// closures — hooks and self-referencing callbacks don't mix.
+// closures: hooks and self-referencing callbacks don't mix.
 
 import { useEffect, useRef, useState } from "react";
 import {
@@ -62,7 +62,7 @@ export function FooterRun() {
       /* ignore */
     }
 
-    // Canvas cannot resolve var(--…) — read the resolved tokens per draw,
+    // Canvas cannot resolve var(--…); read the resolved tokens per draw,
     // same trick as Steady Hand and Cutout, so the scene follows the theme.
     const tokens = (): Tokens => {
       const cs = getComputedStyle(document.documentElement);
@@ -163,7 +163,7 @@ export function FooterRun() {
       }
       ctx.stroke();
 
-      // score and best — stacked label-over-value, sharing the page's
+      // score and best: stacked label-over-value, sharing the page's
       // 80px desktop gutter with the footer row above
       const colRight = w - (w >= 768 ? 80 : 24);
       ctx.fillStyle = t.dim;

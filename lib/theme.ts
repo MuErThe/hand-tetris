@@ -1,6 +1,6 @@
 "use client";
 
-// Theme choice — dark ("the cabinet") or light ("the studio"), defaulting to
+// Theme choice: dark ("the cabinet") or light ("the studio"), defaulting to
 // whatever the OS asks for. Local-only, same defensive localStorage pattern as
 // lib/warmup/streak.ts.
 //
@@ -39,7 +39,7 @@ export function writeChoice(choice: ThemeChoice): void {
     // "I deliberately chose to follow my OS" distinct from "never visited".
     window.localStorage.setItem(KEY, choice);
   } catch {
-    /* ignore — the theme still applies for this session */
+    /* ignore: the theme still applies for this session */
   }
   listeners.forEach((cb) => cb());
 }
@@ -47,7 +47,7 @@ export function writeChoice(choice: ThemeChoice): void {
 const listeners = new Set<() => void>();
 
 /**
- * Subscribe to changes in the stored choice — from this tab or another one.
+ * Subscribe to changes in the stored choice: from this tab or another one.
  * Paired with readChoice as a useSyncExternalStore source, which is how the
  * control reads storage without a setState-in-effect on mount.
  */
@@ -87,7 +87,7 @@ export function applyTheme(theme: ResolvedTheme): void {
 /**
  * Runs blocking in <head> before first paint, so the page never flashes the
  * wrong theme. Deliberately duplicates the small amount of logic above rather
- * than importing it — this string ships as-is into the HTML, ahead of any
+ * than importing it: this string ships as-is into the HTML, ahead of any
  * bundle. Kept to one line of real work; it must not throw on a browser with
  * storage disabled.
  *

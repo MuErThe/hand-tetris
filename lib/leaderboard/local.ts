@@ -2,7 +2,7 @@
 
 // localStorage-backed personal record + remembered credentials.
 
-// Legacy namespace from before the Squint rename — deliberately unchanged:
+// Legacy namespace from before the Squint rename, deliberately unchanged:
 // renaming it would orphan every existing player's stored token, locking them
 // out of the leaderboard name they registered.
 const NS = "hand-tetris/v1/";
@@ -33,7 +33,7 @@ function safeSet(key: string, value: string): void {
   try {
     if (typeof window !== "undefined") window.localStorage.setItem(key, value);
   } catch {
-    /* quota / private mode — ignore */
+    /* quota / private mode; ignore */
   }
 }
 

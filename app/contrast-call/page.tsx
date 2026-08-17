@@ -40,7 +40,7 @@ export default function ContrastCallPage() {
       trains="contrast judgement"
       pitch="how much contrast is that, really? ten pairs, and the number matters more than the vibe."
       howTo={[
-        "drag the rail — or use the arrow keys — to call the ratio",
+        "drag the rail, or use the arrow keys, to call the ratio",
         "lock it in to see the true number and whether it passes",
         "the rail is logarithmic: 4.5:1 sits near the middle",
       ]}
@@ -70,7 +70,7 @@ export function ContrastGame({
   const [rounds, setRounds] = useState<RoundRecord[]>([]);
   const [roundIdx, setRoundIdx] = useState(0);
   const [challenge, setChallenge] = useState<Challenge | null>(null);
-  // The caret starts at 4.5:1 — the threshold everyone is really asking about,
+  // The caret starts at 4.5:1; the threshold everyone is really asking about,
   // and a neutral anchor that doesn't hint at the answer.
   const [pos, setPos] = useState(() => ratioToPos(4.5));
   const [locked, setLocked] = useState<{
@@ -180,7 +180,7 @@ export function ContrastGame({
     >
       <div className="flex-1 min-h-0 flex items-center justify-center">
         {/* The artboard. The rail's ticks and numerals are paper-register ink,
-            so the whole play area has to be paper — on the cabinet they'd be
+            so the whole play area has to be paper: on the cabinet they'd be
             dark-on-dark. */}
         <div
           className="w-full rounded-[6px] flex flex-col items-center gap-7"
@@ -272,7 +272,7 @@ function Rail({
           }}
         />
 
-        {/* WCAG landmarks — the numbers that actually decide things */}
+        {/* WCAG landmarks: the numbers that actually decide things */}
         {LANDMARKS.map((lm) => {
           const p = ratioToPos(lm.ratio);
           return (

@@ -15,7 +15,7 @@ import {
 // ----- Tunables -----
 
 // Steering. Landmarks near the frame edges are the least reliable, so only
-// the central band of the camera frame maps onto the board — the player
+// the central band of the camera frame maps onto the board: the player
 // never has to reach into the noisy edge region to hit column 0 or 11.
 const STEER_X_MIN = 0.12;
 const STEER_X_MAX = 0.88;
@@ -23,7 +23,7 @@ const STEER_X_MAX = 0.88;
 // column switches. Gives every cell boundary a dead zone so a hand hovering
 // on a boundary can't flicker between two columns.
 const COLUMN_DEAD_ZONE = 0.15;
-// One Euro filter for the steering X — smooth at rest, snappy on fast moves.
+// One Euro filter for the steering X: smooth at rest, snappy on fast moves.
 const X_FILTER_MIN_CUTOFF = 1.2; // Hz
 const X_FILTER_BETA = 1.5;
 
@@ -34,19 +34,19 @@ const PINCH_ON_FRAMES = 2; // consecutive frames to confirm a pinch
 const PINCH_OFF_FRAMES = 2; // consecutive frames to confirm a release
 const PINCH_COOLDOWN_MS = 280;
 const POST_PINCH_FREEZE_MS = 200;
-// Light filtering only — pinch must stay low-latency; the frame debounce
+// Light filtering only: pinch must stay low-latency; the frame debounce
 // above does the heavy lifting against single-frame noise.
 const PINCH_FILTER_MIN_CUTOFF = 3.0; // Hz
 const PINCH_FILTER_BETA = 3.0;
 
-// Drop zone — enter/exit bands plus a frame debounce, so a hand dipping near
+// Drop zone: enter/exit bands plus a frame debounce, so a hand dipping near
 // the line can't strobe the fast-fall on and off.
 const DROP_Y_ENTER = 0.72;
 const DROP_Y_EXIT = 0.62;
 const DROP_ON_FRAMES = 3;
 
 // Quality gating
-// Frames where the model's hand score is below this are ignored entirely —
+// Frames where the model's hand score is below this are ignored entirely:
 // better to coast on the last good state than steer off garbage landmarks.
 const MIN_HAND_CONFIDENCE = 0.6;
 // A dropout shorter than this keeps the last good gesture state alive, so a
@@ -55,7 +55,7 @@ const HAND_LOST_GRACE_MS = 250;
 
 const FINGER_EXTENDED_MARGIN = 0.08; // fraction of hand size
 
-// ----- Private rolling state — one tracker per page, so module-level is fine.
+// ----- Private rolling state: one tracker per page, so module-level is fine.
 
 interface GestureRuntime {
   xFilter: OneEuroFilter;
@@ -85,12 +85,12 @@ function createRuntime(): GestureRuntime {
 
 let rt = createRuntime();
 
-/** Clear all rolling gesture state — call when (re)booting the tracker. */
+/** Clear all rolling gesture state; call when (re)booting the tracker. */
 export function resetGestureTracking(): void {
   rt = createRuntime();
 }
 
-// Debug overlay flag — off by default, flipped by the D hotkey.
+// Debug overlay flag: off by default, flipped by the D hotkey.
 let debugOverlayEnabled = false;
 
 export function toggleDebugOverlay(): boolean {
@@ -158,7 +158,7 @@ export function onHandResults(
 
   const rawColumn = clamp(g.smoothedX * COLS, 0, COLS - 0.001);
   g.currentColumnFloat = rawColumn;
-  // Commit a new column only once the hand is clearly inside it — the dead
+  // Commit a new column only once the hand is clearly inside it: the dead
   // zone is measured from the current cell's center so it's the same width
   // at every boundary.
   const center = g.targetColumn + 0.5;
@@ -186,7 +186,7 @@ export function onHandResults(
   // Debounced hysteresis: a pinch must hold for PINCH_ON_FRAMES consecutive
   // frames to register, and must clearly open (past PINCH_RELEASE) for
   // PINCH_OFF_FRAMES before it can re-trigger. The open-hand gate applies on
-  // the way in only — an active pinch may hold even if other fingers wobble.
+  // the way in only: an active pinch may hold even if other fingers wobble.
   if (!rt.pinched) {
     const closed = normalizedPinch < PINCH_THRESHOLD && handOpen;
     rt.pinchOnStreak = closed ? rt.pinchOnStreak + 1 : 0;
@@ -215,7 +215,7 @@ export function onHandResults(
   g.indexTipY = indexTip.y;
   if (g.dropZoneActive) {
     // Exiting early is harmless (the piece just slows down), so the exit
-    // band alone is enough — no debounce needed on the way out.
+    // band alone is enough: no debounce needed on the way out.
     if (indexTip.y < DROP_Y_EXIT) {
       g.dropZoneActive = false;
       rt.dropStreak = 0;
@@ -325,7 +325,7 @@ function clamp(v: number, lo: number, hi: number): number {
 }
 
 /**
- * True when the given finger is extended — i.e. its tip sits meaningfully
+ * True when the given finger is extended: i.e. its tip sits meaningfully
  * farther from the wrist than its PIP joint, scaled by hand size so the
  * check is invariant to camera distance.
  */

@@ -76,7 +76,7 @@ export function PinchMeter({ gestureRef }: PinchMeterProps) {
         </div>
       </div>
 
-      {/* Column indicator — one tick per playfield column */}
+      {/* Column indicator: one tick per playfield column */}
       <div className="flex flex-col flex-1 gap-1">
         <div className="flex items-center justify-between">
           <span

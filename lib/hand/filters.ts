@@ -1,5 +1,5 @@
 /**
- * One Euro Filter (Casiez et al., CHI 2012) — adaptive low-pass filter for
+ * One Euro Filter (Casiez et al., CHI 2012): adaptive low-pass filter for
  * noisy input signals. At rest the cutoff drops to `minCutoff` and jitter is
  * smoothed away; during fast motion the cutoff rises with speed (scaled by
  * `beta`) so the output tracks with minimal lag. Strictly better than a
@@ -15,8 +15,8 @@ export class OneEuroFilter {
   private prevTimeSec = 0;
 
   /**
-   * @param minCutoff baseline cutoff frequency in Hz — lower = smoother at rest
-   * @param beta speed coefficient — higher = snappier during fast movement
+   * @param minCutoff baseline cutoff frequency in Hz: lower = smoother at rest
+   * @param beta speed coefficient: higher = snappier during fast movement
    * @param dCutoff cutoff for the derivative estimate (1 Hz is the paper default)
    */
   constructor(minCutoff: number, beta: number, dCutoff = 1.0) {
@@ -50,7 +50,7 @@ export class OneEuroFilter {
     return filtered;
   }
 
-  /** Forget all history — call when the hand is lost so re-acquisition doesn't lag. */
+  /** Forget all history; call when the hand is lost so re-acquisition doesn't lag. */
   reset(): void {
     this.prevValue = null;
     this.prevDeriv = 0;

@@ -65,7 +65,7 @@ interface GameShellProps {
   countNoun?: string;
   /** The game's living preview, shown on the start card. */
   vignette?: VignetteKind;
-  /** The game's accent colour (CSS value) — tints the start card. */
+  /** The game's accent colour (CSS value): tints the start card. */
   accent?: string;
   /** Mounts the game during play; receives finish/quit callbacks. */
   children: (ctx: GamePlayContext) => ReactNode;
@@ -94,7 +94,7 @@ export function GameShell({
   const [mounted, setMounted] = useState(false);
   const [phase, setPhase] = useState<"start" | "playing" | "over">("start");
   // The start overlay is two steps: the splash front door (every visit),
-  // then the tag/how-to card — reached only by first-timers or on an
+  // then the tag/how-to card: reached only by first-timers or on an
   // identity error.
   const [overlayStep, setOverlayStep] = useState<"splash" | "setup">("splash");
   const [runKey, setRunKey] = useState(0);
@@ -230,7 +230,7 @@ export function GameShell({
   return (
     <div className="relative flex-1 flex flex-col w-full h-screen overflow-hidden" style={{ padding: "16px 18px" }}>
       {/* Focalism: while the start overlay is up, the page itself sits in the
-          deep field — the lens defocuses; there is no glass veil. */}
+          deep field: the lens defocuses; there is no glass veil. */}
       <FocalPlane
         level={phase === "start" && mounted ? 2 : 0}
         className="flex-1 flex flex-col min-h-0"
@@ -291,7 +291,7 @@ export function GameShell({
       </main>
       </FocalPlane>
 
-      {/* Start overlay — arrives by sharpening from the deep field */}
+      {/* Start overlay: arrives by sharpening from the deep field */}
       <AnimatePresence>
         {phase === "start" && mounted && (
           <motion.div

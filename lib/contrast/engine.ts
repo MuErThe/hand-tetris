@@ -1,4 +1,4 @@
-// Contrast Call — pure generators + scoring. No React, no DOM.
+// Contrast Call: pure generators + scoring. No React, no DOM.
 
 import {
   contrastRatio,
@@ -43,7 +43,7 @@ const COOL_HUES = [150, 190, 215, 250, 280];
 /**
  * Find the HSL lightness whose colour hits a target relative luminance, for a
  * fixed hue and saturation. Luminance rises monotonically with lightness, so a
- * bisection always converges — and solving for luminance (rather than picking
+ * bisection always converges, and solving for luminance (rather than picking
  * a colour and hoping) is what lets each round target a chosen ratio.
  *
  * Returns null when the target is unreachable at this hue/saturation, which
@@ -98,7 +98,7 @@ const RECIPES: Record<ContrastType, Recipe> = {
     fgHueSat: (bg) => ({ h: bg.h + between(-18, 18), s: between(40, 80) }),
   },
   clash: {
-    // Opposing hues at close luminance — the pair that looks loud and fails.
+    // Opposing hues at close luminance: the pair that looks loud and fails.
     band: () => between(1.05, 3.2),
     bg: () => ({ h: between(0, 360), s: between(60, 95), l: between(45, 62) }),
     fgHueSat: (bg) => ({ h: bg.h + 180 + between(-40, 40), s: between(60, 95) }),
@@ -146,7 +146,7 @@ export function generate(type: ContrastType): Challenge {
     };
   }
 
-  // The truth is whatever the colours actually are, never the requested band —
+  // The truth is whatever the colours actually are, never the requested band:
   // the solver lands close but the pair on screen is the thing being judged.
   const fgRgb = hslToRgb(fg);
   const bgRgb = hslToRgb(bg);
@@ -154,7 +154,7 @@ export function generate(type: ContrastType): Challenge {
 
   return {
     type,
-    prompt: "Call the contrast ratio — place your mark on the rail.",
+    prompt: "Call the contrast ratio: place your mark on the rail.",
     fg: rgbToCss(fgRgb),
     bg: rgbToCss(bgRgb),
     ratio,

@@ -1,7 +1,7 @@
 "use client";
 
 // Focalism targeting: corner brackets that fade in when a zone is hovered
-// or focused — the lens acquiring its subject.
+// or focused: the lens acquiring its subject.
 
 import type { ReactNode } from "react";
 

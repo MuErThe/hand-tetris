@@ -13,7 +13,7 @@ const nextConfig: NextConfig = {
   output: "export",
   basePath,
   // Expose the base path to client code that builds asset URLs manually
-  // (e.g. lib/audio/sfx.ts) — `basePath` itself isn't readable in the browser.
+  // (e.g. lib/audio/sfx.ts): `basePath` itself isn't readable in the browser.
   env: { NEXT_PUBLIC_BASE_PATH: basePath },
   // GitHub Pages doesn't run image optimisation; disable to keep paths static.
   images: { unoptimized: true },

@@ -5,7 +5,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { CATALOGUE } from "@/lib/games/registry";
 
 export const metadata: Metadata = {
-  title: "About — what Squint is and how it trains your eye",
+  title: "About: what Squint is and how it trains your eye",
   description:
     "Squint is a free arcade of five-minute games that train a designer's instincts: visual accuracy, kerning, colour perception and divergent thinking. How it works, what each game trains, and answers to common questions.",
   alternates: { canonical: "./" },
@@ -18,23 +18,23 @@ const FAQS: { q: string; a: string }[] = [
   },
   {
     q: "Does my camera footage leave my device?",
-    a: "No. The hand-tracked games (Hand Tetris and Thirty Circles) run MediaPipe hand tracking entirely on-device in your browser via WebAssembly. Video frames are never uploaded anywhere — the only network calls are fetching the model files and, if you opt in, submitting your name and score to the leaderboard.",
+    a: "No. The hand-tracked games (Hand Tetris and Thirty Circles) run MediaPipe hand tracking entirely on-device in your browser via WebAssembly. Video frames are never uploaded anywhere. The only network calls are fetching the model files and, if you opt in, submitting your name and score to the leaderboard.",
   },
   {
     q: "Who is Squint for?",
-    a: "Designers, illustrators, typographers, art directors, students — anyone whose work depends on a trained eye. The games train visual judgement skills that transfer directly to design work: spotting a mis-centred element, uneven letter spacing, or an off colour.",
+    a: "Designers, illustrators, typographers, art directors, students: anyone whose work depends on a trained eye. The games train visual judgement skills that transfer directly to design work: spotting a mis-centred element, uneven letter spacing, or an off colour.",
   },
   {
     q: "How long does a session take?",
-    a: "About five minutes. Each game is a short session of quick rounds, and the Daily Warm-Up chains one round of four games — a different set sampled each day — into a single five-minute ritual with streak tracking.",
+    a: "About five minutes. Each game is a short session of quick rounds, and the Daily Warm-Up chains one round of four games (a different set sampled each day) into a single five-minute ritual with streak tracking.",
   },
   {
     q: "What is the Thirty Circles exercise?",
-    a: "Thirty Circles is a classic divergent-thinking warm-up popularised by Bob McKim at Stanford and by IDEO: turn a page of thirty identical circles into thirty different recognisable things against a three-minute clock. It trains fluency (how many ideas), flexibility (how varied) and originality — the three dimensions of divergent thinking.",
+    a: "Thirty Circles is a classic divergent-thinking warm-up popularised by Bob McKim at Stanford and by IDEO: turn a page of thirty identical circles into thirty different recognisable things against a three-minute clock. It trains fluency (how many ideas), flexibility (how varied) and originality, the three dimensions of divergent thinking.",
   },
   {
     q: "How does Squint score colour matching?",
-    a: "Colour Forge scores your mix against the target using CIEDE2000, the industry-standard perceptual colour-difference formula, computed in CIE Lab space. That means the score reflects how different the colours look to a human eye, not just how far apart the RGB numbers are — and the per-channel breakdown tells you whether you missed on hue, saturation or lightness.",
+    a: "Colour Forge scores your mix against the target using CIEDE2000, the industry-standard perceptual colour-difference formula, computed in CIE Lab space. That means the score reflects how different the colours look to a human eye, not just how far apart the RGB numbers are, and the per-channel breakdown tells you whether you missed on hue, saturation or lightness.",
   },
   {
     q: "How does the kerning game know the correct spacing?",
@@ -82,8 +82,8 @@ export default function AboutPage() {
 
           <p className="font-mono text-[13px] leading-relaxed mb-4" style={{ color: "var(--ink)" }}>
             Squint is a free arcade of five-minute games that train a designer&apos;s
-            instincts. Great designers rely on a trained eye — for proportion,
-            spacing, colour and ideas — and like any skill, that eye improves with
+            instincts. Great designers rely on a trained eye for proportion,
+            spacing, colour and ideas, and like any skill, that eye improves with
             deliberate practice and honest feedback. Squint turns that practice
             into short, replayable games.
           </p>

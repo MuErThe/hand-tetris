@@ -4,10 +4,10 @@ import { THEME_BOOT_SCRIPT } from "@/lib/theme";
 import { CATALOGUE } from "@/lib/games/registry";
 import "./globals.css";
 
-// preload disabled — the boot placeholder doesn't render any text, so the
+// preload disabled: the boot placeholder doesn't render any text, so the
 // link-preload tags fire a "preloaded but not used within a few seconds"
 // warning. Fonts still load lazily on first use.
-// Display face. Technical but rounded — calm without going generic, and a
+// Display face. Technical but rounded: calm without going generic, and a
 // clear relative of the mono used for data. Replaced the pixel face when the
 // arcade skin came off; Focalism itself is unchanged.
 const spaceGrotesk = Space_Grotesk({
@@ -24,7 +24,7 @@ const jetbrainsMono = JetBrains_Mono({
   preload: false,
 });
 
-// Proportional display serif for Kern Combat — expressive shapes with real
+// Proportional display serif for Kern Combat: expressive shapes with real
 // kerning pairs (AV, To, LT) make the spacing exercise legible. Self-hosted at
 // build time, so no CSP change.
 const fraunces = Fraunces({
@@ -35,7 +35,7 @@ const fraunces = Fraunces({
 });
 
 const SITE_URL = "https://squint.mdzabeeh.com/";
-const TITLE = "Squint — train the eye you trust";
+const TITLE = "Squint: train the eye you trust";
 const DESCRIPTION =
   "Five-minute games that train a designer's instincts: eyeballing proportion, kerning, colour matching, the Thirty Circles divergent-thinking sprint, and gesture-controlled Tetris.";
 
@@ -74,7 +74,7 @@ export const metadata: Metadata = {
         url: "og-image.png",
         width: 1200,
         height: 630,
-        alt: "Squint — five-minute games that train a designer's eye",
+        alt: "Squint: five-minute games that train a designer's eye",
         type: "image/png",
       },
     ],
@@ -91,7 +91,7 @@ export const metadata: Metadata = {
 };
 
 // Browser chrome follows the OS preference. It intentionally doesn't track an
-// explicit in-app override — these are static <meta> tags and the mismatch is
+// explicit in-app override: these are static <meta> tags and the mismatch is
 // confined to the address bar.
 export const viewport: Viewport = {
   themeColor: [
@@ -101,7 +101,7 @@ export const viewport: Viewport = {
 };
 
 // Content-Security-Policy ships as a real response header via vercel.json
-// (which also lets us enforce frame-ancestors — impossible from a meta tag).
+// (which also lets us enforce frame-ancestors: impossible from a meta tag).
 // Keeping it out of the markup also means `next dev` isn't subject to it,
 // so development hot-reload (which needs eval) works normally.
 
@@ -127,10 +127,10 @@ const JSON_LD = {
       operatingSystem: "Web browser",
       offers: { "@type": "Offer", price: "0", priceCurrency: "GBP" },
       description:
-        "A free arcade of five-minute games that train a designer's instincts — visual accuracy, kerning, colour perception and divergent thinking — with teach-back feedback, local progress tracking and daily warm-up streaks.",
+        "A free arcade of five-minute games that train a designer's instincts: visual accuracy, kerning, colour perception and divergent thinking, with teach-back feedback, local progress tracking and daily warm-up streaks.",
       featureList: [
-        ...CATALOGUE.map((g) => `${g.name} — ${g.blurb}`),
-        "Daily Warm-Up — four games sampled daily with streak tracking",
+        ...CATALOGUE.map((g) => `${g.name}: ${g.blurb}`),
+        "Daily Warm-Up: four games sampled daily with streak tracking",
       ],
     },
   ],

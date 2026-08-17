@@ -1,6 +1,6 @@
 // Adaptive round selection: bias practice toward the challenge types the
 // player is worst at, so a session targets the gap instead of rehearsing
-// strengths. Pure functions — the randomness is injected so callers stay
+// strengths. Pure functions: the randomness is injected so callers stay
 // deterministic where they need to be.
 
 /**

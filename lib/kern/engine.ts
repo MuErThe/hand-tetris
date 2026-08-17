@@ -1,14 +1,14 @@
-// Kern Combat — pure helpers: pair classification, gap scoring, word picking.
+// Kern Combat pure helpers: pair classification, gap scoring, word picking.
 // Font measurement (canvas) lives in the page since it needs the DOM.
 
 import { GAP_TOLERANCE_EM, MAX_ROUND_POINTS, type KernCategory } from "./types";
 
-// Letters whose relevant side is a diagonal or a big overhang — the pairs that
+// Letters whose relevant side is a diagonal or a big overhang: the pairs that
 // must nest closer than they look.
 const OPEN = new Set("AVWYTLFPKXvwyk".split(""));
-// Letters built from curves — they carry their own optical space.
+// Letters built from curves: they carry their own optical space.
 const ROUND = new Set("OQCGDoceqgbdp".split(""));
-// Letters dominated by vertical stems — parallel sides read cramped fast.
+// Letters dominated by vertical stems: parallel sides read cramped fast.
 const STRAIGHT = new Set("HILNMEFKRBUhilnmbku".split(""));
 
 /** Classify the pair straddling a gap, for choosing the lesson. */

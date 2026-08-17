@@ -1,4 +1,4 @@
-// Kern Combat — space the letters by eye until they feel even, then grade the
+// Kern Combat: space the letters by eye until they feel even, then grade the
 // result against the font's own kerned metrics (measured at runtime). Each word
 // is tagged with the optical rule its trickiest pairs exercise, so practice can
 // lean toward the rule a player keeps missing.
@@ -37,7 +37,7 @@ export const WORDS: KernWord[] = [
   { text: "MILLION", category: "straight" },
   { text: "UNTIL", category: "straight" },
   { text: "FILTER", category: "straight" },
-  // Mixed — real words, mixed shapes, judge the overall rhythm.
+  // Mixed: real words, mixed shapes, judge the overall rhythm.
   { text: "DESIGN", category: "mixed" },
   { text: "STUDIO", category: "mixed" },
   { text: "KERNING", category: "mixed" },

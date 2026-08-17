@@ -91,7 +91,7 @@ export function rawStreak(): StreakData | null {
 
 /**
  * Overwrite the stored streak with a merged one (account sync). Deliberately
- * does NOT nudge the syncer — sync-driven writes must not re-trigger a push.
+ * does NOT nudge the syncer: sync-driven writes must not re-trigger a push.
  */
 export function replaceStreak(d: StreakData): void {
   save(d);

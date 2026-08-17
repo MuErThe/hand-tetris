@@ -20,7 +20,7 @@ const MP3_OVERRIDES: Partial<Record<SfxName, string>> = {
   // clear: "clear.mp3",
 };
 
-// basePath-aware URL prefix — required when the site deploys under a
+// basePath-aware URL prefix: required when the site deploys under a
 // sub-path (e.g. username.github.io/squint). Inlined at build time via
 // next.config.ts.
 const SOUNDS_BASE = `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/sounds/`;
@@ -62,7 +62,7 @@ function makeAudio(name: SfxName, file: string): HTMLAudioElement {
     "canplaythrough",
     () => {
       mp3Available[name] = true;
-      // Probe confirmed the file exists — grow the pool so rapid repeats can
+      // Probe confirmed the file exists: grow the pool so rapid repeats can
       // overlap. Growing here (not upfront) keeps a missing file to a single
       // failed request instead of POOL_SIZE of them.
       const arr = pool[name];
@@ -90,7 +90,7 @@ function pick(arr: HTMLAudioElement[]): HTMLAudioElement {
   return arr[0];
 }
 
-// ---- Synth fallback (Web Audio) — fires when no mp3 is available -----------
+// ---- Synth fallback (Web Audio): fires when no mp3 is available -----------
 
 function playTone(
   c: AudioContext,
@@ -123,7 +123,7 @@ function playSynth(name: SfxName): void {
   if (c.state === "suspended") void c.resume();
   switch (name) {
     case "rotate":
-      // Quick rising chirp — light, click-like.
+      // Quick rising chirp: light, click-like.
       playTone(c, 520, 880, 0.07, "square", 0.18);
       break;
     case "step":
@@ -136,7 +136,7 @@ function playSynth(name: SfxName): void {
       playTone(c, 220, 110, 0.08, "triangle", 0.18, 0);
       break;
     case "clear":
-      // Bright ascending C–E–G arpeggio.
+      // Bright ascending C-E-G arpeggio.
       playTone(c, 523, 523, 0.1, "sawtooth", 0.22, 0);
       playTone(c, 659, 659, 0.1, "sawtooth", 0.22, 0.08);
       playTone(c, 784, 784, 0.2, "sawtooth", 0.24, 0.16);
@@ -150,7 +150,7 @@ function playSynth(name: SfxName): void {
       playTone(c, 1568, 1568, 0.35, "square", 0.12, 0.24);
       break;
     case "gameOver":
-      // Slow descending minor melody — defeated, falling.
+      // Slow descending minor melody: defeated, falling.
       playTone(c, 523, 523, 0.22, "sawtooth", 0.26, 0);
       playTone(c, 440, 440, 0.22, "sawtooth", 0.26, 0.22);
       playTone(c, 349, 349, 0.26, "sawtooth", 0.26, 0.44);

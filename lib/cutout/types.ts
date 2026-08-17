@@ -1,4 +1,4 @@
-// Cutout — read a boolean operation off its result.
+// Cutout: read a boolean operation off its result.
 //
 // Two overlapping shapes and one target silhouette; the player names the
 // operation that produced it. This is the mental model every vector tool
@@ -52,7 +52,7 @@ export interface Shape {
 }
 
 export interface Round {
-  /** The operation that produced the target — i.e. the answer. */
+  /** The operation that produced the target: i.e. the answer. */
   type: BoolOp;
   prompt: string;
   a: Shape;
@@ -61,7 +61,7 @@ export interface Round {
 
 export interface Evaluation {
   correct: boolean;
-  /** 0 when correct, 1 when not — feeds the adaptive weighting. */
+  /** 0 when correct, 1 when not: feeds the adaptive weighting. */
   errorPct: number;
   points: number;
   tag: "caught" | "missed";

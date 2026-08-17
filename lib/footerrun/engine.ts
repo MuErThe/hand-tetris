@@ -1,4 +1,4 @@
-// Pure endless-runner engine for the footer easter egg — the Eyeball It
+// Pure endless-runner engine for the footer easter egg: the Eyeball It
 // reticle hopping over pieces of the arcade. No React, no DOM: the canvas
 // component calls tick() with elapsed time and draws from the state.
 // Local-only by design; nothing here ever touches the leaderboard.
@@ -28,11 +28,11 @@ export interface RunState {
   obstacles: Obstacle[];
   untilSpawn: number; // ms
   seed: number;
-  /** Last kind dealt — never repeated back to back. */
+  /** Last kind dealt; never repeated back to back. */
   lastKind: ObstacleKind | null;
 }
 
-// World scale ~2.2× the original small footer — big Notion-sized pieces.
+// World scale ~2.2× the original small footer: big Notion-sized pieces.
 // GRAVITY and JUMP_V scale together, which keeps airtime identical while
 // jump height grows with the world, so the game feels the same.
 export const RUNNER = { x: 120, size: 36 };
@@ -69,7 +69,7 @@ export function startRun(seed: number): RunState {
   return { ...createRun(), phase: "running", seed: seed | 0 || 1 };
 }
 
-// mulberry32 step on the embedded seed — deterministic per run.
+// mulberry32 step on the embedded seed: deterministic per run.
 function rand(s: RunState): number {
   s.seed = (s.seed + 0x6d2b79f5) | 0;
   let t = Math.imul(s.seed ^ (s.seed >>> 15), 1 | s.seed);
@@ -82,7 +82,7 @@ export function jump(s: RunState): void {
   if (s.phase === "running" && s.y === 0) s.vy = JUMP_V;
 }
 
-/** Next obstacle kind — uniform, but never the same twice running. */
+/** Next obstacle kind: uniform, but never the same twice running. */
 function pickKind(s: RunState): ObstacleKind {
   let kind: ObstacleKind;
   do {
@@ -114,7 +114,7 @@ export function tick(s: RunState, dtMs: number, width: number): void {
 
   s.untilSpawn -= dtMs;
   if (s.untilSpawn <= 0) {
-    // Deal a cluster of 1–3 pieces: kinds never repeat back to back, every
+    // Deal a cluster of 1-3 pieces: kinds never repeat back to back, every
     // piece gets its own scale (so heights vary), and bigger clusters are
     // kept short and tight so a single jump can still clear them.
     const roll = rand(s);
@@ -128,7 +128,7 @@ export function tick(s: RunState, dtMs: number, width: number): void {
       const k = minScale + rand(s) * (maxScale - minScale);
       const w = Math.round(base.w * k);
       let h = Math.round(base.h * k);
-      // Singles and pairs sometimes carry a rider — a second piece stacked
+      // Singles and pairs sometimes carry a rider: a second piece stacked
       // on top. Total height stays within a clean jump's clearance.
       let top: Obstacle["top"];
       if (count < 3 && rand(s) < (count === 1 ? 0.45 : 0.2)) {
@@ -141,22 +141,22 @@ export function tick(s: RunState, dtMs: number, width: number): void {
           top = { kind: topKind, h: topH };
           h += topH;
         }
-        // The no-repeat rule applies to the baseline sequence — restore it
+        // The no-repeat rule applies to the baseline sequence: restore it
         // so a rider doesn't let the next base piece echo this one.
         s.lastKind = kind;
       }
       s.obstacles.push({ x, w, h, kind, top });
       x += w + 18 + rand(s) * 18;
     }
-    // The floor of the gap is the full jump's airtime plus a beat — and the
-    // cluster's own width rides on top — so a clean player is never dealt
+    // The floor of the gap is the full jump's airtime plus a beat, and the
+    // cluster's own width rides on top, so a clean player is never dealt
     // an impossible hand.
     const airtimeMs = ((2 * JUMP_V) / GRAVITY) * 1000;
     const clusterMs = ((x - width) / s.speed) * 1000;
     s.untilSpawn = airtimeMs + clusterMs + 260 + rand(s) * 900;
   }
 
-  // AABB with a small forgiveness inset — this is a footer, not a boss fight.
+  // AABB with a small forgiveness inset: this is a footer, not a boss fight.
   const rx = RUNNER.x + 3;
   const rw = RUNNER.size - 6;
   for (const o of s.obstacles) {

@@ -11,7 +11,7 @@ import {
 } from "./specimens";
 
 export const metadata: Metadata = {
-  title: "Focalism — a design language where hierarchy is focus",
+  title: "Focalism: a design language where hierarchy is focus",
   description:
     "Focalism is a UI design language in the lineage of brutalism and glassmorphism: the interface behaves like a lens. Depth is focal distance, transitions are focus racks, colour appears only as signal, and errors fringe with chromatic aberration. The manifesto, the six laws, live specimens and adoption recipes.",
   alternates: { canonical: "./" },
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 const ARTICLE_JSON_LD = {
   "@context": "https://schema.org",
   "@type": "Article",
-  headline: "Focalism — a design language where hierarchy is focus",
+  headline: "Focalism: a design language where hierarchy is focus",
   description:
     "The interface is a lens: Focalism replaces shadows and elevation with focal planes, slides with focus racks, and decorative colour with signal colour and chromatic aberration.",
   author: { "@type": "Person", name: "Zabeeh" },
@@ -32,7 +32,7 @@ const LAWS: { n: string; title: string; body: string }[] = [
   {
     n: "01",
     title: "The interface is a lens",
-    body: "Hierarchy is focus. Whatever the user attends to is razor sharp; everything else sits at a measured distance from the focal plane. Attention is not decorated — it is focused.",
+    body: "Hierarchy is focus. Whatever the user attends to is razor sharp; everything else sits at a measured distance from the focal plane. Attention is not decorated; it is focused.",
   },
   {
     n: "02",
@@ -42,12 +42,12 @@ const LAWS: { n: string; title: string; body: string }[] = [
   {
     n: "03",
     title: "Motion is optical or mechanical",
-    body: "Macro transitions are focus racks — the outgoing plane defocuses while the incoming one sharpens. Nothing slides, nothing bounces in from off-screen. Micro interactions are detents: the snap, tick and settle of a fine instrument.",
+    body: "Macro transitions are focus racks: the outgoing plane defocuses while the incoming one sharpens. Nothing slides, nothing bounces in from off-screen. Micro interactions are detents: the snap, tick and settle of a fine instrument.",
   },
   {
     n: "04",
     title: "Colour is signal",
-    body: "The world is warm near-monochrome. Colour appears only when it means something: green is truth, hot orange is error, an accent is identity. And when something errs or falls out of focus, its edges fringe red-cyan — chromatic aberration, the lens catching the miss. Ration it: when everything fringes, nothing means anything.",
+    body: "The world is warm near-monochrome. Colour appears only when it means something: green is truth, hot orange is error, an accent is identity. And when something errs or falls out of focus, its edges fringe red-cyan: chromatic aberration, the lens catching the miss. Ration it: when everything fringes, nothing means anything.",
   },
   {
     n: "05",
@@ -57,7 +57,7 @@ const LAWS: { n: string; title: string; body: string }[] = [
   {
     n: "06",
     title: "Warm precision",
-    body: "A fine instrument in a warm room. Exactness without coldness: charcoal fields, amber focus-light, honest measurements, calm at rest and cinematic only in motion. And the work itself sits on lit paper — however the room is lit, the play surface stays the brightest plane on screen, because colour and type are judged truly against a light ground. Accessibility is part of the optics — the focused plane always reads, and reduced-motion users get fades instead of racks.",
+    body: "A fine instrument in a warm room. Exactness without coldness: charcoal fields, amber focus-light, honest measurements, calm at rest and cinematic only in motion. And the work itself sits on lit paper: however the room is lit, the play surface stays the brightest plane on screen, because colour and type are judged truly against a light ground. Accessibility is part of the optics: the focused plane always reads, and reduced-motion users get fades instead of racks.",
   },
 ];
 
@@ -91,15 +91,15 @@ export default function FocalismPage() {
           <p className="font-mono text-[14px] leading-relaxed mb-3" style={{ color: "var(--ink)" }}>
             Brutalism made honesty of raw material. Glassmorphism made light of
             layered glass. <strong>Focalism makes hierarchy of focus itself</strong>:
-            the interface behaves like a lens, and what you attend to is simply —
-            optically — sharp.
+            the interface behaves like a lens, and what you attend to is simply,
+            optically, sharp.
           </p>
           <p className="font-mono text-[12px] leading-relaxed mb-10" style={{ color: "var(--ink-dim)" }}>
             Born inside{" "}
             <Link href="/" className="underline decoration-dotted underline-offset-4" style={{ color: "var(--accent)" }}>
               Squint
             </Link>
-            , a training arcade for the designer&apos;s eye — a product about
+            , a training arcade for the designer&apos;s eye, a product about
             perception deserved a design language about perception. Squint is the
             reference implementation; this page is the doctrine. Take it, use it,
             push it further.
@@ -131,31 +131,31 @@ export default function FocalismPage() {
           <div className="flex flex-col gap-8 mb-12">
             <section>
               <h3 className="font-mono text-[10px] uppercase tracking-[0.1em] mb-3" style={{ color: "var(--ink-dim)" }}>
-                focal planes — click a plane to attend to it
+                focal planes: click a plane to attend to it
               </h3>
               <FocusScaleSpecimen />
             </section>
             <section>
               <h3 className="font-mono text-[10px] uppercase tracking-[0.1em] mb-3" style={{ color: "var(--ink-dim)" }}>
-                the focus rack — attention swaps by sharpening
+                the focus rack: attention swaps by sharpening
               </h3>
               <RackSpecimen />
             </section>
             <section>
               <h3 className="font-mono text-[10px] uppercase tracking-[0.1em] mb-3" style={{ color: "var(--ink-dim)" }}>
-                chromatic aberration — error fringes like a lens
+                chromatic aberration: error fringes like a lens
               </h3>
               <AberrationSpecimen />
             </section>
             <section>
               <h3 className="font-mono text-[10px] uppercase tracking-[0.1em] mb-3" style={{ color: "var(--ink-dim)" }}>
-                detents — micro-interactions with a notch
+                detents: micro-interactions with a notch
               </h3>
               <DetentSpecimen />
             </section>
             <section>
               <h3 className="font-mono text-[10px] uppercase tracking-[0.1em] mb-3" style={{ color: "var(--ink-dim)" }}>
-                the reticle — hover to acquire
+                the reticle: hover to acquire
               </h3>
               <ReticleSpecimen />
             </section>
@@ -176,7 +176,7 @@ export default function FocalismPage() {
   --ab-red: rgba(255,70,70,.4);           /* aberration fringes */
   --ab-cyan: rgba(80,220,255,.35);
 }
-/* focus steps — the depth axis */
+/* focus steps: the depth axis */
 .fz-0 { filter: none; }
 .fz-1 { filter: blur(2px) brightness(.92) saturate(.95); }
 .fz-2 { filter: blur(5px) brightness(.82) saturate(.85); }
@@ -184,12 +184,12 @@ export default function FocalismPage() {
 .fz-0,.fz-1,.fz-2,.fz-3 {
   transition: filter var(--rack-ms) var(--rack-ease);
 }
-/* error/deep-defocus only — ration it */
+/* error/deep-defocus only; ration it */
 .aberrate-text {
   text-shadow: .6px 0 var(--ab-red), -.6px 0 var(--ab-cyan);
 }
 
-/* the lit bench — the play surface stays the room's brightest plane */
+/* the lit bench: the play surface stays the room's brightest plane */
 .paper {
   background: #f2ecdf;             /* warm sketchbook stock */
   color: #2a2118;                  /* drawing ink */
@@ -197,7 +197,7 @@ export default function FocalismPage() {
 
 /* Rules of thumb:
    - animate blur only during transitions, never at rest
-   - never blur a live canvas — dim it instead
+   - never blur a live canvas; dim it instead
    - the focused plane always meets contrast
    - prefers-reduced-motion: fades instead of racks */`}</pre>
 
@@ -207,7 +207,7 @@ export default function FocalismPage() {
               className="inline-block font-display tracking-[0.06em] text-[13px] px-6 py-3 border transition-all duration-150 hover-wash"
               style={{ borderColor: "var(--accent)", color: "var(--accent)", background: "color-mix(in srgb, var(--accent) 8%, transparent)" }}
             >
-              ▶ See it live — play Squint
+              ▶ See it live: play Squint
             </Link>
             <Link
               href="/about"

@@ -48,11 +48,11 @@ const ICONS: Record<ThemeChoice, ReactNode> = {
   ),
 };
 
-// The accessible name for each option — speech-input users can still say
+// The accessible name for each option: speech-input users can still say
 // "auto", "light" or "dark" (WCAG 2.5.3 keeps working without visible text
 // because these are the whole name).
 const DESCRIPTIONS: Record<ThemeChoice, string> = {
-  system: "Auto — follow my system setting",
+  system: "Auto: follow my system setting",
   light: "Light theme",
   dark: "Dark theme",
 };
@@ -61,7 +61,7 @@ const DESCRIPTIONS: Record<ThemeChoice, string> = {
  * Three-state theme control: auto (follow the OS), light, dark.
  *
  * Radios rather than a two-state switch because "follow my system" is a real
- * third choice — a plain toggle would strand anyone who tapped it once with no
+ * third choice: a plain toggle would strand anyone who tapped it once with no
  * way back to automatic.
  *
  * The theme itself is already on <html> before this mounts (see
@@ -93,7 +93,7 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
       <legend className="sr-only">Theme</legend>
       {THEME_CHOICES.map((c) => (
         // Presses like a detent: the segment dips under the finger, ticks,
-        // and springs back a hair past rest — the same mechanism language
+        // and springs back a hair past rest: the same mechanism language
         // as the Detent button.
         <motion.label
           key={c}

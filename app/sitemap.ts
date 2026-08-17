@@ -8,7 +8,7 @@ export const dynamic = "force-static";
 const SITE_URL = "https://squint.mdzabeeh.com";
 
 // Trailing slashes throughout, to match `trailingSlash: true` in
-// next.config.ts — without them every URL here would 308 on the way in.
+// next.config.ts: without them every URL here would 308 on the way in.
 const url = (path: string) => `${SITE_URL}${path}${path.endsWith("/") ? "" : "/"}`;
 
 /**

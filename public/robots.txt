@@ -1,4 +1,4 @@
-# Squint — https://squint.mdzabeeh.com
+# Squint: https://squint.mdzabeeh.com
 # All crawlers welcome, including AI/answer engines.
 
 User-agent: *

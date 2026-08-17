@@ -1,4 +1,4 @@
-// Eyeball It — pure generators + scoring. No React, no DOM.
+// Eyeball It: pure generators + scoring. No React, no DOM.
 
 import {
   type AngleChallenge,
@@ -82,7 +82,7 @@ export function generate(type: EyeballType): Challenge {
         target: 0.5 - OPTICAL_OFFSET,
         geometric: 0.5,
         tol: LINEAR_TOL,
-        prompt: "Split the frame so it *looks* even — trust your eye, not a ruler.",
+        prompt: "Split the frame so it *looks* even: trust your eye, not a ruler.",
       } satisfies LinearChallenge;
     }
     case "centre": {
@@ -175,13 +175,13 @@ export function evaluate(challenge: Challenge, guess: Guess): Evaluation {
     };
   }
 
-  // Kind mismatch — shouldn't happen; score as a miss.
+  // Kind mismatch: shouldn't happen; score as a miss.
   return {
     errorPct: 1,
     points: 0,
     tag: "_default",
-    guessDisplay: "—",
-    targetDisplay: "—",
-    errorDisplay: "—",
+    guessDisplay: "n/a",
+    targetDisplay: "n/a",
+    errorDisplay: "n/a",
   };
 }

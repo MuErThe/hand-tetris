@@ -35,7 +35,7 @@ const CAMERA_HEIGHT = 720;
  * Boot MediaPipe Hands with the camera. Returns a stop function that releases
  * the camera and tracker.
  *
- * Loaded dynamically — MediaPipe touches `window` during construction and
+ * Loaded dynamically: MediaPipe touches `window` during construction and
  * can't be imported at module top level on the server.
  */
 export async function bootHandTracker(

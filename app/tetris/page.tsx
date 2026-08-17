@@ -74,7 +74,7 @@ export default function Home() {
   const [leaderboard, setLeaderboard] = useState<LeaderboardRow[]>([]);
   const [loadingLeaderboard, setLoadingLeaderboard] = useState(false);
 
-  // Play-time tracking — captured at the moment the run starts and frozen on
+  // Play-time tracking: captured at the moment the run starts and frozen on
   // the first game-over event. Server uses it for plausibility.
   const runStartRef = useRef<number>(0);
   const runDurationRef = useRef<number>(0);
@@ -131,7 +131,7 @@ export default function Home() {
     };
   }, [mounted]);
 
-  // Mirrors the endedManually state for the game-loop event path below —
+  // Mirrors the endedManually state for the game-loop event path below:
   // handleQuit flips both before the engine reports the run as over.
   const endedManuallyRef = useRef(false);
 
@@ -143,7 +143,7 @@ export default function Home() {
       if (submittedRunRef.current === runId) return;
       submittedRunRef.current = runId;
 
-      // Sad descending melody for a natural top-out only — a manual quit
+      // Sad descending melody for a natural top-out only: a manual quit
       // already had its own UX, no need to pile on a defeat sound.
       if (!endedManuallyRef.current) playSfx("gameOver");
 
@@ -272,18 +272,18 @@ export default function Home() {
 
   const handlePauseToggle = useCallback(() => {
     setIsPaused((p) => !p);
-    // Read `isPaused` from the closure snapshot — the callback is rebuilt on
+    // Read `isPaused` from the closure snapshot: the callback is rebuilt on
     // every change so this reflects the state *before* the toggle.
     playSfx(isPaused ? "resume" : "pause");
   }, [isPaused]);
 
-  /** Return to the start screen — also clears the run. */
+  /** Return to the start screen: also clears the run. */
   const handleBackToMenu = useCallback(() => {
     handleRestart();
     setStarted(false);
   }, [handleRestart]);
 
-  // Q quits, P toggles pause — only while a run is in progress.
+  // Q quits, P toggles pause: only while a run is in progress.
   // Must be declared BEFORE the viewport early-returns so the hook count
   // stays stable across renders (rules of hooks).
   useEffect(() => {
@@ -636,7 +636,7 @@ function MobileGate() {
         <br />
         flip your tablet to landscape
         <br />
-        — or hop onto a laptop.
+        or hop onto a laptop.
       </p>
 
       <div
@@ -661,7 +661,7 @@ function RotateDeviceAnimation() {
         strokeLinecap="round"
         strokeLinejoin="round"
       >
-        {/* Curved rotation arc — hints the motion */}
+        {/* Curved rotation arc: hints the motion */}
         <path
           d="M 22 60 A 38 38 0 0 1 98 60"
           strokeDasharray="3 4"

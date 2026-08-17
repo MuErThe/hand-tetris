@@ -3,7 +3,7 @@
 // Accounts, phase 3: cross-device sync for logged-in (Google) players. One
 // account_state row per auth user mirrors the arcade identity, warm-up
 // streak and per-game progress. Guests and anonymous sessions stay purely
-// local. Merges are conservative — a pull never destroys local history:
+// local. Merges are conservative, and a pull never destroys local history:
 // streaks combine (a later day on another device extends the count),
 // progress unions by session timestamp, and this device's identity is
 // adopted from the account only when there is none here yet.
@@ -97,7 +97,7 @@ export async function pushState(): Promise<void> {
       progress,
     });
   } catch {
-    /* offline — the next dirty nudge retries */
+    /* offline: the next dirty nudge retries */
   }
 }
 
@@ -147,7 +147,7 @@ export async function syncOnLogin(): Promise<void> {
 
     await pushState();
   } catch {
-    /* ignore — purely additive, local play is unaffected */
+    /* ignore: purely additive, local play is unaffected */
   }
 }
 

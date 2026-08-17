@@ -11,7 +11,7 @@ export default function Hub() {
   return (
     <main className="flex-1 overflow-y-auto overflow-x-hidden">
       <div className="min-h-full flex flex-col items-center px-5 md:px-20 py-10 md:py-12">
-        {/* Top navbar — the wordmark holds the centre (the I is the eye);
+        {/* Top navbar: the wordmark holds the centre (the I is the eye);
             theme lives on the right, not over a play surface. */}
         <header
           className="w-full grid items-center mb-8"
@@ -71,34 +71,48 @@ function GameCard({ game }: { game: GameDef }) {
   return (
     <Link
       href={game.path}
-      className="bento-card group panel-bg rounded-[6px] overflow-hidden flex flex-col"
+      className="bento-card plate-card group rounded-[10px] overflow-hidden flex flex-col justify-end"
       style={{ "--tint": game.tint, gridArea: game.area } as React.CSSProperties}
     >
-      {/* Living preview */}
-      {/* The vignette SVG is 160:72, so with an auto-height box its height
-          tracks the card's width — a full-width card would get a ~460px
-          preview. Non-featured cards get a fixed band instead and the scene
-          letterboxes within it. */}
+      {/* The living preview runs edge to edge behind everything; the scrim
+          over it puts the copy back on a known colour, so contrast holds
+          whatever frame the animation is on.
+
+          The featured cell is only tall once the bento goes multi-column, so
+          its portrait scene is swapped in at the same 900px breakpoint the
+          grid uses: below that the cell is an ordinary wide tile. */}
       <div
-        className={game.featured ? "flex-1" : "shrink-0"}
-        style={game.featured ? { minHeight: 150 } : { height: 132 }}
+        className={`absolute inset-0 ${game.wide ? "mx-auto max-w-[720px]" : ""}`}
       >
-        <Vignette kind={game.vignette} tint={game.tint} className="h-full" />
+        {game.featured && (
+          <Vignette
+            kind={game.vignette}
+            tint={game.tint}
+            fill
+            tall
+            className="h-full hidden min-[900px]:block"
+          />
+        )}
+        <Vignette
+          kind={game.vignette}
+          tint={game.tint}
+          fill
+          className={`h-full ${game.featured ? "min-[900px]:hidden" : ""}`}
+        />
       </div>
+      <div aria-hidden className="plate-scrim absolute inset-0" />
 
-      <div className="flex flex-col gap-2 p-4 pt-3">
-        <div className="flex items-start justify-between gap-2">
-          <span
-            className="font-mono text-[8px] uppercase tracking-[0.1em] px-2 py-0.5 rounded-[6px] border"
-            style={{ color: game.tint, borderColor: "var(--panel-border)" }}
-          >
-            {game.trains}
-          </span>
-        </div>
+      <span
+        className="plate-chip absolute top-3 left-3 font-mono text-[8px] uppercase tracking-[0.1em] px-2 py-0.5 rounded-[6px] border"
+        style={{ color: game.tint, borderColor: "var(--panel-border)" }}
+      >
+        {game.trains}
+      </span>
 
+      <div className="relative flex flex-col gap-2 p-4">
         <h2
           className="font-display tracking-[0.04em] leading-none"
-          style={{ color: "var(--ink)", fontSize: game.featured ? 26 : 20 }}
+          style={{ color: "var(--ink)", fontSize: game.featured ? 40 : 30 }}
         >
           {game.title}
           {game.titleTight ? "" : " "}

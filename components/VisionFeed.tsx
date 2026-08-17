@@ -39,7 +39,7 @@ export const VisionFeed = forwardRef<VisionFeedHandle, VisionFeedProps>(
     const trackerStopRef = useRef<(() => void) | null>(null);
     const overlayStopRef = useRef<(() => void) | null>(null);
     const statusRef = useRef<CameraStatus>("init");
-    /** Latched after a successful boot — drives auto-resume on tab return. */
+    /** Latched after a successful boot: drives auto-resume on tab return. */
     const wantTrackingRef = useRef(false);
     const [status, setStatus] = useState<CameraStatus>("init");
 
@@ -94,7 +94,7 @@ export const VisionFeed = forwardRef<VisionFeedHandle, VisionFeedProps>(
         resetGestureTracking();
         clearLiveGesture();
         const stop = await bootHandTracker(video, (results) => {
-          // First inference marks the model warm — before that the camera is
+          // First inference marks the model warm: before that the camera is
           // live but gestures can't register yet.
           if (statusRef.current === "warming") setStatusBoth("ready");
           onHandResults(results, gestureRef, movementFreezeUntilRef);

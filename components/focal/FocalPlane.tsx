@@ -1,6 +1,6 @@
 "use client";
 
-// Focalism primitives — the interface is a lens.
+// Focalism primitives: the interface is a lens.
 // A FocalPlane sits at a focus step (0 = attended/sharp … 3 = deep field).
 // Changing `level` performs a focus rack via the .fz-* transitions.
 

@@ -157,7 +157,7 @@ export async function fetchTop10(game: string): Promise<LeaderboardRow[]> {
   //      sorted best-first, so first = that player's best run.
   //   2. Same (score, meta) tuple → keep the most recent. Catches the case
   //      where a player registered under more than one spelling and ran the
-  //      exact same stats — only the latest record survives.
+  //      exact same stats: only the latest record survives.
   const byName = new Map<string, LeaderboardRow>();
   for (const r of rows) {
     const key = (r.name ?? "").toLowerCase();

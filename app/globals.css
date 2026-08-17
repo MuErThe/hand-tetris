@@ -1,25 +1,25 @@
 @import "tailwindcss";
 
 /* ──────────────────────────────────────────────────────────────────────────
-   THEME — Squint runs in two lights: the cabinet (dark) and the studio
+   THEME. Squint runs in two lights: the cabinet (dark) and the studio
    (light). Only the palette block below differs between them; everything
    downstream reads var(--…) and re-themes for free.
 
    `data-theme` is stamped on <html> before first paint by the inline script
    in app/layout.tsx, so there is no flash of the wrong theme. The
-   prefers-color-scheme block is the no-JS fallback only — it deliberately
+   prefers-color-scheme block is the no-JS fallback only: it deliberately
    matches :root:not([data-theme]) so a stamped attribute always wins.
 
    Two surfaces are exempt from the flip by design, via .force-dark:
    the Tetris WebGL stage (a lit 3D scene needs its dark room) and anything
    else that would be misread on paper. The Colour Forge mat stays a fixed
-   neutral grey in both themes — the surround is part of the colour
+   neutral grey in both themes: the surround is part of the colour
    measurement, so it cannot be allowed to move.
    ────────────────────────────────────────────────────────────────────────── */
 
-/* Theme-invariant tokens — these mean the same thing in either light. */
+/* Theme-invariant tokens: these mean the same thing in either light. */
 :root {
-  /* Lit artboards — the work always sits on warm paper. In dark mode the
+  /* Lit artboards: the work always sits on warm paper. In dark mode the
      paper is a lit object in a dark room; in light mode the room caught up.
      Either way the play surface itself does not change, so a score earned in
      one theme is comparable with a score earned in the other. */
@@ -28,14 +28,14 @@
   --paper-tick: rgba(42, 33, 24, 0.38);
   --paper-ink: #2a2118;
   --paper-dim: rgba(42, 33, 24, 0.55);
-  /* Neutral appraisal mat — the colour-science surround for judging colour.
+  /* Neutral appraisal mat: the colour-science surround for judging colour.
      Text on the mat must use --paper-ink; --accent only reaches 3.4:1 here. */
   --mat-grey: #b8b4ab;
   /* Signal inks, tuned to clear 4.5:1 on --paper-bg. */
   --truth-ink: #2f6b2a;
   --guess-ink: #b23a06;
   --aim-ink: #856011;
-  /* The focus rack — the one easing every macro transition uses. */
+  /* The focus rack: the one easing every macro transition uses. */
   --rack-ms: 340ms;
   --rack-ease: cubic-bezier(0.33, 0, 0.15, 1);
 }
@@ -53,13 +53,13 @@
   --accent: #f5b651;
   --accent-hot: #ff7849;
   /* Neutral, not amber. Borders are a last resort now that surfaces carry the
-     structure — an accent-tinted hairline round every panel was the loudest
+     structure: an accent-tinted hairline round every panel was the loudest
      part of the arcade skin. */
   --panel-border: color-mix(in srgb, var(--ink) 12%, transparent);
   --panel-border-strong: color-mix(in srgb, var(--ink) 22%, transparent);
 
   /* Game tints. Identity colours, but they also carry label text, so the
-     light theme needs its own set — the vivid versions manage ~1.9:1 on
+     light theme needs its own set: the vivid versions manage ~1.9:1 on
      paper. The WebGL tetromino colours are separate hex constants in
      lib/render/palette.ts and are unaffected by these. */
   --c-I: #5be7e0;
@@ -76,7 +76,7 @@
   --field-2: #191420;
   --field-3: #201a28;
 
-  /* Neutral lifts and scrims — the greys that were hardcoded rgba before.
+  /* Neutral lifts and scrims: the greys that were hardcoded rgba before.
      --raise is "a surface nudged toward the viewer"; in dark that means
      adding light, in light it means adding ink. */
   --raise: rgba(255, 255, 255, 0.04);
@@ -91,7 +91,7 @@
   --recess: rgba(0, 0, 0, 0.22);
   --bevel: rgba(0, 0, 0, 0.35);
 
-  /* Room texture — CRT whisper and vignette. */
+  /* Room texture: CRT whisper and vignette. */
   --scanline-col: rgba(0, 0, 0, 0.22);
   --scanline-opacity: 0.3;
   --vignette-col: rgba(0, 0, 0, 0.55);
@@ -105,7 +105,7 @@
 [data-theme="light"] {
   color-scheme: light;
 
-  /* Whites and neutral greys — the studio is daylit, not a coffee stain.
+  /* Whites and neutral greys: the studio is daylit, not a coffee stain.
      Every value here clears 4.5:1 against the surface it sits on. */
   --bg-0: #ececeb;
   --bg-1: #f7f7f6;
@@ -134,7 +134,7 @@
   --field-3: #fcfcfb;
 
   /* The artboard stays the brightest thing on screen, so it still reads as
-     the lit object the doctrine calls for — the cream stock would look like
+     the lit object the doctrine calls for: the cream stock would look like
      a stain against white. Safe to move: Colour Forge judges on --mat-grey,
      which never changes, and the paper inks all gain contrast here. */
   --paper-bg: #fdfdfc;
@@ -148,7 +148,7 @@
   --recess: rgba(0, 0, 0, 0.05);
   --bevel: rgba(0, 0, 0, 0.1);
 
-  /* Scanlines and vignette would grey the whites — a trace, not a texture. */
+  /* Scanlines and vignette would grey the whites: a trace, not a texture. */
   --scanline-col: rgba(0, 0, 0, 0.1);
   --scanline-opacity: 0.08;
   --vignette-col: rgba(0, 0, 0, 0.07);
@@ -162,7 +162,7 @@
   :root:not([data-theme]) {
     color-scheme: light;
 
-    /* Whites and neutral greys — the studio is daylit, not a coffee stain.
+    /* Whites and neutral greys: the studio is daylit, not a coffee stain.
        Every value here clears 4.5:1 against the surface it sits on. */
     --bg-0: #ececeb;
     --bg-1: #f7f7f6;
@@ -191,7 +191,7 @@
     --field-3: #fcfcfb;
 
     /* The artboard stays the brightest thing on screen, so it still reads as
-       the lit object the doctrine calls for — the cream stock would look like
+       the lit object the doctrine calls for: the cream stock would look like
        a stain against white. Safe to move: Colour Forge judges on --mat-grey,
        which never changes, and the paper inks all gain contrast here. */
     --paper-bg: #fdfdfc;
@@ -205,7 +205,7 @@
     --recess: rgba(0, 0, 0, 0.05);
     --bevel: rgba(0, 0, 0, 0.1);
 
-    /* Scanlines and vignette would grey the whites — a trace, not a texture. */
+    /* Scanlines and vignette would grey the whites: a trace, not a texture. */
     --scanline-col: rgba(0, 0, 0, 0.1);
     --scanline-opacity: 0.08;
     --vignette-col: rgba(0, 0, 0, 0.07);
@@ -215,7 +215,7 @@
   }
 }
 
-/* Surfaces that stay in the dark whatever the page is doing — the WebGL
+/* Surfaces that stay in the dark whatever the page is doing: the WebGL
    stage above all. Re-declares the dark palette for its subtree. */
 .force-dark {
   color-scheme: dark;
@@ -228,14 +228,14 @@
   --accent: #f5b651;
   --accent-hot: #ff7849;
   /* Neutral, not amber. Borders are a last resort now that surfaces carry the
-     structure — an accent-tinted hairline round every panel was the loudest
+     structure: an accent-tinted hairline round every panel was the loudest
      part of the arcade skin. */
   --panel-border: color-mix(in srgb, var(--ink) 12%, transparent);
   --panel-border-strong: color-mix(in srgb, var(--ink) 22%, transparent);
 
   --paper-bg: #f2ecdf;
 
-  /* Vivid tints — the stage is dark here whatever the page is doing. */
+  /* Vivid tints: the stage is dark here whatever the page is doing. */
   --c-I: #5be7e0;
   --c-O: #f5d76e;
   --c-T: #b86dc9;
@@ -306,9 +306,9 @@ body {
   font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
 }
 
-/* Micro-labels — the one place uppercase survives the calm pass. Structural
+/* Micro-labels: the one place uppercase survives the calm pass. Structural
    names only (panel titles, round counters, units), small and quiet, tracked
-   far tighter than the arcade version's 0.2–0.4em shout. */
+   far tighter than the arcade version's 0.2-0.4em shout. */
 .label-micro {
   font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
   font-size: 9px;
@@ -354,13 +354,22 @@ button {
 }
 
 /* ────────────────────────────────────────────────────────────────────────
-   Vignettes — the hub cards' living previews. Pure CSS keyframes; the
+   Vignettes: the hub cards' living previews. Pure CSS keyframes; the
    component (components/arcade/Vignette.tsx) only provides markup.
    ──────────────────────────────────────────────────────────────────────── */
 
 /* tetris: pieces drift down and settle on the stack */
 @keyframes vg-fall {
   0% { transform: translateY(-26px); opacity: 0; }
+  12% { opacity: 1; }
+  62% { transform: translateY(0); opacity: 1; }
+  88% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(0); opacity: 0; }
+}
+
+/* The featured plate's scene uses a taller viewBox, so the drop is longer. */
+@keyframes vg-fall-tall {
+  0% { transform: translateY(-46px); opacity: 0; }
   12% { opacity: 1; }
   62% { transform: translateY(0); opacity: 1; }
   88% { transform: translateY(0); opacity: 1; }
@@ -465,7 +474,7 @@ button {
    FOCALISM utilities
    ──────────────────────────────────────────────────────────────────────── */
 
-/* Focus steps — the depth axis. fz-0 is the attended plane (sharp);
+/* Focus steps: the depth axis. fz-0 is the attended plane (sharp);
    higher steps sit further from the focal plane. Blur is animated ONLY
    through these transitions (the rack), never continuously. */
 .fz-0,
@@ -482,7 +491,7 @@ button {
 /* Defocused planes shouldn't eat clicks meant for the focused one. */
 .fz-2, .fz-3 { pointer-events: none; }
 
-/* Chromatic aberration — rationed to error states and deep defocus.
+/* Chromatic aberration: rationed to error states and deep defocus.
    The moment everything fringes, nothing means anything. */
 .aberrate-text {
   text-shadow: 0.6px 0 var(--ab-red), -0.6px 0 var(--ab-cyan);
@@ -502,7 +511,7 @@ button {
 .aberrate-edge::before { border-color: var(--ab-red); transform: translateX(1px); }
 .aberrate-edge::after { border-color: var(--ab-cyan); transform: translateX(-1px); }
 
-/* The wordmark's eye breathes focus — slow, alive, never distracting. */
+/* The wordmark's eye breathes focus; slow, alive, never distracting. */
 @keyframes focal-breathe {
   0%, 100% { filter: blur(0px); opacity: 1; }
   50% { filter: blur(1.3px); opacity: 0.9; }
@@ -529,7 +538,7 @@ button {
   .fz-3 { opacity: 0.35; }
 }
 
-/* Amber hover wash — the site's one hover idiom for bordered buttons.
+/* Amber hover wash: the site's one hover idiom for bordered buttons.
    Derived from --accent rather than a literal amber, so it brightens a button
    in the cabinet and deepens one on paper. Elements carry their own
    transition classes; this only supplies the colour.
@@ -589,7 +598,7 @@ button {
 }
 
 /* ────────────────────────────────────────────────────────────────────────
-   Theme control — a segmented detent. Selection is carried by border, fill
+   Theme control: a segmented detent. Selection is carried by border, fill
    AND weight, never by colour alone.
    ──────────────────────────────────────────────────────────────────────── */
 
@@ -626,7 +635,7 @@ button {
 
 /* Selected: full-strength accent always; the raised fill is painted by the
    sliding marker when motion is on, and by the fallback rule when it isn't.
-   The :not() guard matters — without it this rule out-ranks the marker
+   The :not() guard matters; without it this rule out-ranks the marker
    reset below and draws a second border on top of the marker. */
 .theme-seg__opt:has(input:checked) {
   color: var(--accent);
@@ -640,7 +649,7 @@ button {
 
 /* The travelling selection. Sits behind the label; the label's own background
    is transparent so the two never double up. */
-/* Flat fill only — an inset ring here stacks with the control's outer
+/* Flat fill only: an inset ring here stacks with the control's outer
    border and the icon's own strokes into a nest of rectangles. */
 .theme-seg__marker {
   position: absolute;
@@ -659,7 +668,7 @@ button {
   align-items: center;
 }
 
-/* The reticle has to land on the label — the input itself is sr-only. */
+/* The reticle has to land on the label: the input itself is sr-only. */
 .theme-seg__opt:has(input:focus-visible) {
   outline: 1px dashed color-mix(in srgb, var(--accent) 80%, transparent);
   outline-offset: 3px;
@@ -693,7 +702,7 @@ button {
     "cutout";
 }
 
-/* The area names come from `area` on each registry entry — adding a game
+/* The area names come from `area` on each registry entry: adding a game
    means adding its name here too. Tetris holds the tall feature column and
    the rest flow in reading order, which is also the tab order. */
 @media (min-width: 900px) {
@@ -726,7 +735,8 @@ button {
   }
 }
 
-/* Each card carries its game accent in --tint; hover lights it up. */
+/* Shared tile behaviour: the game plates and the warm-up banner both use
+   this. Each card carries its game accent in --tint; hover lights it up. */
 .bento-card {
   border: 1px solid var(--panel-border);
   transition:
@@ -736,8 +746,70 @@ button {
     filter var(--rack-ms) var(--rack-ease);
 }
 
+/* A game card is a self-lit plate: a dark, tint-keyed field that does NOT
+   flip with the theme, in the same spirit as the surfaces exempted from the
+   flip above (.force-dark). The scene runs full-bleed behind the text and a
+   scrim guarantees the overlay's contrast by construction rather than luck.
+
+   The tints are redeclared to their vivid dark-theme values because the
+   light-theme set is deliberately darkened to carry text on white: on a
+   dark plate it would vanish. Redeclaring --ink and friends alongside means
+   CardStats, Sparkline and the Vignette scenes all re-key themselves without
+   needing to know they are on a plate. */
+.plate-card {
+  color-scheme: dark;
+
+  --ink: #ece6d8;
+  --ink-dim: #a29bb0;
+  --accent: #f5b651;
+  --accent-hot: #ff7849;
+  --panel-border: color-mix(in srgb, var(--ink) 16%, transparent);
+  --panel-border-strong: color-mix(in srgb, var(--ink) 26%, transparent);
+  --shadow-col: rgba(0, 0, 0, 0.35);
+  --shadow-strong: rgba(0, 0, 0, 0.55);
+
+  --c-I: #5be7e0;
+  --c-O: #f5d76e;
+  --c-T: #b86dc9;
+  --c-S: #7cc576;
+  --c-Z: #e57373;
+  --c-J: #5b8def;
+  --c-L: #f0a04b;
+
+  /* The plate ground: one recipe for all nine, so no card can drift out of
+     contrast on its own. --tint is set per card from the registry. */
+  --plate-base: #100d18;
+  --plate: color-mix(in srgb, var(--tint) 13%, var(--plate-base));
+
+  position: relative;
+  min-height: 280px;
+  background: var(--plate);
+  color: var(--ink);
+  border-color: color-mix(in srgb, var(--tint) 26%, transparent);
+  box-shadow: 0 2px 10px var(--shadow-col);
+}
+
+/* Bottom-weighted scrim. Opaque plate through the text band, fading to clear
+   over the scene, so overlaid copy sits on a known colour, not on whatever
+   the animation happens to be doing at that frame. */
+.plate-scrim {
+  background: linear-gradient(
+    to top,
+    var(--plate) 0%,
+    var(--plate) 36%,
+    color-mix(in srgb, var(--plate) 62%, transparent) 58%,
+    transparent 100%
+  );
+}
+
+/* The trains label sits on open scene, so it carries its own ground. */
+.plate-chip {
+  background: color-mix(in srgb, var(--plate-base) 72%, transparent);
+  backdrop-filter: blur(3px);
+}
+
 /* Focalism focus-pull: attending to one card racks its siblings out of
-   focus — the hub behaves like a lens choosing a subject. */
+   focus: the hub behaves like a lens choosing a subject. */
 .hub-bento:has(.bento-card:hover) .bento-card:not(:hover) {
   filter: blur(2px) brightness(0.9) saturate(0.9);
 }
@@ -750,11 +822,32 @@ button {
 .bento-card:hover,
 .bento-card:focus-visible {
   transform: translateY(-2px);
-  border-color: color-mix(in srgb, var(--tint) 65%, transparent);
-  box-shadow: 0 8px 28px var(--shadow-col),
-    0 0 22px color-mix(in srgb, var(--tint) 18%, transparent);
-  outline: none;
+  border-color: color-mix(in srgb, var(--tint) 75%, transparent);
+  box-shadow: 0 10px 32px var(--shadow-strong),
+    0 0 26px color-mix(in srgb, var(--tint) 22%, transparent);
+}
+/* A tint border alone is not a focus indicator: keyboard users get a ring. */
+.bento-card:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 .bento-card:hover .vg-anim {
   filter: brightness(1.15);
+}
+
+/* Slow push into the scene on approach: the only motion the plate adds. */
+.plate-card .vg-anim {
+  transition: transform var(--rack-ms) var(--rack-ease);
+}
+.plate-card:hover .vg-anim,
+.plate-card:focus-visible .vg-anim {
+  transform: scale(1.04);
+}
+@media (prefers-reduced-motion: reduce) {
+  .plate-card .vg-anim,
+  .plate-card:hover .vg-anim,
+  .plate-card:focus-visible .vg-anim {
+    transition: none;
+    transform: none;
+  }
 }

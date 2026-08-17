@@ -47,7 +47,7 @@ export function StartScreen({ show, onStart, onDismiss }: StartScreenProps) {
   const [stored, setStored] = useState<StoredPlayer | null>(loadStoredPlayer);
   const [name, setName] = useState(() => loadStoredPlayer()?.name ?? "");
   // Splash front door first (every visit); the pilot/mode panel follows.
-  // Tetris never skips the panel — the camera/keyboard choice lives there.
+  // Tetris never skips the panel: the camera/keyboard choice lives there.
   const [step, setStep] = useState<"splash" | "panel">("splash");
   const [busy, setBusy] = useState(false);
   const [busyReason, setBusyReason] = useState<string>("");
@@ -88,7 +88,7 @@ export function StartScreen({ show, onStart, onDismiss }: StartScreenProps) {
     }
 
     if (!lbOnline) {
-      // No backend configured — name is local-only.
+      // No backend configured: name is local-only.
       const p = { name: candidate, token: "local" };
       saveStoredPlayer(p);
       return p;
@@ -115,18 +115,18 @@ export function StartScreen({ show, onStart, onDismiss }: StartScreenProps) {
           setName(attempt);
           continue;
         }
-        setError(`"${attempt}" is taken — try another or click GENERATE`);
+        setError(`"${attempt}" is taken. Try another or click GENERATE`);
         return null;
       }
       setError(
         res.error === "name_profanity"
           ? "please pick a different name"
           : res.error === "name_length"
-            ? `name must be ${NAME_RULES.min}–${NAME_RULES.max} characters`
+            ? `name must be ${NAME_RULES.min}-${NAME_RULES.max} characters`
             : res.error === "name_charset"
               ? "letters, digits, underscore and dash only"
               : res.error === "offline"
-                ? "leaderboard is offline — playing locally"
+                ? "leaderboard is offline, playing locally"
                 : `couldn’t reserve name (${res.message ?? res.error})`,
       );
       return null;
@@ -542,7 +542,7 @@ function RulesPanel({
               <RuleRow
                 num="02"
                 title="PINCH TO ROTATE"
-                body="touch thumb to index finger — each pinch rotates the piece 90 degrees clockwise"
+                body="touch thumb to index finger; each pinch rotates the piece 90 degrees clockwise"
                 illo={<HandIllustration type="pinch" />}
               />
               <RuleRow
@@ -576,7 +576,7 @@ function RulesPanel({
               <RuleRow
                 num="05"
                 title="ROTATE"
-                body="press the up arrow key — each tap rotates the piece 90 degrees clockwise"
+                body="press the up arrow key; each tap rotates the piece 90 degrees clockwise"
                 illo={<KeyIllustration type="arrow-up" />}
               />
               <RuleRow
@@ -783,7 +783,7 @@ function HandIllustration({ type }: { type: "steer" | "pinch" | "drop" }) {
         <path d="M24 36 L6 36 M14 30 L6 36 L14 42" />
         {/* hand pointing up */}
         <g transform="translate(38 4)">
-          {/* fingers — varied heights (index, middle, ring, pinky) */}
+          {/* fingers: varied heights (index, middle, ring, pinky) */}
           <path d="M4 26 L4 14 Q4 10 7 10 Q10 10 10 14 L10 26" strokeWidth={2} />
           <path d="M11 26 L11 6 Q11 2 14 2 Q17 2 17 6 L17 26" strokeWidth={2} />
           <path d="M18 26 L18 8 Q18 4 21 4 Q24 4 24 8 L24 26" strokeWidth={2} />
@@ -819,7 +819,7 @@ function HandIllustration({ type }: { type: "steer" | "pinch" | "drop" }) {
         <path d="M40 38 Q44 36 46 40 L46 44" />
         <path d="M48 40 Q52 38 54 42 L54 46" />
         <path d="M56 42 Q60 40 60 44 L60 48" />
-        {/* thumb meeting index — pinch */}
+        {/* thumb meeting index: pinch */}
         <path d="M30 30 Q26 22 30 16" />
         <path d="M38 30 Q42 22 36 16" />
         {/* contact point with spark */}
@@ -830,7 +830,7 @@ function HandIllustration({ type }: { type: "steer" | "pinch" | "drop" }) {
       </svg>
     );
   }
-  // drop — hand with fingers pointing down toward a dashed target strip
+  // drop: hand with fingers pointing down toward a dashed target strip
   return (
     <svg
       viewBox="0 0 80 96"
@@ -845,7 +845,7 @@ function HandIllustration({ type }: { type: "steer" | "pinch" | "drop" }) {
       <g transform="translate(24 2)">
         {/* palm (rounded dome on top) */}
         <path d="M2 18 Q2 -10 17 -10 Q32 -10 32 18" />
-        {/* fingers hanging down — varied lengths */}
+        {/* fingers hanging down: varied lengths */}
         <path d="M4 18 L4 30 Q4 34 7 34 Q10 34 10 30 L10 18" strokeWidth={2} />
         <path d="M11 18 L11 38 Q11 42 14 42 Q17 42 17 38 L17 18" strokeWidth={2} />
         <path d="M18 18 L18 36 Q18 40 21 40 Q24 40 24 36 L24 18" strokeWidth={2} />

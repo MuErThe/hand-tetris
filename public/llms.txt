@@ -20,7 +20,7 @@
   the perceptual CIEDE2000 formula plus a per-channel breakdown.
 - [Cutout](https://squint.mdzabeeh.com/cutout/): two overlapping shapes are
   shown next to the silhouette that one boolean operation produced, and you
-  name the operation — union, intersect, exclude, or either subtraction.
+  name the operation: union, intersect, exclude, or either subtraction.
   Order is treated as part of the answer, since A minus B is a different
   shape from B minus A. Trains the mental model behind Figma's boolean
   operations and Illustrator's Pathfinder.
@@ -36,13 +36,15 @@
   greyscale, warm and cool hues, clashing opposites, pairs straddling 4.5:1,
   and the compressed ends of the scale.
 - [Double Take](https://squint.mdzabeeh.com/double-take/): two renderings of
-  one interface card sit side by side and exactly one carries a single
-  deliberate flaw — broken alignment, an uneven gap, a weak size step, text
-  under 4.5:1 contrast, a mismatched corner radius or lopsided padding. Pick
+  one real interface card (a profile, a product listing, a player, a metric
+  tile, a notification) sit side by side and exactly one carries a single
+  deliberate flaw: broken alignment, an uneven gap, a weak size step, text
+  under 4.5:1 contrast, a mismatched corner radius, lopsided padding, an
+  off-centre icon, a mis-grouped label or an odd-sized sibling icon. Pick
   the clean one; the flaw is then named and measured with the principle
   behind it. Flaws get subtler as the session progresses.
 - [Thirty Circles](https://squint.mdzabeeh.com/thirty-circles/): the classic
-  Bob McKim / IDEO divergent-thinking sprint — thirty circles into thirty
+  Bob McKim / IDEO divergent-thinking sprint: thirty circles into thirty
   different things in three minutes; drawn by webcam-tracked hand or mouse;
   reflection on fluency, flexibility, originality.
 - [Hand Tetris](https://squint.mdzabeeh.com/tetris/): gesture-controlled
@@ -63,7 +65,7 @@ selection adapts toward the player's weakest challenge types.
 - [About & FAQ](https://squint.mdzabeeh.com/about/): what Squint is, who
   it's for, privacy details, and how scoring works.
 - [Focalism](https://squint.mdzabeeh.com/focalism/): the design language
-  invented for Squint — "hierarchy is focus": depth via focal planes
+  invented for Squint, "hierarchy is focus": depth via focal planes
   instead of shadows, focus-rack transitions, signal-only colour, and
   chromatic aberration marking errors. Manifesto, live specimens and
   CSS adoption recipes. Squint is the reference implementation.

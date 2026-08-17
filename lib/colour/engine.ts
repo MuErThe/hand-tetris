@@ -1,4 +1,4 @@
-// Colour Forge — pure round generation + scoring. Player mixes in HSL; scoring
+// Colour Forge: pure round generation + scoring. Player mixes in HSL; scoring
 // is CIEDE2000 in Lab; the channel breakdown is reported back in HSL terms so
 // the lesson is "you over-saturated" not "your b* was off".
 
@@ -29,7 +29,7 @@ export const DELTAE_TOLERANCE = 45;
 
 const rnd = (min: number, max: number) => min + Math.random() * (max - min);
 
-/** A pleasant, matchable colour — avoid near-black/white and muddy extremes. */
+/** A pleasant, matchable colour; avoid near-black/white and muddy extremes. */
 function randomColour(): Hsl {
   return {
     h: Math.round(rnd(0, 360)),

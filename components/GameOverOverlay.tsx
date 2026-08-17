@@ -32,7 +32,7 @@ interface GameOverOverlayProps {
   /** Game-specific board columns rendered from each row's `meta`. */
   leaderboardColumns?: MetaColumn[];
   onRestart: () => void;
-  /** Optional — when given, renders a secondary "BACK TO MENU" action. */
+  /** Optional: when given, renders a secondary "BACK TO MENU" action. */
   onBackToMenu?: () => void;
   /** When true, the modal header reads "Run ended" instead of "Game over". */
   endedManually?: boolean;

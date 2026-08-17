@@ -19,9 +19,9 @@ export interface GameState {
   dropIntervalMs: number;
   msSinceDrop: number;
   isOver: boolean;
-  /** Rows cleared on the most recent lock — UI animation reads this. */
+  /** Rows cleared on the most recent lock: UI animation reads this. */
   lastClearedRows: number[];
-  /** Cell contents (per row) at the moment of the most recent clear — for animations. */
+  /** Cell contents (per row) at the moment of the most recent clear: for animations. */
   lastClearedCells: Cell[][];
   /** Monotonic counter incremented each time a piece locks. UI uses for effect keys. */
   lockTick: number;

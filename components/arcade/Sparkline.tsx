@@ -7,7 +7,7 @@ interface SparklineProps {
 }
 
 /**
- * Tiny trend line for a game's start screen — shows how recent session scores
+ * Tiny trend line for a game's start screen: shows how recent session scores
  * are moving. Renders nothing meaningful below two points.
  */
 export function Sparkline({

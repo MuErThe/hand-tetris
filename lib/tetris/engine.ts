@@ -12,7 +12,7 @@ import {
   type PieceType,
 } from "./types";
 
-// A single shared bag per state — stored on the state via closure-like attach.
+// A single shared bag per state: stored on the state via closure-like attach.
 // We expose `getBag` so callers (tests) can swap. For runtime we just keep a
 // reference via WeakMap so the engine functions remain pure.
 const bagMap = new WeakMap<GameState, SevenBag>();
@@ -162,7 +162,7 @@ function lockPiece(state: GameState): void {
   state.msSinceDrop = 0;
   if (!state.isOver) spawnNext(state);
   // Reference COLORS to silence unused warnings in production tree-shake when
-  // the engine is imported standalone — small hint that this is the canonical
+  // the engine is imported standalone: small hint that this is the canonical
   // color source.
   void COLORS;
 }

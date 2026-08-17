@@ -19,7 +19,7 @@ export type ResolveResult =
 
 /**
  * Resolve the player to submit under. `rawName` may be empty (auto-generates).
- * Never throws — failures come back as `{ ok: false, error }`.
+ * Never throws: failures come back as `{ ok: false, error }`.
  */
 export async function resolveIdentity(rawName: string): Promise<ResolveResult> {
   let candidate = rawName.trim();
@@ -67,7 +67,7 @@ export async function resolveIdentity(rawName: string): Promise<ResolveResult> {
       }
       return {
         ok: false,
-        error: `"${attempt}" is taken — try another`,
+        error: `"${attempt}" is taken. Try another`,
         name: attempt,
       };
     }
@@ -77,11 +77,11 @@ export async function resolveIdentity(rawName: string): Promise<ResolveResult> {
         res.error === "name_profanity"
           ? "please pick a different name"
           : res.error === "name_length"
-            ? `name must be ${NAME_RULES.min}–${NAME_RULES.max} characters`
+            ? `name must be ${NAME_RULES.min}-${NAME_RULES.max} characters`
             : res.error === "name_charset"
               ? "letters, digits, underscore and dash only"
               : res.error === "offline"
-                ? "leaderboard is offline — playing locally"
+                ? "leaderboard is offline, playing locally"
                 : `couldn't reserve name (${res.message ?? res.error})`,
       name: attempt,
     };

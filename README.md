@@ -1,27 +1,27 @@
 # Squint
 
 *Train the eye you trust.* A small arcade of five-minute games that sharpen
-a designer's eye, hand and imagination — divergent-thinking sprints and craft
+a designer's eye, hand and imagination: divergent-thinking sprints and craft
 trainers, plus feedback and local progress tracking so they double as
 practice, not just play. Live at **https://squint.mdzabeeh.com/**.
 
 The hub (`/`) links out to each game. First up is **Hand Tetris**
 (`/tetris`); Eyeball It, Kern Combat, Colour Forge and Thirty Circles follow.
 All games share one arcade identity and a per-game leaderboard
-(see `supabase/schema.sql`, and `supabase/migrations/` for the multi-game
-migration).
+(see `supabase/schema.sql`, the single file that defines the whole database
+and is safe to re-run on a live project).
 
 ## Focalism
 
-The UI is built in **Focalism**, a design language invented for Squint —
+The UI is built in **Focalism**, a design language invented for Squint:
 *hierarchy is focus*. Depth comes from focal planes (blur steps) instead of
 shadows, transitions are focus racks, colour appears only as signal, and
 erring marks fringe with chromatic aberration. Play surfaces sit on lit warm
-paper while the cabinet stays dark — colour and type are judged truly against
+paper while the cabinet stays dark: colour and type are judged truly against
 a light ground. The manifesto, live specimens and adoption recipes live at
 [/focalism](https://squint.mdzabeeh.com/focalism/).
 
-## Hand Tetris — controls
+## Hand Tetris: controls
 
 | Gesture | Action |
 | --- | --- |
@@ -46,10 +46,10 @@ the leaderboard, submitting your name + score to Supabase.
 ## How tracking stays accurate
 
 - **MediaPipe Hands** (full model, pinned version) at 1280×720
-- **One Euro Filter** on the steering signal — smooth at rest, no lag on
+- **One Euro Filter** on the steering signal: smooth at rest, no lag on
   fast moves
-- **Confidence gating** — frames below a model-score threshold are ignored
-- **Dropout grace window** — a briefly lost hand doesn't reset gesture state
+- **Confidence gating**: frames below a model-score threshold are ignored
+- **Dropout grace window**: a briefly lost hand doesn't reset gesture state
 - **Frame debouncing + hysteresis** on pinch and drop-zone so no gesture can
   trigger off a single noisy frame or flicker at a boundary
 - All thresholds are named constants in `lib/hand/gestures.ts` and

@@ -210,7 +210,7 @@ function PlayfieldScene({
               x: wx,
               y: wy,
               z: 0,
-              // Lateral kick — symmetric outward bias from the row center.
+              // Lateral kick: symmetric outward bias from the row center.
               vx: (wx >= 0 ? 1 : -1) * (1 + Math.random() * 2.5),
               // Pop upward then fall under gravity.
               vy: 1.5 + Math.random() * 2.5,
@@ -257,7 +257,7 @@ function PlayfieldScene({
         const easeOut = 1 - (1 - t) * (1 - t);
         const scale = Math.max(0, 1 - easeOut * 0.55);
         const opacity = 1 - easeOut;
-        // Track the most opaque alive effect — the shared material can only
+        // Track the most opaque alive effect: the shared material can only
         // hold one alpha value, so we use the loudest. Visually fine because
         // overlapping effects are rare.
         if (opacity > aliveOpacity) aliveOpacity = opacity;
@@ -313,7 +313,7 @@ function PlayfieldScene({
         <meshStandardMaterial color="#0a0712" metalness={0.0} roughness={1} />
       </mesh>
 
-      {/* Back panel — subtle depth */}
+      {/* Back panel: subtle depth */}
       <mesh position={[0, 0, -0.8]}>
         <planeGeometry args={[COLS + 1.2, ROWS + 1.2]} />
         <meshBasicMaterial color="#0c0816" />
@@ -322,7 +322,7 @@ function PlayfieldScene({
       {/* Subtle COLS×ROWS grid backdrop on the rear plane */}
       <GridBackdrop />
 
-      {/* Frame — left, right, bottom (no top) */}
+      {/* Frame: left, right, bottom (no top) */}
       <FrameBar
         position={[-halfW - T / 2, 0, 0]}
         size={[T, ROWS + T * 2, T]}
@@ -335,7 +335,7 @@ function PlayfieldScene({
         position={[0, -halfH - T / 2, 0]}
         size={[COLS + T * 2, T, T]}
       />
-      {/* Corner posts (top — gives a "machine cabinet" silhouette) */}
+      {/* Corner posts (top), giving a "machine cabinet" silhouette */}
       <FrameBar
         position={[-halfW - T / 2, halfH + T / 2, 0]}
         size={[T * 1.6, T * 1.6, T * 1.6]}
@@ -360,7 +360,7 @@ function PlayfieldScene({
         />
       </instancedMesh>
 
-      {/* Ghost piece — wireframe basic material */}
+      {/* Ghost piece: wireframe basic material */}
       <instancedMesh
         ref={ghostRef}
         args={[undefined, undefined, 16]}
@@ -472,5 +472,5 @@ export function Playfield3D(props: Playfield3DProps) {
   );
 }
 
-// Note: BOX exported for next-piece preview reuse — keep symmetric.
+// Note: BOX exported for next-piece preview reuse; keep symmetric.
 export { CELL, BOX };

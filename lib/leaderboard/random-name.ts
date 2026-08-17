@@ -1,5 +1,5 @@
 // Random arcade-style names like "PLAYER-7K2X", "BLOCK-X4Q9".
-// Always passes validateName: 11–13 chars, charset [A-Z0-9-].
+// Always passes validateName: 11-13 chars, charset [A-Z0-9-].
 
 const PREFIXES = [
   "PLAYER",

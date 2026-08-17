@@ -60,10 +60,10 @@ export default function KernCombatPage() {
         </>
       }
       trains="typographic craft"
-      pitch="drag the letters until the spacing feels even — then grade your eye against the type designer's own metrics."
+      pitch="drag the letters until the spacing feels even, then grade your eye against the type designer's own metrics."
       howTo={[
         "drag any letter left/right; it carries the letters after it",
-        "even rhythm is the goal — no gap louder than the rest",
+        "even rhythm is the goal: no gap louder than the rest",
         "lock it in to see the true spacing and what you missed",
       ]}
       columns={KERN_COLUMNS}

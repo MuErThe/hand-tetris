@@ -1,6 +1,6 @@
 "use client";
 
-// Live specimens for the Focalism manifesto — the doctrine, demonstrated.
+// Live specimens for the Focalism manifesto: the doctrine, demonstrated.
 
 import { useState } from "react";
 import { Detent } from "@/components/focal/Detent";
@@ -9,7 +9,7 @@ import type { FocusLevel } from "@/components/focal/FocalPlane";
 
 const STEP_LABELS = ["fz-0 · attended", "fz-1 · near", "fz-2 · far", "fz-3 · deep"];
 
-/** Law 1–2: focus steps — click a plane to attend to it. */
+/** Law 1-2: focus steps; click a plane to attend to it. */
 export function FocusScaleSpecimen() {
   const [focused, setFocused] = useState(0);
   return (
@@ -42,7 +42,7 @@ export function FocusScaleSpecimen() {
   );
 }
 
-/** Law 4: colour is signal — aberration marks error, never decoration. */
+/** Law 4: colour is signal; aberration marks error, never decoration. */
 export function AberrationSpecimen() {
   const [erring, setErring] = useState(false);
   return (
@@ -70,7 +70,7 @@ export function AberrationSpecimen() {
   );
 }
 
-/** Law 3: detents — press to feel the notch. */
+/** Law 3: detents; press to feel the notch. */
 export function DetentSpecimen() {
   const [count, setCount] = useState(0);
   return (
@@ -90,7 +90,7 @@ export function DetentSpecimen() {
   );
 }
 
-/** Law 3 (macro): the focus rack — attention swaps by sharpening, not sliding. */
+/** Law 3 (macro): the focus rack; attention swaps by sharpening, not sliding. */
 export function RackSpecimen() {
   const [side, setSide] = useState<0 | 1>(0);
   return (
