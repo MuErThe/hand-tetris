@@ -19,7 +19,20 @@ import { leaderboardConfigured } from "@/lib/leaderboard/supabase";
 export function AccountMenu({ className = "" }: { className?: string }) {
   const account = useAccount();
   const [open, setOpen] = useState(false);
+  const [pending, setPending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const rootRef = useRef<HTMLDivElement>(null);
+
+  const logIn = async () => {
+    setError(null);
+    setPending(true);
+    const problem = await signInWithGoogle();
+    // On success the browser is leaving; only a failure ever lands here.
+    if (problem) {
+      setError(problem);
+      setPending(false);
+    }
+  };
 
   useEffect(() => {
     if (!account) return;
@@ -49,21 +62,35 @@ export function AccountMenu({ className = "" }: { className?: string }) {
 
   if (!account) {
     return (
-      <button
-        type="button"
-        onClick={() => void signInWithGoogle()}
-        aria-label="Log in with Google"
-        title="Log in with Google"
-        className={`flex items-center justify-center rounded-[6px] border transition-transform hover:-translate-y-px hover-wash ${className}`}
-        style={{
-          width: 28,
-          height: 28,
-          borderColor: "var(--panel-border-strong)",
-          background: "var(--field-2)",
-        }}
-      >
-        <GoogleMark />
-      </button>
+      <div className={`relative ${className}`}>
+        <button
+          type="button"
+          onClick={() => void logIn()}
+          disabled={pending}
+          aria-label={pending ? "Opening Google" : "Log in with Google"}
+          title={pending ? "Opening Google" : "Log in with Google"}
+          aria-describedby={error ? "account-login-error" : undefined}
+          className="flex items-center justify-center rounded-[6px] border transition-transform hover:-translate-y-px hover-wash disabled:opacity-60 disabled:cursor-wait"
+          style={{
+            width: 28,
+            height: 28,
+            borderColor: "var(--panel-border-strong)",
+            background: "var(--field-2)",
+          }}
+        >
+          <GoogleMark />
+        </button>
+        {error && (
+          <p
+            id="account-login-error"
+            role="alert"
+            className="absolute right-0 mt-2 w-[220px] text-right font-mono text-[10px] leading-snug tracking-[0.02em]"
+            style={{ color: "var(--accent-hot)" }}
+          >
+            {error}
+          </p>
+        )}
+      </div>
     );
   }
 

@@ -5,7 +5,7 @@
 // redirect back from Google, the stored identity is re-linked to the (now
 // permanent) auth user in the background.
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAccount } from "@/lib/hooks/useAccount";
 import {
   linkPlayerToSession,
@@ -18,6 +18,19 @@ import { leaderboardConfigured } from "@/lib/leaderboard/supabase";
 
 export function AccountRow({ className = "" }: { className?: string }) {
   const account = useAccount();
+  const [pending, setPending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const logIn = async () => {
+    setError(null);
+    setPending(true);
+    const problem = await signInWithGoogle();
+    // On success the browser is leaving; only a failure ever lands here.
+    if (problem) {
+      setError(problem);
+      setPending(false);
+    }
+  };
 
   useEffect(() => {
     if (!account) return;
@@ -49,13 +62,22 @@ export function AccountRow({ className = "" }: { className?: string }) {
           </button>
         </>
       ) : (
-        <button
-          type="button"
-          onClick={() => void signInWithGoogle()}
-          className="underline decoration-dotted underline-offset-2 transition-colors hover:text-[var(--accent)]"
-        >
-          continue with Google to keep your streak on every device
-        </button>
+        <>
+          <button
+            type="button"
+            onClick={() => void logIn()}
+            disabled={pending}
+            aria-describedby={error ? "account-row-error" : undefined}
+            className="underline decoration-dotted underline-offset-2 transition-colors hover:text-[var(--accent)] disabled:no-underline disabled:cursor-wait"
+          >
+            {pending ? "opening Google…" : "continue with Google to keep your streak on every device"}
+          </button>
+          {error && (
+            <p id="account-row-error" role="alert" className="mt-1.5" style={{ color: "var(--accent-hot)" }}>
+              {error}
+            </p>
+          )}
+        </>
       )}
     </div>
   );

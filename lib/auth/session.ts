@@ -69,23 +69,36 @@ export async function linkPlayerToSession(player: StoredPlayer): Promise<void> {
   }
 }
 
+/** What to tell the player when the Google hand-off doesn't happen. */
+export const SIGN_IN_BUSY =
+  "Another Squint tab is busy signing in. Close it, then try again.";
+export const SIGN_IN_FAILED =
+  "Couldn't reach the sign-in service. Try again in a moment.";
+
 /**
  * Send the player to Google and return here via redirect; the supabase
  * client picks the session out of the URL on return. Always a plain
  * sign-in, never linkIdentity: an anonymous session owns nothing the
  * name+token claim (claim_legacy_player) doesn't carry across, and the
  * link can only fail on the way back, costing a second trip through Google.
+ *
+ * Resolves to null once the browser is navigating away, or to a message for
+ * the player when it isn't: the auth lock held by another tab, or the
+ * service unreachable. Never throws.
  */
-export async function signInWithGoogle(): Promise<void> {
+export async function signInWithGoogle(): Promise<string | null> {
   const sb = getSupabase();
-  if (!sb) return;
+  if (!sb) return SIGN_IN_FAILED;
   try {
-    await sb.auth.signInWithOAuth({
+    const { error } = await sb.auth.signInWithOAuth({
       provider: "google",
       options: { redirectTo: window.location.origin + window.location.pathname },
     });
-  } catch {
-    /* provider not configured: the row stays as it was */
+    return error ? SIGN_IN_FAILED : null;
+  } catch (e) {
+    // supabase-js marks its lock-wait errors rather than exporting a class.
+    const busy = typeof e === "object" && e !== null && "isAcquireTimeout" in e;
+    return busy ? SIGN_IN_BUSY : SIGN_IN_FAILED;
   }
 }
 
