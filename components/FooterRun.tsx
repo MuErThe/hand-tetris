@@ -14,8 +14,11 @@ import { useEffect, useRef, useState } from "react";
 import {
   createRun,
   jump,
+  skyName,
+  skyPhase,
   startRun,
   tick,
+  windAt,
   RUNNER,
   type Obstacle,
   type RunState,
@@ -24,6 +27,29 @@ import {
 const BEST_KEY = "arcade/v1/footer-run";
 const HEIGHT = 420;
 const BASELINE = 64; // px above the canvas bottom
+
+// Night is footer-local: the page keeps its studio or cabinet theme, only
+// this sky darkens. The gradient fades to nothing above the ground band,
+// so pieces on the baseline keep the page's contrast; flyers up in the dark
+// are drawn in accent. Stars and moon are pale in either theme.
+const NIGHT_SKY = "21, 26, 43";
+const NIGHT_LIGHT = "232, 228, 216";
+const HORIZON = 120; // px above the baseline where the night fades out
+
+// Star field: fixed fractions of the canvas, with parallax like the clouds.
+const STARS: ReadonlyArray<readonly [number, number, number, number]> = [
+  [0.08, 40, 1.4, 0.2],
+  [0.15, 120, 1, 0.3],
+  [0.27, 70, 1.8, 0.25],
+  [0.36, 170, 1.2, 0.35],
+  [0.44, 30, 1, 0.22],
+  [0.53, 110, 1.6, 0.3],
+  [0.61, 60, 1, 0.28],
+  [0.7, 150, 1.4, 0.33],
+  [0.78, 90, 1, 0.24],
+  [0.86, 40, 1.8, 0.3],
+  [0.95, 130, 1.2, 0.26],
+];
 
 type Tokens = {
   ink: string;
@@ -35,6 +61,7 @@ type Tokens = {
   tee: string;
   ell: string;
   chip: string;
+  display: string;
 };
 
 export function FooterRun() {
@@ -42,6 +69,7 @@ export function FooterRun() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const actRef = useRef<(() => void) | null>(null);
   const [phase, setPhase] = useState<"idle" | "running" | "dead">("idle");
+  const [stint, setStint] = useState<ReturnType<typeof skyName>>("day");
   const [reduced, setReduced] = useState(false);
 
   useEffect(() => {
@@ -78,10 +106,15 @@ export function FooterRun() {
         tee: v("--c-T", "#888"),
         ell: v("--c-I", "#888"),
         chip: v("--c-O", "#888"),
+        // The wordmark's face, for the letterform pieces. next/font exposes
+        // the real family name through the variable; canvas needs it verbatim.
+        display: v("--font-display-face", "ui-sans-serif, system-ui, sans-serif"),
       };
     };
 
     const pad = (n: number) => String(Math.floor(n)).padStart(5, "0");
+
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
 
     const draw = () => {
       const dpr = window.devicePixelRatio || 1;
@@ -89,12 +122,27 @@ export function FooterRun() {
       const h = canvas.height / dpr;
       const t = tokens();
       const ground = h - BASELINE;
+      // Reduced motion: the sky snaps at the thresholds and the wind drops.
+      const night = skyPhase(state.elapsedMs, mq.matches);
+      const wind = mq.matches ? 0 : windAt(state.elapsedMs);
 
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, w, h);
 
-      // a sky of drifting clouds, each on its own parallax speed…
-      const drift = state.score * 5;
+      // night sky: darkens from the top, gone by the horizon band so the
+      // ground pieces keep the page's own contrast
+      if (night > 0) {
+        const sky = ctx.createLinearGradient(0, 0, 0, ground - HORIZON);
+        sky.addColorStop(0, `rgba(${NIGHT_SKY}, ${0.92 * night})`);
+        sky.addColorStop(1, `rgba(${NIGHT_SKY}, 0)`);
+        ctx.fillStyle = sky;
+        ctx.fillRect(0, 0, w, ground - HORIZON);
+      }
+
+      // a sky of drifting clouds, each on its own parallax speed, hurried
+      // along by the wind and thinning out as night comes…
+      const drift = state.score * 5 * (1 + wind * 1.2);
+      ctx.globalAlpha = 1 - night;
       for (const [bx, y, sc, sp] of [
         [w * 0.18, 84, 2.0, 0.35],
         [w * 0.48, 150, 1.4, 0.5],
@@ -105,21 +153,39 @@ export function FooterRun() {
         const x = ((((bx - drift * sp) % span) + span) % span) - 80;
         drawCloud(ctx, x, y, sc, t);
       }
-      // …plus a couple of lock-on pings for the house identity
-      ctx.strokeStyle = t.border;
+      // …stars taking their place…
+      if (night > 0) {
+        ctx.globalAlpha = night * 0.85;
+        ctx.fillStyle = `rgb(${NIGHT_LIGHT})`;
+        for (const [fx, y, r, sp] of STARS) {
+          const span = w + 40;
+          const x = ((((fx * w - drift * sp) % span) + span) % span) - 20;
+          ctx.beginPath();
+          ctx.arc(x, y, r, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+      ctx.globalAlpha = 1;
+      // …plus a couple of lock-on pings for the house identity; the first
+      // fills in as the moon at night
       ctx.lineWidth = 1.5;
-      for (const [bx, y, r, sp] of [
-        [w * 0.32, 244, 16, 0.6],
-        [w * 0.82, 272, 22, 0.45],
+      for (const [bx, y, r, sp, moon] of [
+        [w * 0.32, 244, 16, 0.6, true],
+        [w * 0.82, 272, 22, 0.45, false],
       ] as const) {
         const span = w + 120;
         const x = ((((bx - drift * sp) % span) + span) % span) - 60;
         ctx.beginPath();
         ctx.arc(x, y, r, 0, Math.PI * 2);
+        if (moon && night > 0) {
+          ctx.fillStyle = `rgba(${NIGHT_LIGHT}, ${night})`;
+          ctx.fill();
+        }
+        ctx.strokeStyle = t.border;
         ctx.stroke();
       }
 
-      // baseline + scrolling ticks
+      // baseline + scrolling ticks, stretched a little by the wind
       ctx.strokeStyle = t.dim;
       ctx.beginPath();
       ctx.moveTo(0, ground + 0.5);
@@ -129,23 +195,34 @@ export function FooterRun() {
       ctx.lineWidth = 2;
       const dashSpan = 86;
       const offset = ((drift % dashSpan) + dashSpan) % dashSpan;
+      const gust = wind * 8;
       for (let x = -offset; x < w; x += dashSpan) {
         ctx.beginPath();
         ctx.moveTo(x, ground + 20);
-        ctx.lineTo(x + 32, ground + 20);
+        ctx.lineTo(x + 32 + gust, ground + 20);
         ctx.stroke();
       }
       for (let x = -offset + dashSpan * 0.55; x < w; x += dashSpan) {
         ctx.beginPath();
         ctx.moveTo(x, ground + 42);
-        ctx.lineTo(x + 22, ground + 42);
+        ctx.lineTo(x + 22 + gust, ground + 42);
         ctx.stroke();
       }
 
       for (const o of state.obstacles) drawObstacle(ctx, o, ground, t);
 
-      // the eye runner
+      // the eye runner: the pupil looks where the run is going, rolls up on
+      // the jump and down on the fall, and drops to the floor when caught
       const ry = ground - RUNNER.size - state.y;
+      let gazeX = 0.2;
+      let gazeY = -0.06;
+      if (state.phase === "running") {
+        gazeX = 0.32;
+        gazeY = Math.max(-0.3, Math.min(0.3, -state.vy / 2600)) - 0.04;
+      } else if (state.phase === "dead") {
+        gazeX = 0;
+        gazeY = 0.3;
+      }
       drawEye(
         ctx,
         RUNNER.x + RUNNER.size / 2,
@@ -153,19 +230,41 @@ export function FooterRun() {
         RUNNER.size / 2,
         state.phase === "dead" ? t.dim : t.accent,
         t.field,
+        gazeX,
+        gazeY,
       );
 
       // score and best: stacked label-over-value, sharing the page's
       // 80px desktop gutter with the footer row above
       const colRight = w - (w >= 768 ? 80 : 24);
-      ctx.fillStyle = t.dim;
       ctx.font = "700 16px ui-monospace, SFMono-Regular, Menlo, monospace";
-      ctx.textAlign = "left";
-      ctx.fillText("SCORE", colRight - 138, 48);
-      ctx.fillText(pad(state.score), colRight - 138, 76);
-      ctx.textAlign = "right";
-      ctx.fillText("BEST", colRight, 48);
-      ctx.fillText(pad(Math.max(best, state.score)), colRight, 76);
+      // The figures sit in the sky, so they pale with it; a gear change
+      // flashes the score accent for a beat (not under reduced motion).
+      const pulsing =
+        !mq.matches &&
+        state.phase === "running" &&
+        state.stage > 0 &&
+        state.elapsedMs - state.gearChangedAt < 300;
+      const figures = (colour: string, alpha: number) => {
+        if (alpha <= 0) return;
+        ctx.globalAlpha = alpha;
+        ctx.fillStyle = colour;
+        ctx.textAlign = "left";
+        ctx.fillText("SCORE", colRight - 138, 48);
+        ctx.fillText(pad(state.score), colRight - 138, 76);
+        ctx.textAlign = "right";
+        ctx.fillText("BEST", colRight, 48);
+        ctx.fillText(pad(Math.max(best, state.score)), colRight, 76);
+      };
+      figures(t.dim, 1 - night);
+      figures(`rgb(${NIGHT_LIGHT})`, night);
+      if (pulsing) {
+        ctx.globalAlpha = 1;
+        ctx.fillStyle = t.accent;
+        ctx.textAlign = "left";
+        ctx.fillText(pad(state.score), colRight - 138, 76);
+      }
+      ctx.globalAlpha = 1;
     };
 
     const loop = (now: number) => {
@@ -185,6 +284,7 @@ export function FooterRun() {
               /* ignore */
             }
           }
+          setStint(skyName(state.elapsedMs));
           setPhase("dead");
         }
         rafId = 0;
@@ -211,7 +311,6 @@ export function FooterRun() {
     };
     actRef.current = act;
 
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     setReduced(mq.matches);
     const onMq = () => setReduced(mq.matches);
     mq.addEventListener("change", onMq);
@@ -283,7 +382,7 @@ export function FooterRun() {
           className="absolute inset-x-0 flex justify-center pointer-events-none font-mono font-bold text-[14px] uppercase tracking-[0.18em]"
           style={{ top: HEIGHT * 0.42, color: "var(--ink-dim)" }}
         >
-          {phase === "dead" ? "caught · space to run again" : "press space to run _"}
+          {phase === "dead" ? `caught at ${stint} · space to run again` : "press space to run _"}
         </div>
       )}
     </div>
@@ -292,8 +391,9 @@ export function FooterRun() {
 
 /**
  * The hand-drawn eye: a lumpy outline that reads as a quick marker stroke,
- * filled with the surface, and a pupil sitting up and to the right, looking
- * where the runner is going. The wobble is fixed so it never jitters.
+ * filled with the surface, and a pupil placed by `gazeX`/`gazeY` (fractions
+ * of the radius, right and down positive). The wobble is fixed so the
+ * outline never jitters; only the pupil moves.
  */
 function drawEye(
   ctx: CanvasRenderingContext2D,
@@ -302,6 +402,8 @@ function drawEye(
   r: number,
   ink: string,
   fill: string,
+  gazeX: number,
+  gazeY: number,
 ): void {
   const wobble = [1.0, 1.04, 0.98, 1.03, 0.97, 1.02, 0.99, 1.05, 0.96, 1.01, 1.03, 0.98];
   ctx.fillStyle = fill;
@@ -330,7 +432,7 @@ function drawEye(
 
   ctx.fillStyle = ink;
   ctx.beginPath();
-  ctx.ellipse(cx + r * 0.2, cy - r * 0.06, r * 0.34, r * 0.31, -0.2, 0, Math.PI * 2);
+  ctx.ellipse(cx + r * gazeX, cy + r * gazeY, r * 0.34, r * 0.31, -0.2, 0, Math.PI * 2);
   ctx.fill();
 }
 
@@ -360,6 +462,10 @@ function drawObstacle(
   ground: number,
   t: Tokens,
 ): void {
+  if (o.yBottom !== undefined) {
+    drawPiece(ctx, o.kind, o.x, o.w, o.h, ground - o.yBottom, t);
+    return;
+  }
   const baseH = o.h - (o.top?.h ?? 0);
   drawPiece(ctx, o.kind, o.x, o.w, baseH, ground, t);
   if (o.top) drawPiece(ctx, o.top.kind, o.x, o.w, o.top.h, ground - baseH, t);
@@ -404,11 +510,45 @@ function drawPiece(
       ctx.fillStyle = t.ink;
       ctx.fillRect(x, top, w, h);
       ctx.fillStyle = t.bg;
-      ctx.font = `600 ${Math.round(h * 0.62)}px serif`;
+      ctx.font = `700 ${Math.round(h * 0.62)}px ${t.display}`;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.fillText(kind === "aye" ? "A" : "V", x + w / 2, top + h / 2 + 1);
       ctx.textBaseline = "alphabetic";
+      break;
+    }
+    case "arrow": {
+      // The Start button's ▸, grown into a hurdle: a solid wedge pointing
+      // the way the world runs.
+      ctx.fillStyle = t.accent;
+      ctx.beginPath();
+      ctx.moveTo(x, top);
+      ctx.lineTo(x + w, top + h / 2);
+      ctx.lineTo(x, bottom);
+      ctx.closePath();
+      ctx.fill();
+      break;
+    }
+    case "flyer": {
+      // Hangs from the sky pointing at the ground: stay down. Drawn in
+      // accent so it reads against the night as well as the day.
+      const cx = x + w / 2;
+      const head = Math.min(w, 26);
+      ctx.strokeStyle = t.accent;
+      ctx.fillStyle = t.accent;
+      ctx.lineWidth = 4;
+      ctx.lineCap = "round";
+      ctx.beginPath();
+      ctx.moveTo(cx, 0);
+      ctx.lineTo(cx, bottom - head);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(cx - head / 2, bottom - head);
+      ctx.lineTo(cx + head / 2, bottom - head);
+      ctx.lineTo(cx, bottom);
+      ctx.closePath();
+      ctx.fill();
+      ctx.lineCap = "butt";
       break;
     }
   }
