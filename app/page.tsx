@@ -37,13 +37,13 @@ export default function Hub() {
             </span>
           </h1>
           <div className="flex items-center justify-end gap-4">
-            <AccountMenu />
+            <ThemeToggle />
             <span
               aria-hidden
               className="self-center h-5 w-px"
               style={{ background: "var(--panel-border)" }}
             />
-            <ThemeToggle />
+            <AccountMenu />
           </div>
         </header>
 
