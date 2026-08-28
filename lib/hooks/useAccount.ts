@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import type { User } from "@supabase/supabase-js";
 import { getSupabase } from "@/lib/leaderboard/supabase";
+import { resumeGoogleSignIn } from "@/lib/auth/session";
 
 /** A Google-backed account. Guests and anonymous sessions read as null. */
 export interface Account {
@@ -28,7 +29,8 @@ function toAccount(user: User | null | undefined): Account | null {
 
 /**
  * The logged-in account, live across sign-in/out and the OAuth redirect
- * return. Never creates a session: it only observes.
+ * return. Only observes, except to finish a log-in that came back from
+ * Google with an error the client has to retry (see resumeGoogleSignIn).
  */
 export function useAccount(): Account | null {
   const [account, setAccount] = useState<Account | null>(null);
@@ -37,6 +39,7 @@ export function useAccount(): Account | null {
     const sb = getSupabase();
     if (!sb) return;
     let alive = true;
+    void resumeGoogleSignIn();
     void sb.auth.getSession().then(({ data }) => {
       if (alive) setAccount(toAccount(data.session?.user));
     });
