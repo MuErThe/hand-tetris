@@ -2,7 +2,7 @@
 
 // Navbar account control: a profile-picture button that opens a small
 // dropdown with the account's name, email and a log-out action. Logged-out
-// visitors get a quiet "log in with Google" link instead. Like AccountRow,
+// visitors get a Google mark that starts the log-in instead. Like AccountRow,
 // it re-links the stored identity and pulls sync after the OAuth return.
 
 import { useEffect, useRef, useState } from "react";
@@ -52,14 +52,17 @@ export function AccountMenu({ className = "" }: { className?: string }) {
       <button
         type="button"
         onClick={() => void signInWithGoogle()}
-        className={`font-display text-[11px] tracking-[0.08em] px-3.5 py-2 rounded-[6px] border transition-all duration-150 hover-wash ${className}`}
+        aria-label="Log in with Google"
+        title="Log in with Google"
+        className={`flex items-center justify-center rounded-[6px] border transition-transform hover:-translate-y-px hover-wash ${className}`}
         style={{
-          borderColor: "var(--accent)",
-          color: "var(--accent)",
-          background: "color-mix(in srgb, var(--accent) 8%, transparent)",
+          width: 28,
+          height: 28,
+          borderColor: "var(--panel-border-strong)",
+          background: "var(--field-2)",
         }}
       >
-        Log in with Google
+        <GoogleMark />
       </button>
     );
   }
@@ -131,5 +134,29 @@ export function AccountMenu({ className = "" }: { className?: string }) {
         </div>
       )}
     </div>
+  );
+}
+
+/** The Google "G", drawn inline so the static export needs no asset. */
+function GoogleMark() {
+  return (
+    <svg aria-hidden="true" width={16} height={16} viewBox="0 0 48 48">
+      <path
+        fill="#4285F4"
+        d="M45.1 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h11.8a10.1 10.1 0 0 1-4.4 6.6v5.5h7.1c4.2-3.8 6.6-9.5 6.6-16.1z"
+      />
+      <path
+        fill="#34A853"
+        d="M24 46c5.9 0 10.9-2 14.5-5.4l-7.1-5.5c-2 1.3-4.5 2.1-7.4 2.1-5.7 0-10.5-3.9-12.3-9H4.4v5.7A22 22 0 0 0 24 46z"
+      />
+      <path
+        fill="#FBBC05"
+        d="M11.7 28.2A13.2 13.2 0 0 1 11 24c0-1.5.3-2.9.7-4.2v-5.7H4.4A22 22 0 0 0 2 24c0 3.6.9 6.9 2.4 9.9l7.3-5.7z"
+      />
+      <path
+        fill="#EA4335"
+        d="M24 10.8c3.2 0 6.1 1.1 8.4 3.3l6.3-6.3C34.9 4.2 29.9 2 24 2A22 22 0 0 0 4.4 14.1l7.3 5.7c1.8-5.1 6.6-9 12.3-9z"
+      />
+    </svg>
   );
 }

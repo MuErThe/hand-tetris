@@ -89,13 +89,23 @@ export async function signInWithGoogle(): Promise<void> {
   }
 }
 
-/** Sign out on this device. Guest play (name + token) continues unaffected. */
+/**
+ * Sign out on this device. Guest play (name + token) continues unaffected.
+ * A server-side revoke that fails (5xx, offline) leaves supabase-js holding
+ * the session, so fall back to clearing it locally: the button must always
+ * log the person out of this browser.
+ */
 export async function signOutAccount(): Promise<void> {
   const sb = getSupabase();
   if (!sb) return;
   try {
-    await sb.auth.signOut();
+    const { error } = await sb.auth.signOut();
+    if (error) await sb.auth.signOut({ scope: "local" });
   } catch {
-    /* ignore */
+    try {
+      await sb.auth.signOut({ scope: "local" });
+    } catch {
+      /* ignore */
+    }
   }
 }
