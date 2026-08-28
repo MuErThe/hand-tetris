@@ -13,7 +13,7 @@ export default function Hub() {
       <div className="min-h-full flex flex-col items-center px-5 md:px-20 py-10 md:py-12">
         {/* Top navbar: the wordmark sits left (the I is the eye);
             theme and account live on the right, not over a play surface. */}
-        <header className="w-full flex items-center justify-between mb-8">
+        <header className="w-full flex items-center justify-between mb-14">
           <h1 className="flex flex-col items-start gap-1.5 text-left">
             <span
               className="font-display tracking-[0.1em] leading-none text-[30px]"
