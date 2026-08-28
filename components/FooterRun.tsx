@@ -1,7 +1,7 @@
 "use client";
 
 // The footer's basement: an endless runner in the arcade's own language.
-// The Eyeball It reticle hops Tetris pieces, colour chips and letterforms
+// The Squint eye hops Tetris pieces, colour chips and letterforms
 // along an artboard baseline. Calm at rest: nothing moves until the player
 // starts it, and reduced-motion users get a still scene instead of a game.
 // Runs only while visible, pauses when the tab hides, and the best score
@@ -144,24 +144,16 @@ export function FooterRun() {
 
       for (const o of state.obstacles) drawObstacle(ctx, o, ground, t);
 
-      // the reticle runner
+      // the eye runner
       const ry = ground - RUNNER.size - state.y;
-      ctx.strokeStyle = state.phase === "dead" ? t.dim : t.accent;
-      ctx.lineWidth = 2.4;
-      ctx.strokeRect(RUNNER.x + 0.5, ry + 0.5, RUNNER.size, RUNNER.size);
-      const cx = RUNNER.x + RUNNER.size / 2;
-      const cy = ry + RUNNER.size / 2;
-      ctx.beginPath();
-      for (const [dx, dy] of [
-        [0, -1],
-        [0, 1],
-        [-1, 0],
-        [1, 0],
-      ] as const) {
-        ctx.moveTo(cx + dx * (RUNNER.size / 2 + 4), cy + dy * (RUNNER.size / 2 + 4));
-        ctx.lineTo(cx + dx * (RUNNER.size / 2 + 12), cy + dy * (RUNNER.size / 2 + 12));
-      }
-      ctx.stroke();
+      drawEye(
+        ctx,
+        RUNNER.x + RUNNER.size / 2,
+        ry + RUNNER.size / 2,
+        RUNNER.size / 2,
+        state.phase === "dead" ? t.dim : t.accent,
+        t.field,
+      );
 
       // score and best: stacked label-over-value, sharing the page's
       // 80px desktop gutter with the footer row above
@@ -296,6 +288,50 @@ export function FooterRun() {
       )}
     </div>
   );
+}
+
+/**
+ * The hand-drawn eye: a lumpy outline that reads as a quick marker stroke,
+ * filled with the surface, and a pupil sitting up and to the right, looking
+ * where the runner is going. The wobble is fixed so it never jitters.
+ */
+function drawEye(
+  ctx: CanvasRenderingContext2D,
+  cx: number,
+  cy: number,
+  r: number,
+  ink: string,
+  fill: string,
+): void {
+  const wobble = [1.0, 1.04, 0.98, 1.03, 0.97, 1.02, 0.99, 1.05, 0.96, 1.01, 1.03, 0.98];
+  ctx.fillStyle = fill;
+  ctx.strokeStyle = ink;
+  ctx.lineWidth = 3;
+  ctx.lineJoin = "round";
+  const pts = wobble.map((k, i) => {
+    const a = (i / wobble.length) * Math.PI * 2 - Math.PI / 2;
+    return [cx + Math.cos(a) * r * k, cy + Math.sin(a) * r * k * 1.02] as const;
+  });
+  // Quadratic curves between midpoints keep the lumps but lose the corners.
+  ctx.beginPath();
+  const n = pts.length;
+  const mid = (i: number) => [
+    (pts[i][0] + pts[(i + 1) % n][0]) / 2,
+    (pts[i][1] + pts[(i + 1) % n][1]) / 2,
+  ];
+  ctx.moveTo(mid(n - 1)[0], mid(n - 1)[1]);
+  for (let i = 0; i < n; i++) {
+    const m = mid(i);
+    ctx.quadraticCurveTo(pts[i][0], pts[i][1], m[0], m[1]);
+  }
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.fillStyle = ink;
+  ctx.beginPath();
+  ctx.ellipse(cx + r * 0.2, cy - r * 0.06, r * 0.34, r * 0.31, -0.2, 0, Math.PI * 2);
+  ctx.fill();
 }
 
 /** A three-bump cloud outline, filled with the panel surface. */

@@ -1,5 +1,5 @@
 // Pure endless-runner engine for the footer easter egg: the Eyeball It
-// reticle hopping over pieces of the arcade. No React, no DOM: the canvas
+// eye hopping over pieces of the arcade. No React, no DOM: the canvas
 // component calls tick() with elapsed time and draws from the state.
 // Local-only by design; nothing here ever touches the leaderboard.
 
