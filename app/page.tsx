@@ -10,10 +10,10 @@ import { GAMES, type GameDef } from "@/lib/games/registry";
 export default function Hub() {
   return (
     <main className="flex-1 overflow-y-auto overflow-x-hidden">
-      <div className="min-h-full flex flex-col items-center px-5 md:px-20 py-10 md:py-12">
+      <div className="min-h-full flex flex-col items-center px-5 md:px-20 pt-6 md:pt-7 pb-10 md:pb-12">
         {/* Top navbar: the wordmark sits left (the I is the eye);
             theme and account live on the right, not over a play surface. */}
-        <header className="w-full flex items-center justify-between mb-20">
+        <header className="w-full flex items-center justify-between mb-28">
           <h1 className="flex flex-col items-start gap-1.5 text-left">
             <span
               className="font-display tracking-[0.1em] leading-none text-[30px]"
@@ -43,17 +43,13 @@ export default function Hub() {
           </div>
         </header>
 
-        {/* Bento on the left; the daily warm-up rides a sticky rail on the
-            right once there is room, and stacks above the grid before that. */}
-        <div className="hub-layout">
-          <aside className="hub-rail">
-            <WarmUpBanner />
-          </aside>
-          <div className="hub-bento">
-            {GAMES.map((g) => (
-              <GameCard key={g.id} game={g} />
-            ))}
-          </div>
+        {/* Bento: the daily warm-up takes the right rail beside Tetris once
+            there is room, and stacks above the grid before that. */}
+        <div className="hub-bento">
+          <WarmUpBanner />
+          {GAMES.map((g) => (
+            <GameCard key={g.id} game={g} />
+          ))}
         </div>
 
         <p

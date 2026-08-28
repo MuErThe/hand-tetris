@@ -690,6 +690,7 @@ button {
   width: 100%;
   grid-template-columns: 1fr;
   grid-template-areas:
+    "warmup"
     "tetris"
     "eyeball"
     "kern"
@@ -701,38 +702,27 @@ button {
     "cutout";
 }
 
-/* Hub: the bento plus a rail for the daily warm-up. Narrow screens stack
-   the rail above the grid; from 900px the rail takes a fixed column on the
-   right and its card sticks to the top of the scrolling hub. */
-.hub-layout {
-  display: grid;
-  gap: 14px;
-  width: 100%;
-  grid-template-columns: 1fr;
-}
-@media (min-width: 900px) {
-  .hub-layout {
-    grid-template-columns: minmax(0, 1fr) 260px;
-    align-items: start;
-  }
-  .hub-rail {
-    order: 1;
-    position: sticky;
-    top: 16px;
-  }
-}
-
 /* The area names come from `area` on each registry entry: adding a game
-   means adding its name here too. Tetris holds the tall feature column and
-   the rest flow in reading order, which is also the tab order. */
+   means adding its name here too. Tetris holds the tall feature column, the
+   daily warm-up the full right rail, and the rest flow in reading order,
+   which is also the tab order. */
 @media (min-width: 900px) {
   .hub-bento {
-    grid-template-columns: 1.25fr 1fr 1fr;
+    grid-template-columns: 1.25fr 1fr 1fr 1fr;
     grid-template-areas:
-      "tetris eyeball kern"
-      "tetris colour circles"
-      "double contrast steady"
-      "cutout cutout cutout";
+      "tetris eyeball kern warmup"
+      "tetris colour circles warmup"
+      "double contrast steady warmup"
+      "cutout cutout cutout warmup";
+  }
+  /* The rail card is viewport-tall and pinned: it never scrolls itself
+     while the games go past. A sticky grid item is bounded by its own
+     area, so the area runs the full column and the card sits at its top. */
+  .hub-bento > .hub-warmup {
+    position: sticky;
+    top: 16px;
+    align-self: start;
+    height: calc(100dvh - 32px);
   }
 }
 
@@ -829,11 +819,13 @@ button {
 
 /* Focalism focus-pull: attending to one card racks its siblings out of
    focus: the hub behaves like a lens choosing a subject. */
-.hub-bento:has(.bento-card:hover) .bento-card:not(:hover) {
+/* The daily warm-up is a fixture, not a contender: it stays sharp while
+   the game plates defer to whichever one is under the pointer. */
+.hub-bento:has(.bento-card:hover) .bento-card:not(:hover, .hub-warmup) {
   filter: blur(2px) brightness(0.9) saturate(0.9);
 }
 @media (prefers-reduced-motion: reduce) {
-  .hub-bento:has(.bento-card:hover) .bento-card:not(:hover) {
+  .hub-bento:has(.bento-card:hover) .bento-card:not(:hover, .hub-warmup) {
     filter: none;
     opacity: 0.8;
   }

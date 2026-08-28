@@ -20,6 +20,7 @@ import {
   localDayNumber,
   rawStreak,
   replaceStreak,
+  withDay,
   type StreakData,
 } from "@/lib/warmup/streak";
 import { CATALOGUE } from "@/lib/games/registry";
@@ -38,10 +39,22 @@ async function accountUserId(): Promise<string | null> {
 }
 
 function parseStreak(value: unknown): StreakData | null {
-  const s = value as { count?: unknown; lastDay?: unknown } | null | undefined;
-  return s && typeof s.count === "number" && typeof s.lastDay === "number"
-    ? { count: s.count, lastDay: s.lastDay }
-    : null;
+  const s = value as
+    | { count?: unknown; lastDay?: unknown; days?: unknown }
+    | null
+    | undefined;
+  if (!s || typeof s.count !== "number" || typeof s.lastDay !== "number") return null;
+  const days = Array.isArray(s.days)
+    ? s.days.filter((d): d is number => typeof d === "number")
+    : undefined;
+  return { count: s.count, lastDay: s.lastDay, ...(days ? { days } : {}) };
+}
+
+/** Both devices' play-days, one list: history is a union whoever wins. */
+function unionDays(a: StreakData, b: StreakData): number[] {
+  let days = withDay(a.days, a.lastDay);
+  for (const d of withDay(b.days, b.lastDay)) days = withDay(days, d);
+  return days;
 }
 
 /**
@@ -56,16 +69,17 @@ function mergeStreak(
 ): StreakData | null {
   if (!a) return b;
   if (!b) return a;
+  const days = unionDays(a, b);
   const alive = (s: StreakData) => today - s.lastDay <= 2;
   if (alive(a) && alive(b)) {
-    if (a.lastDay === b.lastDay) return a.count >= b.count ? a : b;
+    if (a.lastDay === b.lastDay) return { ...(a.count >= b.count ? a : b), days };
     const early = a.lastDay < b.lastDay ? a : b;
     const late = a.lastDay < b.lastDay ? b : a;
-    return { count: Math.max(late.count, early.count + 1), lastDay: late.lastDay };
+    return { count: Math.max(late.count, early.count + 1), lastDay: late.lastDay, days };
   }
-  if (alive(a)) return a;
-  if (alive(b)) return b;
-  return a.count >= b.count ? a : b;
+  if (alive(a)) return { ...a, days };
+  if (alive(b)) return { ...b, days };
+  return { ...(a.count >= b.count ? a : b), days };
 }
 
 /** Union by session timestamp, oldest→newest (replaceSessions trims). */

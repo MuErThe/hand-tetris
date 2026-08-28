@@ -8,7 +8,13 @@ const KEY = "arcade/v1/warmup-streak";
 export interface StreakData {
   count: number;
   lastDay: number; // local day number (days since epoch, local midnight)
+  /** Local day numbers actually played, most recent last. Capped. */
+  days?: number[];
 }
+
+// History kept for the flame week and any future calendar; older days fall
+// off. Optional so data saved before it existed still parses.
+const DAYS_KEPT = 30;
 
 /** Days since the Unix epoch at the given date's LOCAL midnight. */
 export function localDayNumber(d = new Date()): number {
@@ -21,7 +27,12 @@ function load(): StreakData | null {
     const raw = typeof window !== "undefined" ? window.localStorage.getItem(KEY) : null;
     if (!raw) return null;
     const p = JSON.parse(raw);
-    if (typeof p?.count === "number" && typeof p?.lastDay === "number") return p;
+    if (typeof p?.count === "number" && typeof p?.lastDay === "number") {
+      const days = Array.isArray(p.days)
+        ? p.days.filter((d: unknown): d is number => typeof d === "number")
+        : undefined;
+      return { count: p.count, lastDay: p.lastDay, ...(days ? { days } : {}) };
+    }
   } catch {
     /* ignore */
   }
@@ -61,7 +72,7 @@ export function recordToday(): number {
   const today = localDayNumber();
   const s = load();
   if (!s) {
-    save({ count: 1, lastDay: today });
+    save({ count: 1, lastDay: today, days: [today] });
     markDirty();
     return 1;
   }
@@ -69,9 +80,27 @@ export function recordToday(): number {
   const gap = today - s.lastDay;
   // gap 1 = yesterday, gap 2 = one missed day (forgiven). Otherwise reset.
   const count = gap === 1 || gap === 2 ? s.count + 1 : 1;
-  save({ count, lastDay: today });
+  save({ count, lastDay: today, days: withDay(s.days, today) });
   markDirty();
   return count;
+}
+
+/** `days` plus one more, deduplicated, sorted, trimmed to DAYS_KEPT. */
+export function withDay(days: number[] | undefined, day: number): number[] {
+  return Array.from(new Set([...(days ?? []), day]))
+    .sort((a, b) => a - b)
+    .slice(-DAYS_KEPT);
+}
+
+/**
+ * The played days as a stable string ("20510,20511"), for
+ * useSyncExternalStore, which needs snapshots that compare equal when
+ * nothing changed. The legacy lastDay counts as played even without history.
+ */
+export function playedDaysKey(): string {
+  const s = load();
+  if (!s) return "";
+  return withDay(s.days, s.lastDay).join(",");
 }
 
 // Nudges the account syncer (lib/auth/sync listens; an event rather than an
