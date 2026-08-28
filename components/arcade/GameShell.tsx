@@ -27,6 +27,9 @@ import { NAME_RULES } from "@/lib/leaderboard/profanity";
 import { generateRandomName } from "@/lib/leaderboard/random-name";
 import { bestScore, scoreTrend } from "@/lib/learning/progress";
 import { playSfx, unlockAudio } from "@/lib/audio/sfx";
+import { TrophyIcon } from "@/components/icons";
+import { RulesDrawer } from "@/components/arcade/RulesDrawer";
+import { GAMES } from "@/lib/games/registry";
 
 export interface StatItem {
   label: string;
@@ -123,6 +126,9 @@ export function GameShell({
   }, []);
 
   const trend = mounted ? scoreTrend(gameId) : [];
+  // The registry's long-form copy for the rules drawer; games outside the
+  // registry (none today) simply get the rules alone.
+  const gameDef = GAMES.find((g) => g.id === gameId);
   const best = mounted ? bestScore(gameId) : 0;
 
   const beginPlay = useCallback(() => {
@@ -300,7 +306,7 @@ export function GameShell({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
             className="fixed inset-0 z-40 flex items-center justify-center px-6 py-6 overflow-y-auto"
-            style={{ background: "var(--scrim-soft)" }}
+            style={{ background: "var(--bg-0)" }}
           >
             {overlayStep === "splash" ? (
               <GameSplash
@@ -434,7 +440,7 @@ export function GameShell({
                   className="w-full px-8 py-3 font-mono text-[10px] uppercase tracking-[0.1em] border-t transition-colors flex items-center justify-center gap-2 hover-wash-soft"
                   style={{ borderColor: "var(--panel-border)", color: "var(--ink-dim)", background: "var(--recess)" }}
                 >
-                  🏆 view leaderboard
+                  <TrophyIcon size={14} /> view leaderboard
                 </button>
               )}
             </motion.div>
@@ -447,6 +453,14 @@ export function GameShell({
             >
               ◂ arcade
             </Link>
+            <RulesDrawer
+              title={title}
+              trains={trains}
+              lines={howTo}
+              trainsLong={gameDef?.trainsLong}
+              how={gameDef?.how}
+              accent={accent}
+            />
           </motion.div>
         )}
       </AnimatePresence>

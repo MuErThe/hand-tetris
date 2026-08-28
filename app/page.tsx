@@ -6,6 +6,7 @@ import { AccountMenu } from "@/components/AccountMenu";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { SiteFooter } from "@/components/SiteFooter";
 import { GAMES, type GameDef } from "@/lib/games/registry";
+import { LockIcon } from "@/components/icons";
 
 export default function Hub() {
   return (
@@ -56,7 +57,7 @@ export default function Hub() {
           className="font-mono text-[9px] uppercase tracking-[0.1em] mt-10 text-center"
           style={{ color: "var(--ink-dim)", opacity: 0.7 }}
         >
-          🔒 camera games run entirely on-device · nothing leaves your browser
+          <LockIcon /> camera games run entirely on-device · nothing leaves your browser
         </p>
       </div>
       <SiteFooter />

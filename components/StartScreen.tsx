@@ -24,6 +24,7 @@ import {
 } from "@/lib/leaderboard/profanity";
 import { generateRandomName } from "@/lib/leaderboard/random-name";
 import { TETRIS_COLUMNS, TETRIS_GAME } from "@/lib/tetris/leaderboard";
+import { LockIcon, TrophyIcon } from "@/components/icons";
 
 interface StartResult {
   ok: boolean;
@@ -175,7 +176,7 @@ export function StartScreen({ show, onStart, onDismiss }: StartScreenProps) {
           transition={{ duration: 0.3 }}
           className="fixed inset-0 z-40 flex items-start md:items-center justify-center px-6 py-6 overflow-y-auto overflow-x-hidden"
           style={{
-            background: "var(--scrim)",
+            background: "var(--bg-0)",
           }}
         >
           {step === "splash" ? (
@@ -354,7 +355,7 @@ export function StartScreen({ show, onStart, onDismiss }: StartScreenProps) {
                   className="font-mono text-[9px] uppercase tracking-[0.09em] text-center mt-1"
                   style={{ color: "var(--ink-dim)", opacity: 0.8 }}
                 >
-                  🔒 video is processed on-device · never leaves your browser
+                  <LockIcon /> video is processed on-device · never leaves your browser
                 </p>
 
                 <AccountRow className="mt-3" />
@@ -378,7 +379,7 @@ export function StartScreen({ show, onStart, onDismiss }: StartScreenProps) {
                   (e.currentTarget.style.color = "var(--ink-dim)")
                 }
               >
-                <span style={{ fontSize: 13 }}>🏆</span>
+                <TrophyIcon size={14} />
                 view leaderboard
               </button>
             )}

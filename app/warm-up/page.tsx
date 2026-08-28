@@ -18,6 +18,7 @@ import { motion } from "framer-motion";
 import { FocalPlane, RACK, sharpenIn } from "@/components/focal/FocalPlane";
 import { Detent } from "@/components/focal/Detent";
 import { dailyWarmUpGames, wordmark } from "@/lib/games/registry";
+import { FlameIcon } from "@/components/icons";
 
 /**
  * The day's rotation: four games sampled deterministically from the registry's
@@ -179,7 +180,7 @@ export default function WarmUpPage() {
               </div>
 
               <div className="flex items-center justify-center gap-2 mb-5 font-mono text-[10px] uppercase tracking-[0.1em]" style={{ color: streak > 0 ? "var(--accent)" : "var(--ink-dim)" }}>
-                {streak > 0 ? <>🔥 day {streak} streak {alreadyDone.current && "· done today ✓"}</> : "start your streak today"}
+                {streak > 0 ? <><FlameIcon /> day {streak} streak {alreadyDone.current && "· done today ✓"}</> : "start your streak today"}
               </div>
 
               <Detent onClick={start} className="font-display tracking-[0.06em] text-sm px-6 py-3.5 border w-full transition-all duration-150 hover-wash" style={{ borderColor: "var(--accent)", color: "var(--accent)", background: "color-mix(in srgb, var(--accent) 10%, transparent)", boxShadow: "0 0 24px color-mix(in srgb, var(--accent) 18%, transparent)" }}>
@@ -225,7 +226,7 @@ function Summary({ steps, streak, results }: { steps: Step[]; streak: number; re
         <div className="text-center">
           <div className="font-display text-[10px] tracking-[0.12em] mb-3" style={{ color: "var(--accent)" }}> warm-up complete </div>
           <div className="font-display leading-none mb-1" style={{ color: "var(--accent)", fontSize: 52, textShadow: "0 0 18px color-mix(in srgb, var(--accent) 40%, transparent)" }}>
-            🔥 {streak}
+            <FlameIcon size="0.85em" /> {streak}
           </div>
           <div className="font-mono text-[10px] uppercase tracking-[0.1em] mb-6" style={{ color: "var(--ink-dim)" }}>
             day streak

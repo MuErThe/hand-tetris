@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useSyncExternalStore } from "react";
 import { currentStreak, doneToday, localDayNumber, playedDaysKey } from "@/lib/warmup/streak";
 import { dailyWarmUpGames, wordmark } from "@/lib/games/registry";
+import { FlameIcon } from "@/components/icons";
 import { Vignette } from "./Vignette";
 
 // The streak lives in localStorage and only changes on other pages, so the
@@ -100,16 +101,14 @@ export function WarmUpBanner() {
                     className="flex flex-col items-center gap-1"
                     aria-label={`${WEEKDAY_NAMES[i]}${d === today ? " (today)" : ""}: ${lit ? "done" : future ? "to come" : "missed"}`}
                   >
-                    <span
-                      aria-hidden="true"
-                      className="text-[16px] leading-none transition-[filter,opacity]"
+                    <FlameIcon
+                      lit={lit}
+                      size={18}
                       style={{
-                        filter: lit ? "none" : "grayscale(1)",
-                        opacity: lit ? 1 : future ? 0.25 : 0.4,
+                        color: lit ? "var(--accent)" : "var(--ink-dim)",
+                        opacity: lit ? 1 : future ? 0.35 : 0.6,
                       }}
-                    >
-                      🔥
-                    </span>
+                    />
                     <span
                       aria-hidden="true"
                       className="font-mono text-[8px] tracking-[0.06em]"
@@ -179,7 +178,7 @@ export function WarmUpBanner() {
           <div className="flex flex-col leading-tight gap-0.5">
             {streak > 0 && (
               <span className="font-display text-[16px]" style={{ color: "var(--accent)" }}>
-                🔥 {streak}
+                <FlameIcon size={16} /> {streak}
                 <span className="font-mono text-[8px] uppercase tracking-[0.1em] ml-1.5" style={{ color: "var(--ink-dim)" }}>
                   day streak
                 </span>

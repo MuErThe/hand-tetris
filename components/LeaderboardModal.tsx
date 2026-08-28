@@ -3,6 +3,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { RACK, sharpenIn } from "@/components/focal/FocalPlane";
+import { MedalIcon, TrophyIcon } from "@/components/icons";
 import {
   fetchTop10,
   type LeaderboardRow,
@@ -311,14 +312,19 @@ function PodiumCell({
   const subtitle = columns
     .map((c) => `${c.get(row.meta)} ${c.label}`)
     .join(" · ");
-  const medal =
-    row.rank === 1 ? "🏆" : row.rank === 2 ? "🥈" : row.rank === 3 ? "🥉" : "";
   const colors: Record<number, string> = {
     1: "var(--accent)",
     2: "var(--ink)",
     3: "var(--accent-hot)",
   };
   const main = colors[row.rank] ?? "var(--ink)";
+  const medalSize = featured ? 28 : 22;
+  const medal =
+    row.rank === 1 ? (
+      <TrophyIcon size={medalSize} />
+    ) : row.rank <= 3 ? (
+      <MedalIcon size={medalSize} />
+    ) : null;
   return (
     <motion.div
       initial={{ opacity: 0, y: 8 }}
@@ -348,10 +354,7 @@ function PodiumCell({
       >
         #{String(row.rank).padStart(2, "0")}
       </div>
-      <div
-        className="leading-none mb-1"
-        style={{ fontSize: featured ? 28 : 22 }}
-      >
+      <div className="leading-none mb-1" style={{ color: main }}>
         {medal}
       </div>
       <div

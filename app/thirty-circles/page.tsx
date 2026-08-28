@@ -9,6 +9,9 @@ import { Vignette } from "@/components/arcade/Vignette";
 import { FocalPlane } from "@/components/focal/FocalPlane";
 import { bestScore, recordSession, scoreTrend, loadSessions } from "@/lib/learning/progress";
 import { playSfx, unlockAudio } from "@/lib/audio/sfx";
+import { LockIcon } from "@/components/icons";
+import { RulesDrawer } from "@/components/arcade/RulesDrawer";
+import { game } from "@/lib/games/registry";
 import {
   CATEGORIES,
   CONSTRAINTS,
@@ -406,10 +409,25 @@ function StartOverlay({
   onCamera: () => void;
 }) {
   return (
-    <div className="fixed inset-0 z-40 flex items-center justify-center px-6 py-6 overflow-y-auto" style={{ background: "var(--scrim-soft)" }}>
+    <div className="fixed inset-0 z-40 flex items-center justify-center px-6 py-6 overflow-y-auto" style={{ background: "var(--bg-0)" }}>
       <Link href="/" className="fixed top-4 left-4 z-[55] font-mono text-[10px] uppercase tracking-[0.06em] px-3 py-2 rounded-[6px] border hover:-translate-y-px transition-transform" style={{ borderColor: "var(--panel-border-strong)", color: "var(--ink-dim)", background: "var(--recess)" }}>
         ◂ arcade
       </Link>
+      <RulesDrawer
+        title={
+          <>
+            Thirty <span style={{ color: "var(--accent)" }}>Circles</span>
+          </>
+        }
+        trains="divergent thinking"
+        trainsLong={game(THIRTY_GAME).trainsLong}
+        how={game(THIRTY_GAME).how}
+        lines={[
+          "the clock starts on your first stroke: three minutes for thirty circles",
+          "draw inside a circle to claim it; tap the next one to move on",
+          "every circle must be a different thing, so vary, don't repeat",
+        ]}
+      />
       <div className="panel-bg relative rounded-[6px] border w-full overflow-hidden" style={{ maxWidth: 540, borderColor: "var(--panel-border-strong)", boxShadow: "0 24px 60px var(--shadow-strong)" }}>
         <div className="border-b" style={{ borderColor: "var(--panel-border)", height: 84 }}>
           <Vignette kind="circles" tint="var(--c-J)" className="h-full" />
@@ -447,7 +465,7 @@ function StartOverlay({
               draw with mouse →
             </button>
             <p className="font-mono text-[9px] uppercase tracking-[0.09em] text-center mt-1" style={{ color: "var(--ink-dim)", opacity: 0.8 }}>
-              🔒 camera runs on-device · pinch to draw
+              <LockIcon /> camera runs on-device · pinch to draw
             </p>
           </div>
         </div>

@@ -13,6 +13,7 @@ import { Detent } from "@/components/focal/Detent";
 import { AccountRow } from "@/components/AccountRow";
 import { Vignette, type VignetteKind } from "./Vignette";
 import { bestScore, loadSessions } from "@/lib/learning/progress";
+import { TrophyIcon } from "@/components/icons";
 
 interface GameSplashProps {
   gameId: string;
@@ -94,7 +95,7 @@ export function GameSplash({
             className="font-display tracking-[0.06em] text-[13px] px-6 py-3.5 border rounded-[6px] transition-colors hover-wash-soft"
             style={{ borderColor: "var(--panel-border-strong)", color: "var(--ink)" }}
           >
-            🏆 Leaderboard
+            <TrophyIcon size={16} /> Leaderboard
           </button>
         )}
         <Detent
