@@ -43,12 +43,17 @@ export default function Hub() {
           </div>
         </header>
 
-        {/* Bento */}
-        <div className="hub-bento">
-          <WarmUpBanner />
-          {GAMES.map((g) => (
-            <GameCard key={g.id} game={g} />
-          ))}
+        {/* Bento on the left; the daily warm-up rides a sticky rail on the
+            right once there is room, and stacks above the grid before that. */}
+        <div className="hub-layout">
+          <aside className="hub-rail">
+            <WarmUpBanner />
+          </aside>
+          <div className="hub-bento">
+            {GAMES.map((g) => (
+              <GameCard key={g.id} game={g} />
+            ))}
+          </div>
         </div>
 
         <p

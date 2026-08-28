@@ -690,7 +690,6 @@ button {
   width: 100%;
   grid-template-columns: 1fr;
   grid-template-areas:
-    "warmup"
     "tetris"
     "eyeball"
     "kern"
@@ -702,6 +701,27 @@ button {
     "cutout";
 }
 
+/* Hub: the bento plus a rail for the daily warm-up. Narrow screens stack
+   the rail above the grid; from 900px the rail takes a fixed column on the
+   right and its card sticks to the top of the scrolling hub. */
+.hub-layout {
+  display: grid;
+  gap: 14px;
+  width: 100%;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 900px) {
+  .hub-layout {
+    grid-template-columns: minmax(0, 1fr) 260px;
+    align-items: start;
+  }
+  .hub-rail {
+    order: 1;
+    position: sticky;
+    top: 16px;
+  }
+}
+
 /* The area names come from `area` on each registry entry: adding a game
    means adding its name here too. Tetris holds the tall feature column and
    the rest flow in reading order, which is also the tab order. */
@@ -709,7 +729,6 @@ button {
   .hub-bento {
     grid-template-columns: 1.25fr 1fr 1fr;
     grid-template-areas:
-      "warmup warmup warmup"
       "tetris eyeball kern"
       "tetris colour circles"
       "double contrast steady"

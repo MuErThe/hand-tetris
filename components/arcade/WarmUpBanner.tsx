@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { currentStreak, doneToday } from "@/lib/warmup/streak";
 import { Vignette } from "./Vignette";
 
-/** Bento tile: the daily-warm-up call to action + current streak flame. */
+/** Rail card: the daily-warm-up call to action + current streak flame. */
 export function WarmUpBanner() {
   const [mounted, setMounted] = useState(false);
   const [streak, setStreak] = useState(0);
@@ -20,14 +20,14 @@ export function WarmUpBanner() {
   return (
     <Link
       href="/warm-up"
-      className="bento-card group panel-bg rounded-[6px] overflow-hidden flex items-stretch"
-      style={{ "--tint": "var(--accent)", gridArea: "warmup" } as React.CSSProperties}
+      className="bento-card group panel-bg rounded-[6px] overflow-hidden flex flex-col"
+      style={{ "--tint": "var(--accent)" } as React.CSSProperties}
     >
-      <div className="shrink-0 hidden sm:block" style={{ width: 132 }}>
+      <div className="shrink-0" style={{ height: 120 }}>
         <Vignette kind="warmup" tint="var(--accent)" className="h-full" />
       </div>
-      <div className="flex-1 flex items-center justify-between gap-4 px-5 py-4">
-        <div className="flex flex-col gap-0.5">
+      <div className="flex flex-col gap-3 px-5 py-4">
+        <div className="flex flex-col gap-1">
           <span className="font-display text-[13px] tracking-[0.1em]" style={{ color: "var(--ink)" }}>
             Daily <span style={{ color: "var(--accent)" }}>warm-up</span>
           </span>
@@ -38,9 +38,9 @@ export function WarmUpBanner() {
             four games, drawn daily · five minutes · before the real work
           </span>
         </div>
-        <div className="flex items-center gap-4 shrink-0">
-          {mounted && streak > 0 && (
-            <div className="flex flex-col items-end leading-tight">
+        <div className="flex items-center justify-between gap-4">
+          {mounted && streak > 0 ? (
+            <div className="flex flex-col leading-tight">
               <span className="font-display text-[16px]" style={{ color: "var(--accent)" }}>
                 🔥 {streak}
               </span>
@@ -48,6 +48,8 @@ export function WarmUpBanner() {
                 day streak{done ? " · done ✓" : ""}
               </span>
             </div>
+          ) : (
+            <span />
           )}
           <span
             className="font-display text-[11px] tracking-[0.1em] px-3.5 py-2 rounded-[6px] border transition-colors group-hover-wash"
