@@ -1,21 +1,20 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import { currentStreak, doneToday } from "@/lib/warmup/streak";
 import { Vignette } from "./Vignette";
 
+// The streak lives in localStorage and only changes on other pages, so the
+// store never notifies; the server snapshot keeps hydration honest.
+const subscribeNever = () => () => {};
+const noStreak = () => 0;
+const notDone = () => false;
+
 /** Rail card: the daily-warm-up call to action + current streak flame. */
 export function WarmUpBanner() {
-  const [mounted, setMounted] = useState(false);
-  const [streak, setStreak] = useState(0);
-  const [done, setDone] = useState(false);
-
-  useEffect(() => {
-    setStreak(currentStreak());
-    setDone(doneToday());
-    setMounted(true);
-  }, []);
+  const streak = useSyncExternalStore(subscribeNever, currentStreak, noStreak);
+  const done = useSyncExternalStore(subscribeNever, doneToday, notDone);
 
   return (
     <Link
@@ -39,7 +38,7 @@ export function WarmUpBanner() {
           </span>
         </div>
         <div className="flex items-center justify-between gap-4">
-          {mounted && streak > 0 ? (
+          {streak > 0 ? (
             <div className="flex flex-col leading-tight">
               <span className="font-display text-[16px]" style={{ color: "var(--accent)" }}>
                 🔥 {streak}
@@ -55,7 +54,7 @@ export function WarmUpBanner() {
             className="font-display text-[11px] tracking-[0.1em] px-3.5 py-2 rounded-[6px] border transition-colors group-hover-wash"
             style={{ borderColor: "var(--accent)", color: "var(--accent)" }}
           >
-            {mounted && done ? "Again ▸" : "Start ▸"}
+            {done ? "Again ▸" : "Start ▸"}
           </span>
         </div>
       </div>
